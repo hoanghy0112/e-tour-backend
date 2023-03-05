@@ -39,16 +39,6 @@ const schema = new Schema<User>(
       type: Schema.Types.String,
       select: false,
     },
-    // roles: {
-    //   type: [
-    //     {
-    //       type: Schema.Types.ObjectId,
-    //       ref: 'Role',
-    //     },
-    //   ],
-    //   required: true,
-    //   select: false,
-    // },
     verified: {
       type: Schema.Types.Boolean,
       default: false,
