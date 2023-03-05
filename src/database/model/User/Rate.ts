@@ -6,7 +6,7 @@ export interface RateInterface {
   userId: Types.ObjectId;
   companyId?: Types.ObjectId;
   staffId?: Types.ObjectId;
-  tourId?: Types.ObjectId;
+  touristsRouteId?: Types.ObjectId;
 }
 
 const rateSchema = new Schema<RateInterface>(
@@ -31,9 +31,9 @@ const rateSchema = new Schema<RateInterface>(
       type: Schema.Types.ObjectId,
       ref: 'Staff',
     },
-    tourId: {
+    touristsRouteId: {
       type: Schema.Types.ObjectId,
-      ref: 'Tour',
+      ref: 'TouristsRoute',
     },
   },
   {
@@ -44,7 +44,7 @@ const rateSchema = new Schema<RateInterface>(
 rateSchema.index({ userId: 1 });
 rateSchema.index({ companyId: 1 });
 rateSchema.index({ staffId: 1 });
-rateSchema.index({ tourId: 1 });
+rateSchema.index({ touristsRouteId: 1 });
 
 const Rate = model('Rate', rateSchema);
 

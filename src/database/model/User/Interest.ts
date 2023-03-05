@@ -2,7 +2,7 @@ import { Schema, model, Types } from 'mongoose';
 
 export interface InterestInterface {
   // company: Types.ObjectId;
-  tourId: Types.ObjectId;
+  touristsRouteId: Types.ObjectId;
   userId: Types.ObjectId;
 }
 
@@ -11,9 +11,9 @@ const interestSchema = new Schema<InterestInterface>({
   //   type: Schema.Types.ObjectId,
   //   ref: 'Company',
   // },
-  tourId: {
+  touristsRouteId: {
     type: Schema.Types.ObjectId,
-    ref: 'Tour',
+    ref: 'TouristsRoute',
     required: true,
   },
   userId: {
@@ -23,7 +23,7 @@ const interestSchema = new Schema<InterestInterface>({
   },
 });
 
-interestSchema.index({ tourId: 1 });
+interestSchema.index({ touristsRouteId: 1 });
 interestSchema.index({ userId: 1 });
 
 const Interest = model('Interest', interestSchema);

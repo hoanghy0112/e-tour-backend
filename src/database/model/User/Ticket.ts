@@ -9,7 +9,7 @@ export enum TicketStatus {
 
 export interface TicketInterface {
   userId: Types.ObjectId;
-  tourRouteId: Types.ObjectId;
+  tourId: Types.ObjectId;
   status: TicketStatus;
   price: number;
 }
@@ -20,7 +20,7 @@ const ticketSchema = new Schema<TicketInterface>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    tourRouteId: {
+    tourId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Tour',
     },
@@ -35,7 +35,7 @@ const ticketSchema = new Schema<TicketInterface>(
 );
 
 ticketSchema.index({ userId: 1 });
-ticketSchema.index({ tourRouteId: 1 });
+ticketSchema.index({ tourId: 1 });
 
 const Ticket = model('Ticket', ticketSchema);
 
