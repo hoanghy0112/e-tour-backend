@@ -2,7 +2,7 @@ import { Tokens } from 'app-request';
 import { AuthFailureError, InternalError } from '../core/ApiError';
 import JWT, { JwtPayload } from '../core/JWT';
 import { Types } from 'mongoose';
-import User from '../database/model/User';
+import { UserInterface } from '../database/model/User/User';
 import { tokenInfo } from '../config';
 
 export const getAccessToken = (authorization?: string) => {
@@ -28,7 +28,7 @@ export const validateTokenData = (payload: JwtPayload): boolean => {
 };
 
 export const createTokens = async (
-  user: User,
+  user: UserInterface,
   accessTokenKey: string,
   refreshTokenKey: string,
 ): Promise<Tokens> => {

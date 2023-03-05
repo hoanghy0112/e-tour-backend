@@ -1,7 +1,7 @@
 import express from 'express';
 import { SuccessResponse } from '../../core/ApiResponse';
 import crypto from 'crypto';
-import UserRepo from '../../database/repository/UserRepo';
+import UserRepo from '../../database/repository/User/UserRepo';
 import { BadRequestError, AuthFailureError } from '../../core/ApiError';
 import KeystoreRepo from '../../database/repository/KeystoreRepo';
 import { createTokens } from '../../auth/authUtils';

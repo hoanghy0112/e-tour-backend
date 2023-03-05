@@ -1,17 +1,18 @@
 import { Schema, model, Types } from 'mongoose';
 
 export interface UserInterface {
+  _id: Types.ObjectId;
   fullName: string;
-  image?: string;
-  address?: string;
-  phoneNumber?: string;
   identity: string;
   isForeigner: boolean;
   email: string;
-  identityExpiredAt?: Date;
   password: string;
-  isPhoneVerified: boolean;
-  isEmailVerified: boolean;
+  image?: string;
+  address?: string;
+  phoneNumber?: string;
+  identityExpiredAt?: Date;
+  isPhoneVerified?: boolean;
+  isEmailVerified?: boolean;
 }
 
 const userSchema = new Schema<UserInterface>(
@@ -34,7 +35,7 @@ const userSchema = new Schema<UserInterface>(
     },
     phoneNumber: {
       type: String,
-      required: true,
+      required: false,
     },
     address: {
       type: String,
@@ -52,9 +53,11 @@ const userSchema = new Schema<UserInterface>(
     },
     isPhoneVerified: {
       type: Boolean,
+      default: false,
     },
     isEmailVerified: {
       type: Boolean,
+      default: false,
     },
   },
   {

@@ -2,15 +2,14 @@ import express from 'express';
 import { SuccessResponse } from '../../core/ApiResponse';
 import { RoleRequest } from 'app-request';
 import crypto from 'crypto';
-import UserRepo from '../../database/repository/UserRepo';
+import UserRepo from '../../database/repository/User/UserRepo';
 import { BadRequestError } from '../../core/ApiError';
-import User from '../../database/model/User';
+import { UserInterface } from '../../database/model/User/User';
 import { createTokens } from '../../auth/authUtils';
 import validator from '../../helpers/validator';
 import schema from './schema';
 import asyncHandler from '../../helpers/asyncHandler';
 import bcrypt from 'bcrypt';
-import { RoleCode } from '../../database/model/Role';
 import { getUserData } from './utils';
 
 const router = express.Router();
@@ -28,14 +27,14 @@ router.post(
 
     const { user: createdUser, keystore } = await UserRepo.create(
       {
-        name: req.body.name,
+        fullName: req.body.fullName,
         email: req.body.email,
-        profilePicUrl: req.body.profilePicUrl,
+        image: req.body.image,
+        identity: req.body.identity,
         password: passwordHash,
-      } as User,
+      } as UserInterface,
       accessTokenKey,
       refreshTokenKey,
-      RoleCode.LEARNER,
     );
 
     const tokens = await createTokens(

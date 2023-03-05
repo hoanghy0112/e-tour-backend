@@ -1,6 +1,6 @@
 import express from 'express';
 import { ProtectedRequest } from 'app-request';
-import UserRepo from '../database/repository/UserRepo';
+import UserRepo from '../database/repository/User/UserRepo';
 import {
   AuthFailureError,
   AccessTokenError,
