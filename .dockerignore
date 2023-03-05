@@ -2,6 +2,7 @@
 .idea
 
 # ignore vs code project config files
+.vscode
 .vs
 
 # ignore logs
@@ -11,28 +12,14 @@ logs
 # ignore 3rd party lib
 node_modules
 
-# ignore key
-*.pem
-
 # Ignore built files
-build
+build/**/*
 
 # ignore test converage
 coverage
 
-# Environment varibles
-*.env
-*.env.test
-*.env copy
+# git
+.gitignore
+.git
 
-#keys
-keys/*
-!keys/*.md
-!keys/*.example
-
-#temp
-temp
-.DS_Store
-
-*.save
-*.save.*
+.DS_Store 
