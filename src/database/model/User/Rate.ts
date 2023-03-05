@@ -3,10 +3,10 @@ import { Schema, model, Types } from 'mongoose';
 export interface RateInterface {
   star: number;
   description: string;
-  user: Types.ObjectId;
-  company?: Types.ObjectId;
-  staff?: Types.ObjectId;
-  tour?: Types.ObjectId;
+  userId: Types.ObjectId;
+  companyId?: Types.ObjectId;
+  staffId?: Types.ObjectId;
+  tourId?: Types.ObjectId;
 }
 
 const rateSchema = new Schema<RateInterface>(
@@ -18,20 +18,20 @@ const rateSchema = new Schema<RateInterface>(
     description: {
       type: String,
     },
-    user: {
+    userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    company: {
+    companyId: {
       type: Schema.Types.ObjectId,
       ref: 'Company',
     },
-    staff: {
+    staffId: {
       type: Schema.Types.ObjectId,
       ref: 'Staff',
     },
-    tour: {
+    tourId: {
       type: Schema.Types.ObjectId,
       ref: 'Tour',
     },
@@ -41,10 +41,10 @@ const rateSchema = new Schema<RateInterface>(
   },
 );
 
-rateSchema.index({ user: 1 });
-rateSchema.index({ company: 1 });
-rateSchema.index({ staff: 1 });
-rateSchema.index({ tour: 1 });
+rateSchema.index({ userId: 1 });
+rateSchema.index({ companyId: 1 });
+rateSchema.index({ staffId: 1 });
+rateSchema.index({ tourId: 1 });
 
 const Rate = model('Rate', rateSchema);
 

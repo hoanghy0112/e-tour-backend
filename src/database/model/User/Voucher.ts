@@ -7,13 +7,13 @@ export enum VoucherType {
 }
 
 export interface VoucherInterface {
+  companyId: Types.ObjectId;
   expiredAt: Date;
   type: VoucherType;
   description: string;
-  usingCondition: string;
   image?: string;
+  usingCondition: string;
   value: number;
-  company: Types.ObjectId;
 }
 
 const voucherSchema = new Schema<VoucherInterface>(
@@ -35,17 +35,19 @@ const voucherSchema = new Schema<VoucherInterface>(
     value: {
       type: Number,
     },
-    company: {
-      type: Schema.Types.ObjectId,
-      ref: 'Company',
-    },
+    companyId: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Company',
+      },
+    ],
   },
   {
     timestamps: true,
   },
 );
 
-voucherSchema.index({ company: 1 });
+voucherSchema.index({ companyId: 1 });
 
 const Voucher = model('Voucher', voucherSchema);
 

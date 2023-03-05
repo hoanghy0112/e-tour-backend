@@ -2,17 +2,14 @@ import { Schema, model, Types } from 'mongoose';
 
 export interface UserInterface {
   fullName: string;
-  email: string;
-  password: string;
   image?: string;
-  phone?: string;
   address?: string;
+  phoneNumber?: string;
   identity: string;
+  isForeigner: boolean;
+  email: string;
   identityExpiredAt?: Date;
-  tickets: Types.ObjectId;
-  vouchers: Types.ObjectId;
-  interests: Types.ObjectId;
-  rates: Types.ObjectId;
+  password: string;
 }
 
 const userSchema = new Schema<UserInterface>(
@@ -33,7 +30,7 @@ const userSchema = new Schema<UserInterface>(
     image: {
       type: String,
     },
-    phone: {
+    phoneNumber: {
       type: String,
       required: true,
     },
@@ -44,33 +41,13 @@ const userSchema = new Schema<UserInterface>(
       type: String,
       required: true,
     },
+    isForeigner: {
+      type: Boolean,
+      default: false,
+    },
     identityExpiredAt: {
       type: Date,
     },
-    tickets: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Ticket',
-      },
-    ],
-    vouchers: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Voucher',
-      },
-    ],
-    interests: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Interest',
-      },
-    ],
-    rates: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Rate',
-      },
-    ],
   },
   {
     timestamps: true,
