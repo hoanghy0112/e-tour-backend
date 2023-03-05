@@ -10,7 +10,6 @@ export default interface User {
   profilePicUrl?: string;
   email?: string;
   password?: string;
-  // roles: Role[];
   verified?: boolean;
   status?: boolean;
   createdAt?: Date;

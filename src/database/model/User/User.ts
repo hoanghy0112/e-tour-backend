@@ -10,6 +10,8 @@ export interface UserInterface {
   email: string;
   identityExpiredAt?: Date;
   password: string;
+  isPhoneVerified: boolean;
+  isEmailVerified: boolean;
 }
 
 const userSchema = new Schema<UserInterface>(
@@ -47,6 +49,12 @@ const userSchema = new Schema<UserInterface>(
     },
     identityExpiredAt: {
       type: Date,
+    },
+    isPhoneVerified: {
+      type: Boolean,
+    },
+    isEmailVerified: {
+      type: Boolean,
     },
   },
   {
