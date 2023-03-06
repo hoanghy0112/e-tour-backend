@@ -11,8 +11,8 @@ export enum UserType {
   STAFF = 'staff',
 }
 
-export interface CredentialInterface {
-  _id: Types.ObjectId;
+export interface Credential {
+  _id?: Types.ObjectId;
   authenticationType: AuthenticationType;
   userType: UserType;
   username?: string;
@@ -21,7 +21,7 @@ export interface CredentialInterface {
   refreshToken?: string;
 }
 
-const schema = new Schema<CredentialInterface>({
+const schema = new Schema<Credential>({
   authenticationType: AuthenticationType,
   userType: UserType,
   username: String,
@@ -30,4 +30,4 @@ const schema = new Schema<CredentialInterface>({
   refreshToken: String,
 });
 
-export const Credential = model<CredentialInterface>('Credential', schema);
+export const CredentialModel = model<Credential>('Credential', schema);
