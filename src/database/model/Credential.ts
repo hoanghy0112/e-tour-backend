@@ -15,7 +15,7 @@ export interface CredentialInterface {
   _id: Types.ObjectId;
   authenticationType: AuthenticationType;
   userType: UserType;
-  email?: string;
+  username?: string;
   password?: string;
   accessToken?: string;
   refreshToken?: string;
@@ -24,7 +24,7 @@ export interface CredentialInterface {
 const schema = new Schema<CredentialInterface>({
   authenticationType: AuthenticationType,
   userType: UserType,
-  email: String,
+  username: String,
   password: String,
   accessToken: String,
   refreshToken: String,
