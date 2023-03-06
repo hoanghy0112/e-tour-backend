@@ -22,8 +22,14 @@ export interface Credential {
 }
 
 const schema = new Schema<Credential>({
-  authenticationType: AuthenticationType,
-  userType: UserType,
+  authenticationType: {
+    type: String,
+    enum: Object.values(AuthenticationType),
+  },
+  userType: {
+    type: String,
+    enum: Object.values(UserType),
+  },
   username: String,
   password: String,
   accessToken: String,

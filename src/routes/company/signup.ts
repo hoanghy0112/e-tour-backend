@@ -19,28 +19,28 @@ router.post(
     const admin = await StaffRepo.findByUsername({
       username: req.body.username,
     });
-    // if (admin) throw new BadRequestError('User already registered');
+    if (admin) throw new BadRequestError('User already registered');
 
-    // const passwordHash = await bcrypt.hash(req.body.password, 10);
+    const passwordHash = await bcrypt.hash(req.body.password, 10);
 
-    // const { createdAdmin, createdCompany } = await CompanyRepo.create({
-    //   company: {
-    //     isApproveToActive: false,
-    //     name: req.body.name,
-    //     email: req.body.email,
-    //     description: req.body.description,
-    //     image: req.body.image,
-    //     previewImages: req.body.previewImages,
-    //     address: req.body.address,
-    //     phone: req.body.phone,
-    //   },
-    //   username: req.body.username,
-    //   password: passwordHash,
-    // });
+    const { createdAdmin, createdCompany } = await CompanyRepo.create({
+      company: {
+        isApproveToActive: false,
+        name: req.body.name,
+        email: req.body.email,
+        description: req.body.description,
+        image: req.body.image,
+        previewImages: req.body.previewImages,
+        address: req.body.address,
+        phone: req.body.phone,
+      },
+      username: req.body.username,
+      password: passwordHash,
+    });
 
     new SuccessResponse('Signup Successful', {
-      // createdAdmin,
-      // createdCompany,
+      createdAdmin,
+      createdCompany,
     }).send(res);
   }),
 );

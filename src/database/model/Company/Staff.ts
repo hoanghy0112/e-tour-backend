@@ -38,8 +38,16 @@ const schema = new Schema<Staff>(
     image: {
       type: String,
     },
-    role: StaffRole,
-    permissions: [Permission],
+    role: {
+      type: String,
+      enum: Object.values(StaffRole),
+    },
+    permissions: [
+      {
+        type: String,
+        enum: Object.values(Permission),
+      },
+    ],
     companyId: {
       type: Schema.Types.ObjectId,
       ref: 'Company',

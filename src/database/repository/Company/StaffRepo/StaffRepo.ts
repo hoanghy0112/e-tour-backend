@@ -40,8 +40,7 @@ async function create({
 async function findByUsername({
   username,
 }: findByUsernameParameter): Promise<Staff | null> {
-  // return await StaffModel.findOne({ username }).lean().exec();
-  return null;
+  return await StaffModel.findOne({ username }).lean().exec();
 }
 
 export default {
