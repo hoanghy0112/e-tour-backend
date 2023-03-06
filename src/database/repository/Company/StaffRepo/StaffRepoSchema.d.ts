@@ -1,5 +1,7 @@
-import { StaffInterface } from '../../../model/Company/Staff';
+import { Staff } from '../../../model/Company/Staff';
 
 declare interface createParameter {
-  staff: StaffInterface;
+  staff: Staff;
+  username: string;
+  password: string;
 }

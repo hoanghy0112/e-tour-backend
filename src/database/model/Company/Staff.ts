@@ -13,7 +13,7 @@ export enum Permission {
   VIEW_TICKETS = 'view-tickets',
 }
 
-export const SuperStaffPermission = [
+export const AdminPermission = [
   Permission.EDIT_COMPANY,
   Permission.EDIT_ROUTE,
   Permission.EDIT_TOUR,
@@ -21,15 +21,16 @@ export const SuperStaffPermission = [
   Permission.VIEW_TICKETS,
 ];
 
-export interface StaffInterface {
+export interface Staff {
   fullName: string;
   image?: string;
   role: StaffRole;
   permissions: Permission[];
   companyId: Types.ObjectId;
+  credentialId?: Types.ObjectId;
 }
 
-const staffSchema = new Schema(
+const schema = new Schema<Staff>(
   {
     fullName: {
       type: String,
@@ -39,16 +40,15 @@ const staffSchema = new Schema(
     },
     role: StaffRole,
     permissions: [Permission],
-    company: {
+    companyId: {
       type: Schema.Types.ObjectId,
       ref: 'Company',
     },
+    credentialId: { type: Schema.Types.ObjectId, ref: 'Credential' },
   },
   {
     timestamps: true,
   },
 );
 
-const Staff = model('Staff', staffSchema);
-
-module.exports = Staff;
+export const StaffModel = model('Staff', schema);
