@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import { Staff, StaffModel } from '../../../model/Company/Staff';
 import {
   AuthenticationType,
@@ -6,13 +7,17 @@ import {
   CredentialModel,
   UserType,
 } from '../../../model/Credential';
-import { createParameter } from './StaffRepoSchema';
+import { createParameter, findByUsernameParameter } from './StaffRepoSchema';
+import KeystoreRepo from '../../KeystoreRepo';
 
 async function create({
   staff,
   username,
   password,
-}: createParameter): Promise<Staff | null> {
+}: createParameter): Promise<Staff> {
+  // const accessTokenKey = crypto.randomBytes(64).toString('hex');
+  // const refreshTokenKey = crypto.randomBytes(64).toString('hex');
+
   const passwordHash = await bcrypt.hash(password, 10);
 
   const credential = {
@@ -32,8 +37,14 @@ async function create({
   return createdStaff;
 }
 
-const StaffRepo = {
-  create,
-};
+async function findByUsername({
+  username,
+}: findByUsernameParameter): Promise<Staff | null> {
+  // return await StaffModel.findOne({ username }).lean().exec();
+  return null;
+}
 
-export default StaffRepo;
+export default {
+  create,
+  findByUsername,
+};

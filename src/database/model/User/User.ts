@@ -1,6 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 
-export interface UserInterface {
+export interface User {
   _id: Types.ObjectId;
   fullName: string;
   identity: string;
@@ -15,7 +15,7 @@ export interface UserInterface {
   isEmailVerified?: boolean;
 }
 
-const userSchema = new Schema<UserInterface>(
+const schema = new Schema<User>(
   {
     fullName: {
       type: String,
@@ -65,8 +65,8 @@ const userSchema = new Schema<UserInterface>(
   },
 );
 
-userSchema.index({ email: 1 });
+schema.index({ email: 1 });
 
-const User = model('User', userSchema);
+const UserModel = model('User', schema);
 
-export default User;
+export default UserModel;

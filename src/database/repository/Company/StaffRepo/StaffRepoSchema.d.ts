@@ -5,3 +5,7 @@ declare interface createParameter {
   username: string;
   password: string;
 }
+
+declare interface findByUsernameParameter {
+  username: string;
+}

@@ -6,13 +6,17 @@ import {
   StaffModel,
 } from '../../../model/Company/Staff';
 import StaffRepo from '../StaffRepo/StaffRepo';
-import { createParameter, findByIdParameter } from './CompanyRepoSchema';
+import {
+  createParameter,
+  createReturn,
+  findByIdParameter,
+} from './CompanyRepoSchema';
 
 export async function create({
   company,
   username,
   password,
-}: createParameter): Promise<Company | null> {
+}: createParameter): Promise<createReturn> {
   const createdCompany = await CompanyModel.create(company);
 
   const admin = {
@@ -28,7 +32,10 @@ export async function create({
     password,
   });
 
-  return createdCompany;
+  return {
+    createdCompany,
+    createdAdmin,
+  };
 }
 
 export async function findById({
@@ -38,3 +45,10 @@ export async function findById({
 
   return company;
 }
+
+const CompanyRepo = {
+  create,
+  findById,
+};
+
+export default CompanyRepo;

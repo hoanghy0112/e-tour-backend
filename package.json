@@ -1,7 +1,6 @@
 {
-  "name": "nodejs-backend-architecture",
+  "name": "e-tour-backend",
   "version": "2.0.1",
-  "description": "The architecture for nodejs backend application. It is build on top of expressjs using typescript.",
   "main": "index.js",
   "scripts": {
     "start": "npm run build && npm run serve",
@@ -16,11 +15,6 @@
     "upgrade": "npm update --save-dev && npm update --save",
     "test": "jest --forceExit --detectOpenHandles --coverage --verbose"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/janishar/nodejs-backend-architecture-typescript.git"
-  },
-  "author": "Janishar Ali",
   "license": "Apache-2.0",
   "dependencies": {
     "axios": "^1.2.1",

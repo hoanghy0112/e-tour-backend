@@ -1,7 +1,7 @@
 import { Schema, model, Types } from 'mongoose';
 
 export interface Company {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
   isApproveToActive: boolean;
   name: string;
   email: string;

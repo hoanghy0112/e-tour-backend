@@ -12,7 +12,7 @@ export enum UserType {
 }
 
 export interface Credential {
-  _id?: Types.ObjectId;
+  _id: Types.ObjectId;
   authenticationType: AuthenticationType;
   userType: UserType;
   username?: string;

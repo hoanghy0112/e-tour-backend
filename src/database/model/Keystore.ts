@@ -1,17 +1,16 @@
 import { Schema, model, Types } from 'mongoose';
-import { UserInterface } from './User/User';
+import { User } from './User/User';
+import { CredentialModel } from './Credential';
 
 export const DOCUMENT_NAME = 'Keystore';
 export const COLLECTION_NAME = 'keystores';
 
 export default interface Keystore {
   _id: Types.ObjectId;
-  client: UserInterface;
+  client: Credential;
   primaryKey: string;
   secondaryKey: string;
   status?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 const schema = new Schema<Keystore>(
@@ -19,7 +18,7 @@ const schema = new Schema<Keystore>(
     client: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'User',
+      ref: 'Credential',
     },
     primaryKey: {
       type: Schema.Types.String,
@@ -35,18 +34,9 @@ const schema = new Schema<Keystore>(
       type: Schema.Types.Boolean,
       default: true,
     },
-    createdAt: {
-      type: Schema.Types.Date,
-      required: true,
-      select: false,
-    },
-    updatedAt: {
-      type: Schema.Types.Date,
-      required: true,
-      select: false,
-    },
   },
   {
+    timestamps: true,
     versionKey: false,
   },
 );
