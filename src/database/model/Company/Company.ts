@@ -48,4 +48,4 @@ companySchema.index({ name: 1 });
 
 const Company = model('Company', companySchema);
 
-module.exports = Company;
+export default Company;

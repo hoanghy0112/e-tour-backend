@@ -5,10 +5,27 @@ export enum StaffRole {
   STAFF = 'staff',
 }
 
+export enum Permission {
+  EDIT_ROUTE = 'edit-route',
+  EDIT_TOUR = 'edit-tour',
+  EDIT_VOUCHER = 'edit-voucher',
+  EDIT_COMPANY = 'edit-company',
+  VIEW_TICKETS = 'view-tickets',
+}
+
+export const SuperStaffPermission = [
+  Permission.EDIT_COMPANY,
+  Permission.EDIT_ROUTE,
+  Permission.EDIT_TOUR,
+  Permission.EDIT_VOUCHER,
+  Permission.VIEW_TICKETS,
+];
+
 export interface StaffInterface {
   fullName: string;
   image?: string;
   role: StaffRole;
+  permissions: Permission[];
   companyId: Types.ObjectId;
 }
 
@@ -21,6 +38,7 @@ const staffSchema = new Schema(
       type: String,
     },
     role: StaffRole,
+    permissions: [Permission],
     company: {
       type: Schema.Types.ObjectId,
       ref: 'Company',
