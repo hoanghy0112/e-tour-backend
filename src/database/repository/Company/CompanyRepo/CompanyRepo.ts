@@ -1,20 +1,40 @@
-import Company, { CompanyInterface } from '../../../model/Company/Company';
+import { Company, CompanyModel } from '../../../model/Company/Company';
+import {
+  Staff,
+  AdminPermission,
+  StaffRole,
+  StaffModel,
+} from '../../../model/Company/Staff';
+import StaffRepo from '../StaffRepo/StaffRepo';
 import { createParameter, findByIdParameter } from './CompanyRepoSchema';
 
 export async function create({
   company,
-  email,
+  username,
   password,
-}: createParameter): Promise<CompanyInterface | null> {
-  const createdCompany = await Company.create(company);
+}: createParameter): Promise<Company | null> {
+  const createdCompany = await CompanyModel.create(company);
+
+  const admin = {
+    fullName: 'Administrator',
+    role: StaffRole.ADMIN,
+    companyId: createdCompany._id,
+    permissions: AdminPermission,
+  } as Staff;
+
+  const createdAdmin = await StaffRepo.create({
+    staff: admin,
+    username,
+    password,
+  });
 
   return createdCompany;
 }
 
 export async function findById({
   id,
-}: findByIdParameter): Promise<CompanyInterface | null> {
-  const company = await Company.findById(id);
+}: findByIdParameter): Promise<Company | null> {
+  const company = await CompanyModel.findById(id);
 
   return company;
 }

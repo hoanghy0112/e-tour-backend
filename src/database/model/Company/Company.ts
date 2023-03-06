@@ -1,6 +1,7 @@
 import { Schema, model, Types } from 'mongoose';
 
-export interface CompanyInterface {
+export interface Company {
+  _id: Types.ObjectId;
   isApproveToActive: boolean;
   name: string;
   email: string;
@@ -11,7 +12,7 @@ export interface CompanyInterface {
   phone: string;
 }
 
-const companySchema = new Schema<CompanyInterface>(
+const schema = new Schema<Company>(
   {
     isApproveToActive: {
       type: Boolean,
@@ -44,8 +45,6 @@ const companySchema = new Schema<CompanyInterface>(
   },
 );
 
-companySchema.index({ name: 1 });
+schema.index({ name: 1 });
 
-const Company = model('Company', companySchema);
-
-export default Company;
+export const CompanyModel = model('Company', schema);

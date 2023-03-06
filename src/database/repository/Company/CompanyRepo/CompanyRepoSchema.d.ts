@@ -1,8 +1,8 @@
-import { CompanyInterface } from '../../../model/Company/Company';
+import { Company } from '../../../model/Company/Company';
 
 declare interface createParameter {
-  company: CompanyInterface;
-  email: string;
+  company: Company;
+  username: string;
   password: string;
 }
 
