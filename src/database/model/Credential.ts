@@ -17,6 +17,8 @@ export interface Credential {
   userType: UserType;
   username?: string;
   password?: string;
+  accessToken?: string;
+  refreshToken?: string;
 }
 
 const schema = new Schema<Credential>({
@@ -30,6 +32,8 @@ const schema = new Schema<Credential>({
   },
   username: String,
   password: String,
+  accessToken: String,
+  refreshToken: String,
 });
 
 export const CredentialModel = model<Credential>('Credential', schema);
