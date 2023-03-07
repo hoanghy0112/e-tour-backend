@@ -9,8 +9,8 @@
     "watch": "npx concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
     "watch-node": "nodemon -r dotenv/config build/server.js",
     "clean": "rimraf ./build",
-    "build-ts": "tsc",
-    "watch-ts": "tsc -w",
+    "build-ts": "tsc && tsc-alias",
+    "watch-ts": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "eslint": "eslint . --ext .js,.ts",
     "upgrade": "npm update --save-dev && npm update --save",
     "test": "jest --forceExit --detectOpenHandles --coverage --verbose"
@@ -31,6 +31,7 @@
     "newrelic": "^9.7.2",
     "qs": "^6.11.0",
     "redis": "^4.5.1",
+    "tsc-alias": "^1.8.2",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1"
   },
