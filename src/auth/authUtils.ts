@@ -1,10 +1,10 @@
 import { Tokens } from 'app-request';
-import { AuthFailureError, InternalError } from '../core/ApiError';
-import JWT, { JwtPayload } from '../core/JWT';
+import { AuthFailureError, InternalError } from '@core/ApiError';
+import JWT, { JwtPayload } from '@core/JWT';
 import { Types } from 'mongoose';
-import { User } from '../database/model/User/User';
+import { User } from '@model/User/User';
 import { tokenInfo } from '../config';
-import { Credential, CredentialModel } from '../database/model/Credential';
+import { Credential, CredentialModel } from '@model/Credential';
 
 export const getAccessToken = (authorization?: string) => {
   if (!authorization) throw new AuthFailureError('Invalid Authorization');

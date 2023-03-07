@@ -1,10 +1,11 @@
 import { Company } from '@model/Company/Company';
 import { Staff } from '@model/Company/Staff';
+import { ApplicationReportInterface } from '@model/Admin/ApplicationReport';
 
 declare interface createParameter {
-  company: Company;
-  username: string;
-  password: string;
+  title: string;
+  description: string;
+  image: string;
 }
 
 declare interface findByIdParameter {
@@ -12,6 +13,5 @@ declare interface findByIdParameter {
 }
 
 declare interface createReturn {
-  createdCompany: Company;
-  createdAdmin: Staff;
+  createdApplicationReport: ApplicationReportInterface;
 }

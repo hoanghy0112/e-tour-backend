@@ -1,7 +1,7 @@
 import express from 'express';
 import { ProtectedRequest } from 'app-request';
-import { AuthFailureError } from '../core/ApiError';
-import asyncHandler from '../helpers/asyncHandler';
+import { AuthFailureError } from '@core/ApiError';
+import asyncHandler from '@helpers/asyncHandler';
 
 const router = express.Router();
 

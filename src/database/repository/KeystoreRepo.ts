@@ -1,10 +1,10 @@
-import Keystore, { KeystoreModel } from '../model/Keystore';
 import crypto from 'crypto';
-import { Types } from 'mongoose';
-import { User } from '../model/User/User';
-import { Credential, CredentialModel } from '../model/Credential';
 import { createTokens } from '../../auth/authUtils';
 import { Tokens } from '../../types/app-request';
+import Keystore, { KeystoreModel } from '@model/Keystore';
+import { Types } from 'mongoose';
+import { User } from '@model/User/User';
+import { Credential, CredentialModel } from '@model/Credential';
 
 async function findforKey(key: string): Promise<Keystore | null> {
   return KeystoreModel.findOne({

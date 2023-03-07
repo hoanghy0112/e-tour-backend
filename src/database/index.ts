@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
-import Logger from '../core/Logger';
-import { db } from '../config';
+import Logger from '@/core/Logger';
+import { db } from '@/config';
 
 // Build the connection string
 // const dbURI = `mongodb://${db.user}:${encodeURIComponent(db.password)}@${
 //   db.host
 // }/${db.name}`;
-const dbURI = 'mongodb+srv://hoanghy:01122003@data.nylr2.mongodb.net/etour'
+const dbURI = 'mongodb+srv://hoanghy:01122003@data.nylr2.mongodb.net/etour';
 
 const options = {
   autoIndex: true,

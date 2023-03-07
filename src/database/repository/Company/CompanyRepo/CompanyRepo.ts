@@ -1,10 +1,10 @@
-import { Company, CompanyModel } from '../../../model/Company/Company';
+import { Company, CompanyModel } from '@model/Company/Company';
 import {
   Staff,
   AdminPermission,
   StaffRole,
   StaffModel,
-} from '../../../model/Company/Staff';
+} from '@model/Company/Staff';
 import StaffRepo from '../StaffRepo/StaffRepo';
 import {
   createParameter,

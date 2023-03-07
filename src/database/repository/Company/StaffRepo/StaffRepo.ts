@@ -1,12 +1,9 @@
 import bcrypt from 'bcrypt';
-import { Staff, StaffModel } from '../../../model/Company/Staff';
-import {
-  AuthenticationType,
-  Credential,
-  UserType,
-} from '../../../model/Credential';
-import CredentialRepo from '../../CredentialRepo';
+import crypto from 'crypto';
+import { Staff, StaffModel } from '@model/Company/Staff';
+import { AuthenticationType, Credential, UserType } from '@model/Credential';
 import { createParameter, findByUsernameParameter } from './StaffRepoSchema';
+import CredentialRepo from '../../CredentialRepo';
 
 async function create({
   staff,

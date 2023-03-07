@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
-import UserModel, { User } from '../../model/User/User';
-import Keystore from '../../model/Keystore';
+import UserModel, { User } from '@model/User/User';
+import Keystore from '@model/Keystore';
 import KeystoreRepo from '../KeystoreRepo';
 import { CredentialModel } from '../../model/Credential';
 import Logger from '../../../core/Logger';

@@ -1,18 +1,18 @@
 import express from 'express';
 import { ProtectedRequest } from 'app-request';
-import UserRepo from '../database/repository/User/UserRepo';
+import UserRepo from '@repository/User/UserRepo';
 import {
   AuthFailureError,
   AccessTokenError,
   TokenExpiredError,
 } from '../core/ApiError';
 import JWT from '../core/JWT';
-import KeystoreRepo from '../database/repository/KeystoreRepo';
+import KeystoreRepo from '@repository/KeystoreRepo';
 import { Types } from 'mongoose';
 import { getAccessToken, validateTokenData } from './authUtils';
-import validator, { ValidationSource } from '../helpers/validator';
+import validator, { ValidationSource } from '@helpers/validator';
 import schema from './schema';
-import asyncHandler from '../helpers/asyncHandler';
+import asyncHandler from '@helpers/asyncHandler';
 
 const router = express.Router();
 
