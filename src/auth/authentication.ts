@@ -14,9 +14,9 @@ import validator, { ValidationSource } from '@helpers/validator';
 import schema from './schema';
 import asyncHandler from '@helpers/asyncHandler';
 
-const router = express.Router();
+const authentication = express.Router();
 
-export default router.use(
+authentication.use(
   validator(schema.auth, ValidationSource.HEADER),
   asyncHandler(async (req: ProtectedRequest, res, next) => {
     req.accessToken = getAccessToken(req.headers.authorization); // Express headers are auto converted to lowercase
@@ -40,3 +40,5 @@ export default router.use(
     }
   }),
 );
+
+export default authentication;
