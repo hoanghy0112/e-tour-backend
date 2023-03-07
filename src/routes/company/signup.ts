@@ -8,6 +8,13 @@ import StaffRepo from '../../database/repository/Company/StaffRepo/StaffRepo';
 import asyncHandler from '../../helpers/asyncHandler';
 import validator from '../../helpers/validator';
 import schema from './schema';
+import {
+  AuthenticationType,
+  Credential,
+  UserType,
+} from '../../database/model/Credential';
+import CredentialRepo from '../../database/repository/CredentialRepo';
+import KeystoreRepo from '../../database/repository/KeystoreRepo';
 
 const router = express.Router();
 
@@ -19,8 +26,6 @@ router.post(
       username: req.body.username,
     });
     if (admin) throw new BadRequestError('User already registered');
-
-    const passwordHash = await bcrypt.hash(req.body.password, 10);
 
     const { createdAdmin, createdCompany } = await CompanyRepo.create({
       company: {
@@ -34,12 +39,15 @@ router.post(
         phone: req.body.phone,
       },
       username: req.body.username,
-      password: passwordHash,
+      password: req.body.password,
     });
+
+    const tokens = await KeystoreRepo.create(createdAdmin.credential);
 
     new SuccessResponse('Signup Successful', {
       createdAdmin,
       createdCompany,
+      tokens,
     }).send(res);
   }),
 );

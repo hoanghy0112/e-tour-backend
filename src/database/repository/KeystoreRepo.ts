@@ -1,7 +1,10 @@
 import Keystore, { KeystoreModel } from '../model/Keystore';
+import crypto from 'crypto';
 import { Types } from 'mongoose';
 import { User } from '../model/User/User';
 import { Credential, CredentialModel } from '../model/Credential';
+import { createTokens } from '../../auth/authUtils';
+import { Tokens } from '../../types/app-request';
 
 async function findforKey(key: string): Promise<Keystore | null> {
   return KeystoreModel.findOne({
@@ -34,17 +37,19 @@ async function find(
     .exec();
 }
 
-async function create(
-  client: Credential,
-  primaryKey: string,
-  secondaryKey: string,
-): Promise<Keystore> {
+async function create(credential: Credential): Promise<Tokens> {
+  const accessTokenKey = crypto.randomBytes(64).toString('hex');
+  const refreshTokenKey = crypto.randomBytes(64).toString('hex');
+
   const keystore = await KeystoreModel.create({
-    client: client,
-    primaryKey: primaryKey,
-    secondaryKey: secondaryKey,
+    client: (credential._id || credential).toString(),
+    primaryKey: accessTokenKey,
+    secondaryKey: refreshTokenKey,
   });
-  return keystore.toObject();
+
+  const tokens = createTokens(credential, accessTokenKey, refreshTokenKey);
+
+  return tokens;
 }
 
 export default {

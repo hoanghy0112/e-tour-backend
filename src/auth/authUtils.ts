@@ -37,7 +37,7 @@ export const createTokens = async (
     new JwtPayload(
       tokenInfo.issuer,
       tokenInfo.audience,
-      credential._id.toString(),
+      (credential._id || credential).toString(),
       accessTokenKey,
       tokenInfo.accessTokenValidity,
     ),
@@ -49,7 +49,7 @@ export const createTokens = async (
     new JwtPayload(
       tokenInfo.issuer,
       tokenInfo.audience,
-      credential._id.toString(),
+      (credential._id || credential).toString(),
       refreshTokenKey,
       tokenInfo.refreshTokenValidity,
     ),

@@ -1,23 +1,18 @@
 import bcrypt from 'bcrypt';
-import crypto from 'crypto';
 import { Staff, StaffModel } from '../../../model/Company/Staff';
 import {
   AuthenticationType,
   Credential,
-  CredentialModel,
   UserType,
 } from '../../../model/Credential';
+import CredentialRepo from '../../CredentialRepo';
 import { createParameter, findByUsernameParameter } from './StaffRepoSchema';
-import KeystoreRepo from '../../KeystoreRepo';
 
 async function create({
   staff,
   username,
   password,
 }: createParameter): Promise<Staff> {
-  // const accessTokenKey = crypto.randomBytes(64).toString('hex');
-  // const refreshTokenKey = crypto.randomBytes(64).toString('hex');
-
   const passwordHash = await bcrypt.hash(password, 10);
 
   const credential = {
@@ -27,12 +22,14 @@ async function create({
     password: passwordHash,
   } as Credential;
 
-  const createdCredential = await CredentialModel.create(credential);
+  const createdCredential = await CredentialRepo.create(credential);
 
-  const createdStaff = await StaffModel.create({
-    ...staff,
-    credentialId: createdCredential._id,
-  } as Staff);
+  const createdStaff = (
+    await StaffModel.create({
+      ...staff,
+      credential: createdCredential._id,
+    })
+  ).populate('credential');
 
   return createdStaff;
 }
@@ -40,7 +37,10 @@ async function create({
 async function findByUsername({
   username,
 }: findByUsernameParameter): Promise<Staff | null> {
-  return await StaffModel.findOne({ username }).lean().exec();
+  return await StaffModel.findOne({ username })
+    .populate('credential')
+    .lean()
+    .exec();
 }
 
 export default {

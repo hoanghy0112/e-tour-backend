@@ -1,20 +1,20 @@
 import express from 'express';
-import { TokenRefreshResponse } from '../../core/ApiResponse';
+import { TokenRefreshResponse } from '../../../core/ApiResponse';
 import { ProtectedRequest } from 'app-request';
 import { Types } from 'mongoose';
-import UserRepo from '../../database/repository/User/UserRepo';
-import { AuthFailureError } from '../../core/ApiError';
-import JWT from '../../core/JWT';
-import KeystoreRepo from '../../database/repository/KeystoreRepo';
+import UserRepo from '../../../database/repository/User/UserRepo';
+import { AuthFailureError } from '../../../core/ApiError';
+import JWT from '../../../core/JWT';
+import KeystoreRepo from '../../../database/repository/KeystoreRepo';
 import crypto from 'crypto';
 import {
   validateTokenData,
   createTokens,
   getAccessToken,
-} from '../../auth/authUtils';
-import validator, { ValidationSource } from '../../helpers/validator';
+} from '../../../auth/authUtils';
+import validator, { ValidationSource } from '../../../helpers/validator';
 import schema from './schema';
-import asyncHandler from '../../helpers/asyncHandler';
+import asyncHandler from '../../../helpers/asyncHandler';
 
 const router = express.Router();
 

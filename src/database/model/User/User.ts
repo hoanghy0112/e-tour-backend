@@ -1,4 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
+import { Credential } from '../Credential';
 
 export interface User {
   _id: Types.ObjectId;
@@ -6,13 +7,13 @@ export interface User {
   identity: string;
   isForeigner: boolean;
   email: string;
-  password: string;
   image?: string;
   address?: string;
   phoneNumber?: string;
   identityExpiredAt?: Date;
   isPhoneVerified?: boolean;
   isEmailVerified?: boolean;
+  credential: Credential;
 }
 
 const schema = new Schema<User>(
@@ -26,10 +27,10 @@ const schema = new Schema<User>(
       unique: true,
       required: true,
     },
-    password: {
-      type: String,
-      required: true,
-    },
+    // password: {
+    //   type: String,
+    //   required: true,
+    // },
     image: {
       type: String,
     },
@@ -59,6 +60,10 @@ const schema = new Schema<User>(
       type: Boolean,
       default: false,
     },
+    credential: {
+      type: Schema.Types.ObjectId,
+      ref: 'Credential'
+    }
   },
   {
     timestamps: true,

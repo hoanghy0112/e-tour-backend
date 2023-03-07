@@ -1,4 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
+import { Credential } from '../Credential';
 
 export enum StaffRole {
   ADMIN = 'admin',
@@ -27,7 +28,7 @@ export interface Staff {
   role: StaffRole;
   permissions: Permission[];
   companyId: Types.ObjectId;
-  credentialId?: Types.ObjectId;
+  credential: Credential;
 }
 
 const schema = new Schema<Staff>(
@@ -52,7 +53,7 @@ const schema = new Schema<Staff>(
       type: Schema.Types.ObjectId,
       ref: 'Company',
     },
-    credentialId: { type: Schema.Types.ObjectId, ref: 'Credential' },
+    credential: { type: Schema.Types.ObjectId, ref: 'Credential' },
   },
   {
     timestamps: true,
