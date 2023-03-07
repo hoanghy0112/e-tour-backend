@@ -24,7 +24,10 @@ const ticketSchema = new Schema<TicketInterface>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Tour',
     },
-    status: TicketStatus,
+    status: {
+      type: String,
+      enum: Object.values(TicketStatus),
+    },
     price: {
       type: Number,
     },

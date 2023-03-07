@@ -32,7 +32,10 @@ const touristsRouteSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A tour must have a description'],
     },
-    type: TouristsRouteType,
+    type: {
+      type: String,
+      enum: Object.values(TouristsRouteType),
+    },
     route: [
       {
         type: String,

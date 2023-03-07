@@ -22,7 +22,10 @@ const voucherSchema = new Schema<VoucherInterface>(
       type: Date,
       default: Date.now(),
     },
-    type: VoucherType,
+    type: {
+      type: String,
+      enum: Object.values(VoucherType),
+    },
     description: {
       type: String,
     },

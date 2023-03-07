@@ -18,7 +18,10 @@ const tourSchema = new Schema(
       type: Date,
       default: Date.now(),
     },
-    type: TourType,
+    type: {
+      type: String,
+      enum: Object.values(TourType),
+    },
     image: {
       type: String,
     },

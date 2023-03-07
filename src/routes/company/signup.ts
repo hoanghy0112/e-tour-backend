@@ -8,7 +8,6 @@ import StaffRepo from '../../database/repository/Company/StaffRepo/StaffRepo';
 import asyncHandler from '../../helpers/asyncHandler';
 import validator from '../../helpers/validator';
 import schema from './schema';
-import UserRepo from '../../database/repository/User/UserRepo';
 
 const router = express.Router();
 
