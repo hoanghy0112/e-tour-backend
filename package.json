@@ -13,7 +13,7 @@
     "watch-ts": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "eslint": "eslint . --ext .js,.ts",
     "upgrade": "npm update --save-dev && npm update --save",
-    "test": "jest --forceExit --detectOpenHandles --verbose",
+    "test": "jest --forceExit --verbose",
     "test-watch": "jest --detectOpenHandles --verbose"
   },
   "license": "Apache-2.0",
