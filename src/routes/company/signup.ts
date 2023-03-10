@@ -1,4 +1,4 @@
-import { RoleRequest } from 'app-request';
+import { RoleRequest } from '@/types/app-request';
 import bcrypt from 'bcrypt';
 import express from 'express';
 import { BadRequestError } from '../../core/ApiError';

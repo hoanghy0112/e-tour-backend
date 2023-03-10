@@ -1,4 +1,4 @@
-import { Tokens } from 'app-request';
+import { Tokens } from '@/types/app-request';
 import { AuthFailureError, InternalError } from '@core/ApiError';
 import JWT, { JwtPayload } from '@core/JWT';
 import { Types } from 'mongoose';

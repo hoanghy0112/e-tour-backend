@@ -1,5 +1,5 @@
 import express from 'express';
-import { ProtectedRequest } from 'app-request';
+import { ProtectedRequest } from '@/types/app-request';
 import { AuthFailureError } from '@core/ApiError';
 import asyncHandler from '@helpers/asyncHandler';
 

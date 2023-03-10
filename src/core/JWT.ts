@@ -20,7 +20,6 @@ export class JwtPayload {
   iat: number;
   exp: number;
   prm: string;
-
   constructor(
     issuer: string,
     audience: string,

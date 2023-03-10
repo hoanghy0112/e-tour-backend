@@ -1,6 +1,6 @@
 import express from 'express';
 import { TokenRefreshResponse } from '../../../core/ApiResponse';
-import { ProtectedRequest } from 'app-request';
+import { ProtectedRequest } from '@/types/app-request';
 import { Types } from 'mongoose';
 import UserRepo from '../../../database/repository/User/UserRepo';
 import { AuthFailureError } from '../../../core/ApiError';
