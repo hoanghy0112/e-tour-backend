@@ -15,16 +15,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
-      # - name: Build docker images
-      #   run: docker-compose build
-      # - name: Run docker images
-      #   run: docker-compose up -d
-      # - name: Run tests
-      #   run: docker exec -t app npm test
-      # - name: Clean up
-      #   if: success() || failure()
-      #   run: docker-compose down --rmi all -v --remove-orphans
+          node-version: "18.x"
       - name: Install dependencies
         run: npm install
       - name: Run all test cases

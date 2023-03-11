@@ -53,7 +53,6 @@ async function readPrivateKey(): Promise<string> {
 async function encode(payload: JwtPayload): Promise<string> {
   const cert = await readPrivateKey();
   if (!cert) throw new InternalError('Token generation failure');
-  console.log({ cert });
   // @ts-ignore
   return promisify(sign)({ ...payload }, cert, {
     algorithm: 'RS256',
