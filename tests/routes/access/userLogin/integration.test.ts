@@ -56,7 +56,10 @@ describe('User login by username and password', () => {
     } as User);
   });
 
-  afterAll(() => {
+  afterAll(async () => {
+    await UserModel.remove({});
+    await CredentialModel.remove({});
+    await KeystoreModel.remove({});
     connection.close();
   });
 
