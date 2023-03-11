@@ -7,6 +7,5 @@ app
     Logger.info(`server running on port : ${port}`);
   })
   .on('error', (e) => {
-    Logger.info({ env: process.env });
     Logger.error(e);
   });
