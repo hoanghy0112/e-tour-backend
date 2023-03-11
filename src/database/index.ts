@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import Logger from '@/core/Logger';
 import { db } from '@/config';
 
-const dbURI = db.connectionString;
+const dbURI = db.connectionString || 'mongodb+srv://hoanghy:01122003@data.nylr2.mongodb.net/etour';
 
 const options = {
   autoIndex: true,
