@@ -12,7 +12,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      # - name: Build docker images
+      #   run: docker-compose build
+      # - name: Run docker images
+      #   run: docker-compose up -d
+      # - name: Run tests
+      #   run: docker exec -t app npm test
+      # - name: Clean up
+      #   if: success() || failure()
+      #   run: docker-compose down --rmi all -v --remove-orphans
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Run all test cases
-        run: npm run test
+        run: npm run build && npm run test
