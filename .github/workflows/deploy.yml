@@ -38,3 +38,4 @@ jobs:
           tags: hoanghy/e-tour:latest
           build-args: |
             MONGO_URL=${{env.MONGO_URL}}
+            TEST_VALUE=${{env.TEST_VALUE}}
