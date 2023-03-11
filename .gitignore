@@ -13,7 +13,7 @@ node_modules
 package-lock.json
 
 # ignore key
-*.pem
+# *.pem
 
 # Ignore built files
 build
@@ -25,9 +25,9 @@ coverage
 .env
 
 #keys
-keys/*
-!keys/*.md
-!keys/*.example
+# keys/*
+# !keys/*.md
+# !keys/*.example
 
 #temp
 temp
