@@ -26,9 +26,9 @@ describe('User login by username and password', () => {
   let credentialId = '';
 
   beforeAll(async () => {
-    await UserModel.remove({});
-    await CredentialModel.remove({});
-    await KeystoreModel.remove({});
+    await UserModel.deleteMany({});
+    await CredentialModel.deleteMany({});
+    await KeystoreModel.deleteMany({});
 
     const passwordHash = await bcrypt.hash(PASSWORD, 10);
 
@@ -57,9 +57,9 @@ describe('User login by username and password', () => {
   });
 
   afterAll(async () => {
-    await UserModel.remove({});
-    await CredentialModel.remove({});
-    await KeystoreModel.remove({});
+    await UserModel.deleteMany({});
+    await CredentialModel.deleteMany({});
+    await KeystoreModel.deleteMany({});
     connection.close();
   });
 
