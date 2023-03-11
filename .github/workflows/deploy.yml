@@ -37,5 +37,15 @@ jobs:
           push: true
           tags: hoanghy/e-tour:latest
           build-args: |
-            MONGO_URL=${{env.MONGO_URL}}
-            TEST_VALUE=134134
+            NODE_ENV=${{ secrets.NODE_ENV }}
+            PORT=${{ secrets.PORT }}
+            CORS_URL=${{ secrets.CORS_URL }}
+            LOG_DIR=${{ secrets.LOG_DIR }}
+            MONGO_URL=${{ secrets.MONGO_URL }}
+            TZ=${{ secrets.TZ }}
+            DB_MIN_POOL_SIZE=${{ secrets.DB_MIN_POOL_SIZE }}
+            DB_MAX_POOL_SIZE=${{ secrets.DB_MAX_POOL_SIZE }}
+            ACCESS_TOKEN_VALIDITY_SEC=${{ secrets.ACCESS_TOKEN_VALIDITY_SEC }}
+            REFRESH_TOKEN_VALIDITY_SEC=${{ secrets.REFRESH_TOKEN_VALIDITY_SEC }}
+            TOKEN_ISSUER=${{ secrets.TOKEN_ISSUER }}
+            TOKEN_AUDIENCE=${{ secrets.TOKEN_AUDIENCE }}
