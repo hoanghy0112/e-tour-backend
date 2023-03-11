@@ -26,6 +26,6 @@ jobs:
       #   if: success() || failure()
       #   run: docker-compose down --rmi all -v --remove-orphans
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       - name: Run all test cases
         run: npm run build && npm run test
