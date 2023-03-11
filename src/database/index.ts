@@ -2,8 +2,6 @@ import mongoose from 'mongoose';
 import Logger from '@/core/Logger';
 import { db } from '@/config';
 
-Logger.info({ env: process.env });
-
 const dbURI = db.connectionString;
 
 const options = {
