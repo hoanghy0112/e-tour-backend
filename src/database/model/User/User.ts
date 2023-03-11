@@ -27,16 +27,11 @@ const schema = new Schema<User>(
       unique: true,
       required: true,
     },
-    // password: {
-    //   type: String,
-    //   required: true,
-    // },
     image: {
       type: String,
     },
     phoneNumber: {
       type: String,
-      required: false,
     },
     address: {
       type: String,

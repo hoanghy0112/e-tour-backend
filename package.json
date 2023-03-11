@@ -15,7 +15,7 @@
     "upgrade": "npm update --save-dev && npm update --save",
     "test": "jest --forceExit --detectOpenHandles --verbose",
     "deploy": "docker build . -t hoanghy/e-tour && docker push hoanghy/e-tour",
-    "test-watch": "jest --detectOpenHandles --verbose"
+    "test-watch": "jest --watch --detectOpenHandles --verbose"
   },
   "license": "Apache-2.0",
   "dependencies": {

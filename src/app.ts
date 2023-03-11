@@ -13,7 +13,6 @@ import {
 import routes from './routes';
 
 process.on('uncaughtException', (e) => {
-  Logger.info({ env: process.env });
   Logger.error(e);
 });
 
