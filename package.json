@@ -14,6 +14,7 @@
     "eslint": "eslint . --ext .js,.ts",
     "upgrade": "npm update --save-dev && npm update --save",
     "test": "jest --forceExit --detectOpenHandles --verbose",
+    "deploy": "docker build . -t hoanghy/e-tour && docker push hoanghy/e-tour",
     "test-watch": "jest --detectOpenHandles --verbose"
   },
   "license": "Apache-2.0",
