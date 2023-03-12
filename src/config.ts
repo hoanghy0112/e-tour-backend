@@ -19,3 +19,6 @@ export const tokenInfo = {
 };
 
 export const logDirectory = process.env.LOG_DIR;
+
+export const region = 'ap-southeast-1';
+export const Bucket = 'etour-0112';

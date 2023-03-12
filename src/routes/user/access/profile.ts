@@ -6,7 +6,7 @@ import authentication from '@auth/authentication';
 const profileRouter = express.Router();
 
 profileRouter.get(
-  '/user/profile',
+  '/',
   authentication.userAuthentication,
   asyncHandler(async (req: Request, res) => {
     //
