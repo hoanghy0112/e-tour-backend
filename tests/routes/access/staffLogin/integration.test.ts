@@ -1,49 +1,39 @@
-import bcrypt from 'bcrypt';
 import supertest from 'supertest';
 import app from '../../../../src/app';
 import {
-  AuthenticationType,
-  Credential,
-  CredentialModel,
-  UserType,
-} from '../../../../src/database/model/Credential';
+  Staff,
+  StaffModel,
+  StaffRole,
+} from '../../../../src/database/model/Company/Staff';
+import { CredentialModel } from '../../../../src/database/model/Credential';
 import { KeystoreModel } from '../../../../src/database/model/Keystore';
-import UserModel, { User } from '../../../../src/database/model/User/User';
-import CredentialRepo from '../../../../src/database/repository/CredentialRepo';
-import KeystoreRepo from '../../../../src/database/repository/KeystoreRepo';
-import UserRepo from '../../../../src/database/repository/User/UserRepo';
+import UserModel from '../../../../src/database/model/User/User';
+import StaffRepo from '../../../../src/database/repository/Company/StaffRepo/StaffRepo';
 import { PASSWORD, USERNAME } from './mock';
+import { connection } from '../../../../src/database';
 
 describe('Staff login', () => {
   const endpoint = '/company/login/basic';
   const request = supertest(app);
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     await UserModel.deleteMany({});
+    await StaffModel.deleteMany({});
     await CredentialModel.deleteMany({});
     await KeystoreModel.deleteMany({});
 
-    const passwordHash = await bcrypt.hash(PASSWORD, 10);
-
-    const credential = {
-      authenticationType: AuthenticationType.PASSWORD,
-      userType: UserType.CLIENT,
+    await StaffRepo.create({
+      staff: {
+        fullName: 'HY',
+        role: StaffRole.STAFF,
+      } as Staff,
       username: USERNAME,
-      password: passwordHash,
-    } as Credential;
+      password: PASSWORD,
+    });
+  });
 
-    const createdCredential = await CredentialRepo.create(credential);
-
-    await UserRepo.create({
-      fullName: 'hyhy',
-      identity: '12345',
-      isForeigner: false,
-      email: 'hy@gmail.com',
-      image: 'https://image.hub.com/image',
-      address: '3/32 Quang Trung',
-      phoneNumber: '0916769792',
-      credential: createdCredential,
-    } as User);
+  afterAll(async () => {
+    connection.close();
   });
 
   test('Should send error response when username is invalid', async () => {

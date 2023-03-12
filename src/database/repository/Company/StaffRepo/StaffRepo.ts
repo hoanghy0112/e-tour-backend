@@ -1,7 +1,12 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { Staff, StaffModel } from '@model/Company/Staff';
-import { AuthenticationType, Credential, UserType } from '@model/Credential';
+import {
+  AuthenticationType,
+  Credential,
+  CredentialModel,
+  UserType,
+} from '@model/Credential';
 import { createParameter, findByUsernameParameter } from './StaffRepoSchema';
 import CredentialRepo from '../../CredentialRepo';
 
@@ -34,7 +39,11 @@ async function create({
 async function findByUsername({
   username,
 }: findByUsernameParameter): Promise<Staff | null> {
-  return await StaffModel.findOne({ username })
+  const credential = await CredentialModel.findOne({ username });
+
+  if (!credential) return null;
+
+  return await StaffModel.findOne({ credential: credential?._id.toString() })
     .populate('credential')
     .lean()
     .exec();

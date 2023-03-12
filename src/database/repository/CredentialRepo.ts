@@ -16,8 +16,6 @@ async function create({
   return credential;
 }
 
-const CredentialRepo = {
+export default {
   create,
 };
-
-export default CredentialRepo;

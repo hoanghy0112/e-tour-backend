@@ -1,2 +1,4 @@
-export const USERNAME = 'username';
-export const PASSWORD = 'password';
+import { v4 } from 'uuid';
+
+export const USERNAME = v4();
+export const PASSWORD = v4();

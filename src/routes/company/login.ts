@@ -15,16 +15,18 @@ router.post(
   '/basic',
   validator(schema.credential),
   asyncHandler(async (req: PublicRequest, res) => {
-    const staff = await StaffRepo.findByUsername(req.body.username);
-    if (!staff) throw new BadRequestError('User not registered');
+    const staff = await StaffRepo.findByUsername({
+      username: req.body.username,
+    });
+    if (!staff) throw new AuthFailureError('Authentication failure');
 
-    if (!staff.credential.password)
-      throw new BadRequestError('Credential not set');
+    if (!req.body.password) throw new BadRequestError('Credential not set');
 
     const match = await bcrypt.compare(
       req.body.password,
-      staff.credential.password,
+      staff.credential.password || '',
     );
+
     if (!match) throw new AuthFailureError('Authentication failure');
 
     const tokens = await KeystoreRepo.create(staff.credential);
