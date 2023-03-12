@@ -37,7 +37,10 @@ imageRouter.get(
           res.status(200).sendFile(filePath);
         })
         .on('close', () => {
-          rmSync(filePath, { force: true });
+          // Delete temporary file after send it to client
+          setTimeout(() => {
+            rmSync(filePath, { force: true });
+          }, 20000);
         });
     } catch (e) {
       return new BadRequestResponse('File not found').send(res);
