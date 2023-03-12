@@ -6,7 +6,7 @@ describe('Get image', () => {
   const request = supertest(app);
 
   it('Should response 400 if image not found', async () => {
-    const response = await request.get(`${endpoint}/not-exist-image.png`);
+    const response = await request.get(`${endpoint}/not-exists-image.png`);
 
     expect(response.status).toBe(400);
   });
