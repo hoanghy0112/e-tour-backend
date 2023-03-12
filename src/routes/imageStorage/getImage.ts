@@ -43,7 +43,7 @@ imageRouter.get(
           }, 20000);
         });
     } catch (e) {
-      return new BadRequestResponse(e).send(res);
+      return new BadRequestResponse(JSON.stringify(e)).send(res);
     }
   }),
 );
