@@ -24,7 +24,7 @@ const schema = new Schema<User>(
     },
     email: {
       type: String,
-      unique: true,
+      // unique: true,
       required: true,
     },
     image: {

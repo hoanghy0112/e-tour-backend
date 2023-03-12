@@ -2,10 +2,11 @@ import supertest from 'supertest';
 import { connection } from '../../../../src/database';
 import {
   AuthenticationType,
+  Credential,
   CredentialModel,
   UserType,
 } from '../../../../src/database/model/Credential';
-import UserModel from '../../../../src/database/model/User/User';
+import UserModel, { User } from '../../../../src/database/model/User/User';
 import app from '../../../../src/app';
 import path from 'path';
 import {
@@ -23,19 +24,22 @@ import {
   username,
 } from './mock';
 import { readFileSync } from 'fs';
+import UserRepo from '../../../../src/database/repository/User/UserRepo';
+import CredentialRepo from '../../../../src/database/repository/CredentialRepo';
+import { deleteImageFromS3, getS3Image } from '../../../../src/database/s3';
 
 describe('User sign up', () => {
   const endpoint = '/user/signup/basic';
   const request = supertest(app);
 
-  const imageFile = readFileSync(path.resolve(__dirname, 'avatar.png'));
+  const imageFile = path.resolve(__dirname, './avatar.png');
 
   async function resetDatabase() {
     await UserModel.deleteMany({});
     await CredentialModel.deleteMany({});
   }
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     await resetDatabase();
   });
 
@@ -45,12 +49,25 @@ describe('User sign up', () => {
   });
 
   it('Should send 400 Bad Request when username is not valid', async () => {
-    await CredentialModel.create({
+    const credential = {
       authenticationType: AuthenticationType.PASSWORD,
       userType: UserType.CLIENT,
       username: username,
       password: password,
-    });
+    } as Credential;
+
+    const createdCredential = await CredentialRepo.create(credential);
+
+    const createdUser = await UserRepo.create({
+      fullName: fullName,
+      identity: identity,
+      isForeigner: true,
+      email: email,
+      address: address,
+      phoneNumber: phoneNumber,
+      identityExpiredAt: identityExpiredAt,
+      credential: createdCredential,
+    } as User);
 
     const response = await request
       .post(endpoint)
@@ -68,7 +85,8 @@ describe('User sign up', () => {
       .attach('image', imageFile);
 
     expect(response.status).toBe(400);
-    expect(await UserModel.count()).toBe(0);
+    expect(await UserModel.count()).toBe(1);
+    await resetDatabase();
   });
 
   it('Should send 400 when user is foreigner but identityExpiredAt is empty', async () => {
@@ -108,6 +126,23 @@ describe('User sign up', () => {
     expect(await UserModel.count()).toBe(0);
   });
 
+  it('Should send 200 when user info is valid and image is empty', async () => {
+    const response = await request
+      .post(endpoint)
+      .field('username', username)
+      .field('password', password)
+      .field('fullName', fullName)
+      .field('identity', identity)
+      .field('isForeigner', true)
+      .field('email', email)
+      .field('identityExpiredAt', identityExpiredAt.toISOString())
+      .field('isPhoneVerified', isPhoneVerified)
+      .field('isEmailVerified', isEmailVerified);
+
+    expect(response.status).toBe(200);
+    expect(await UserModel.count()).toBe(1);
+  });
+
   it('Should send 200 when user is foreigner and user info is valid', async () => {
     const response = await request
       .post(endpoint)
@@ -122,10 +157,14 @@ describe('User sign up', () => {
       .field('isEmailVerified', isEmailVerified)
       .attach('image', imageFile);
 
+    const imageID = response.body.data.user.image;
+    const avatarImage = await getS3Image(imageID);
+
     expect(response.status).toBe(200);
     expect(await UserModel.count()).toBe(1);
+    expect(avatarImage).not.toBeNull();
 
-    await resetDatabase();
+    await deleteImageFromS3(imageID);
   });
 
   it('Should send 200 when user is not foreigner and user info is valid', async () => {
@@ -143,9 +182,13 @@ describe('User sign up', () => {
       .field('isEmailVerified', isEmailVerified)
       .attach('image', imageFile);
 
+    const imageID = response.body.data.user.image;
+    const avatarImage = await getS3Image(imageID);
+
     expect(response.status).toBe(200);
     expect(await UserModel.count()).toBe(1);
+    expect(avatarImage).not.toBeNull();
 
-    await resetDatabase();
+    await deleteImageFromS3(imageID);
   });
 });
