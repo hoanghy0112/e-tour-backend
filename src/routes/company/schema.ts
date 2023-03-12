@@ -8,7 +8,7 @@ export default {
   signup: Joi.object().keys({
     name: Joi.string().required().min(1),
     email: Joi.string().required().email(),
-    description: Joi.string().required().min(1),
+    description: Joi.string().optional().min(1),
     image: Joi.string().optional().uri(),
     previewImages: Joi.array().items(Joi.string().uri()),
     address: Joi.string().optional(),

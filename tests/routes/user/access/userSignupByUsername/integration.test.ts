@@ -1,13 +1,13 @@
 import supertest from 'supertest';
-import { connection } from '../../../../src/database';
+import { connection } from '../../../../../src/database';
 import {
   AuthenticationType,
   Credential,
   CredentialModel,
   UserType,
-} from '../../../../src/database/model/Credential';
-import UserModel, { User } from '../../../../src/database/model/User/User';
-import app from '../../../../src/app';
+} from '../../../../../src/database/model/Credential';
+import UserModel, { User } from '../../../../../src/database/model/User/User';
+import app from '../../../../../src/app';
 import path from 'path';
 import {
   address,
@@ -24,9 +24,9 @@ import {
   username,
 } from './mock';
 import { readFileSync } from 'fs';
-import UserRepo from '../../../../src/database/repository/User/UserRepo';
-import CredentialRepo from '../../../../src/database/repository/CredentialRepo';
-import { deleteImageFromS3, getS3Image } from '../../../../src/database/s3';
+import UserRepo from '../../../../../src/database/repository/User/UserRepo';
+import CredentialRepo from '../../../../../src/database/repository/CredentialRepo';
+import { deleteImageFromS3, getS3Image } from '../../../../../src/database/s3';
 
 describe('User sign up', () => {
   const endpoint = '/user/signup/basic';

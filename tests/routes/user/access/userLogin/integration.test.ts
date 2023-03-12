@@ -4,17 +4,17 @@ import {
   Credential,
   CredentialModel,
   UserType,
-} from '../../../../src/database/model/Credential';
-import CredentialRepo from '../../../../src/database/repository/CredentialRepo';
-import KeystoreRepo from '../../../../src/database/repository/KeystoreRepo';
-import UserRepo from '../../../../src/database/repository/User/UserRepo';
-import UserModel, { User } from '../../../../src/database/model/User/User';
-import { KeystoreModel } from '../../../../src/database/model/Keystore';
+} from '../../../../../src/database/model/Credential';
+import CredentialRepo from '../../../../../src/database/repository/CredentialRepo';
+import KeystoreRepo from '../../../../../src/database/repository/KeystoreRepo';
+import UserRepo from '../../../../../src/database/repository/User/UserRepo';
+import UserModel, { User } from '../../../../../src/database/model/User/User';
+import { KeystoreModel } from '../../../../../src/database/model/Keystore';
 import supertest from 'supertest';
-import app from '../../../../src/app';
+import app from '../../../../../src/app';
 import { addHeaders } from './mock';
-import JWT from '../../../../src/core/JWT';
-import { connection } from '../../../../src/database';
+import JWT from '../../../../../src/core/JWT';
+import { connection } from '../../../../../src/database';
 
 describe('User login by username and password', () => {
   const USERNAME = 'username';

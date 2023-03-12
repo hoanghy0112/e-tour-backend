@@ -1,4 +1,4 @@
-import * as authUtils from '../../../../src/auth/authUtils';
+import * as authUtils from '../../../../../src/auth/authUtils';
 
 export const getAccessTokenSpy = jest.spyOn(authUtils, 'getAccessToken');
 
