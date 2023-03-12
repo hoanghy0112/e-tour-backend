@@ -49,3 +49,5 @@ jobs:
             REFRESH_TOKEN_VALIDITY_SEC=${{ secrets.REFRESH_TOKEN_VALIDITY_SEC }}
             TOKEN_ISSUER=${{ secrets.TOKEN_ISSUER }}
             TOKEN_AUDIENCE=${{ secrets.TOKEN_AUDIENCE }}
+            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}

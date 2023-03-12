@@ -19,7 +19,7 @@ router.post(
   validator(schema.credential),
   asyncHandler(async (req: PublicRequest, res) => {
     const user = await UserRepo.findByUsername(req.body.username);
-    if (!user) throw new BadRequestError('User not registered');
+    if (!user) throw new AuthFailureError('Authentication failure');
 
     if (!user.credential.password)
       throw new BadRequestError('Credential not set');

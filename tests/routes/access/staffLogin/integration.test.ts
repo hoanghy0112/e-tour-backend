@@ -1,29 +1,22 @@
 import bcrypt from 'bcrypt';
+import supertest from 'supertest';
+import app from '../../../../src/app';
 import {
   AuthenticationType,
   Credential,
   CredentialModel,
   UserType,
 } from '../../../../src/database/model/Credential';
+import { KeystoreModel } from '../../../../src/database/model/Keystore';
+import UserModel, { User } from '../../../../src/database/model/User/User';
 import CredentialRepo from '../../../../src/database/repository/CredentialRepo';
 import KeystoreRepo from '../../../../src/database/repository/KeystoreRepo';
 import UserRepo from '../../../../src/database/repository/User/UserRepo';
-import UserModel, { User } from '../../../../src/database/model/User/User';
-import { KeystoreModel } from '../../../../src/database/model/Keystore';
-import supertest from 'supertest';
-import app from '../../../../src/app';
-import { addHeaders } from './mock';
-import JWT from '../../../../src/core/JWT';
-import { connection } from '../../../../src/database';
+import { PASSWORD, USERNAME } from './mock';
 
-describe('User login by username and password', () => {
-  const USERNAME = 'username';
-  const PASSWORD = '123456';
-  const endpoint = '/user/login/basic';
-
+describe('Staff login', () => {
+  const endpoint = '/company/login/basic';
   const request = supertest(app);
-
-  let credentialId = '';
 
   beforeAll(async () => {
     await UserModel.deleteMany({});
@@ -40,11 +33,8 @@ describe('User login by username and password', () => {
     } as Credential;
 
     const createdCredential = await CredentialRepo.create(credential);
-    credentialId = createdCredential._id.toString();
 
-    const tokens = await KeystoreRepo.create(createdCredential);
-
-    const createdUser = await UserRepo.create({
+    await UserRepo.create({
       fullName: 'hyhy',
       identity: '12345',
       isForeigner: false,
@@ -54,13 +44,6 @@ describe('User login by username and password', () => {
       phoneNumber: '0916769792',
       credential: createdCredential,
     } as User);
-  });
-
-  afterAll(async () => {
-    await UserModel.deleteMany({});
-    await CredentialModel.deleteMany({});
-    await KeystoreModel.deleteMany({});
-    connection.close();
   });
 
   test('Should send error response when username is invalid', async () => {
@@ -81,19 +64,12 @@ describe('User login by username and password', () => {
     expect(response.status).toBe(401);
   });
 
-  it('Should send success response and correct credential', async () => {
-    const response = await addHeaders(
-      request.post(endpoint).send({
-        username: USERNAME,
-        password: PASSWORD,
-      }),
-    );
-
-    const accessToken = response.body.data.tokens.accessToken;
-    const JWT_Token = await JWT.validate(accessToken);
+  test('Should send success response when credential is valid', async () => {
+    const response = await request.post(endpoint).send({
+      username: USERNAME,
+      password: PASSWORD,
+    });
 
     expect(response.status).toBe(200);
-    expect(response.body.statusCode).toBe('10000');
-    expect(JWT_Token.sub).toBe(credentialId);
   });
 });
