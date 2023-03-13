@@ -30,13 +30,11 @@ describe('User login by username and password', () => {
     await CredentialModel.deleteMany({});
     await KeystoreModel.deleteMany({});
 
-    const passwordHash = await bcrypt.hash(PASSWORD, 10);
-
     const credential = {
       authenticationType: AuthenticationType.PASSWORD,
       userType: UserType.CLIENT,
       username: USERNAME,
-      password: passwordHash,
+      password: PASSWORD,
     } as Credential;
 
     const createdCredential = await CredentialRepo.create(credential);
@@ -89,11 +87,12 @@ describe('User login by username and password', () => {
       }),
     );
 
+    expect(response.status).toBe(200);
+    expect(response.body.statusCode).toBe('10000');
+
     const accessToken = response.body.data.tokens.accessToken;
     const JWT_Token = await JWT.validate(accessToken);
 
-    expect(response.status).toBe(200);
-    expect(response.body.statusCode).toBe('10000');
     expect(JWT_Token.sub).toBe(credentialId);
   });
 });

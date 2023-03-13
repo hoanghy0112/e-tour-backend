@@ -32,10 +32,6 @@ describe('Staff login', () => {
     });
   });
 
-  afterAll(async () => {
-    connection.close();
-  });
-
   test('Should send error response when username is invalid', async () => {
     const response = await request.post(endpoint).send({
       username: 'wrong-username',

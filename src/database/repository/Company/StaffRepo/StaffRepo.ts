@@ -15,13 +15,11 @@ async function create({
   username,
   password,
 }: createParameter): Promise<Staff> {
-  const passwordHash = await bcrypt.hash(password, 10);
-
   const credential = {
     authenticationType: AuthenticationType.PASSWORD,
     userType: UserType.STAFF,
     username,
-    password: passwordHash,
+    password,
   } as Credential;
 
   const createdCredential = await CredentialRepo.create(credential);
