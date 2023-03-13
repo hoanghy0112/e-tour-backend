@@ -44,8 +44,8 @@ describe('User sign up', () => {
   });
 
   afterAll(async () => {
-    // resetDatabase();
     connection.close();
+    jest.unmock('../../../../../src/database/s3');
   });
 
   it('Should send 400 Bad Request when username is not valid', async () => {
@@ -160,11 +160,11 @@ describe('User sign up', () => {
     const imageID = response.body.data.user.image;
     const avatarImage = await getS3Image(imageID);
 
+    await deleteImageFromS3(imageID);
+
     expect(response.status).toBe(200);
     expect(await UserModel.count()).toBe(1);
     expect(avatarImage).not.toBeNull();
-
-    await deleteImageFromS3(imageID);
   });
 
   it('Should send 200 when user is not foreigner and user info is valid', async () => {
@@ -185,10 +185,10 @@ describe('User sign up', () => {
     const imageID = response.body.data.user.image;
     const avatarImage = await getS3Image(imageID);
 
+    await deleteImageFromS3(imageID);
+
     expect(response.status).toBe(200);
     expect(await UserModel.count()).toBe(1);
     expect(avatarImage).not.toBeNull();
-
-    await deleteImageFromS3(imageID);
   });
 });

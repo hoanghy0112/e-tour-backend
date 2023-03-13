@@ -1,31 +1,50 @@
 import { RoleRequest } from '@/types/app-request';
-import bcrypt from 'bcrypt';
-import express from 'express';
+import express, { Request } from 'express';
 import { BadRequestError } from '../../core/ApiError';
 import { SuccessResponse } from '../../core/ApiResponse';
 import CompanyRepo from '../../database/repository/Company/CompanyRepo/CompanyRepo';
 import StaffRepo from '../../database/repository/Company/StaffRepo/StaffRepo';
+import KeystoreRepo from '../../database/repository/KeystoreRepo';
 import asyncHandler from '../../helpers/asyncHandler';
 import validator from '../../helpers/validator';
 import schema from './schema';
-import {
-  AuthenticationType,
-  Credential,
-  UserType,
-} from '../../database/model/Credential';
-import CredentialRepo from '../../database/repository/CredentialRepo';
-import KeystoreRepo from '../../database/repository/KeystoreRepo';
+import multer from 'multer';
+import { uploadImageToS3 } from '../../database/s3';
 
 const router = express.Router();
 
+const upload = multer({ storage: multer.memoryStorage() });
+
 router.post(
   '/basic',
+  upload.fields([{ name: 'image', maxCount: 1 }, { name: 'previewImages' }]),
   validator(schema.signup),
-  asyncHandler(async (req: RoleRequest, res) => {
+  asyncHandler(async (req: Request, res) => {
     const admin = await StaffRepo.findByUsername({
       username: req.body.username,
     });
+
     if (admin) throw new BadRequestError('User already registered');
+
+    let image;
+    let previewImages;
+
+    if (req.files) {
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+      if (files?.image) {
+        const imageFile = files?.image[0];
+        image = imageFile ? await uploadImageToS3(imageFile) : '';
+      }
+
+      if (files?.previewImages) {
+        const previewImageFiles = files?.previewImages as Express.Multer.File[];
+        previewImages = await Promise.all(
+          previewImageFiles.map(async (image) =>
+            image ? (await uploadImageToS3(image)) || '' : '',
+          ),
+        );
+      }
+    }
 
     const { createdAdmin, createdCompany } = await CompanyRepo.create({
       company: {
@@ -33,8 +52,8 @@ router.post(
         name: req.body.name,
         email: req.body.email,
         description: req.body.description,
-        image: req.body.image,
-        previewImages: req.body.previewImages,
+        image: image || '',
+        previewImages: previewImages,
         address: req.body.address,
         phone: req.body.phone,
       },

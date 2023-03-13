@@ -1,4 +1,4 @@
-import { Company, CompanyModel } from '@model/Company/Company';
+import CompanyModel, { Company } from '@model/Company/Company';
 import {
   Staff,
   AdminPermission,

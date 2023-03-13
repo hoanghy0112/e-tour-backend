@@ -29,7 +29,8 @@ export async function getS3Image(
 }
 
 export async function uploadImageToS3(
-  image: Express.Multer.File,
+  image: { originalname: string; buffer: Buffer },
+  Key = '',
 ): Promise<string | null> {
   const uid = uuidv4();
   const ext = image.originalname.split('.').at(-1);
@@ -37,7 +38,7 @@ export async function uploadImageToS3(
 
   const command = new PutObjectCommand({
     Bucket: Bucket,
-    Key: imageFileName,
+    Key: Key || imageFileName,
     Body: image.buffer,
   });
 
@@ -55,12 +56,15 @@ export async function deleteImageFromS3(
   const command = new DeleteObjectCommand({
     Bucket: Bucket,
     Key: imageFileName,
+    ExpectedBucketOwner: '748722176544',
   });
 
   try {
-    await client.send(command);
+    const data = await client.send(command);
+    console.log({ data });
     return true;
   } catch (error) {
+    console.log({ error });
     return false;
   }
 }

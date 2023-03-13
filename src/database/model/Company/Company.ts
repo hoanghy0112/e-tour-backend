@@ -6,8 +6,8 @@ export interface Company {
   name: string;
   email: string;
   description: string;
-  image: string;
-  previewImages: string[];
+  image?: string;
+  previewImages?: string[];
   address: string;
   phone: string;
 }
@@ -47,4 +47,5 @@ const schema = new Schema<Company>(
 
 schema.index({ name: 1 });
 
-export const CompanyModel = model('Company', schema);
+const CompanyModel = model('Company', schema);
+export default CompanyModel;
