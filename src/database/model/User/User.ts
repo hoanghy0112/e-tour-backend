@@ -2,7 +2,7 @@ import { Schema, model, Types } from 'mongoose';
 import { Credential } from '../Credential';
 
 export interface User {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
   fullName: string;
   identity: string;
   isForeigner: boolean;

@@ -23,6 +23,7 @@ export const AdminPermission = [
 ];
 
 export interface Staff {
+  _id: string;
   fullName: string;
   image?: string;
   role: StaffRole;

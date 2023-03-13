@@ -43,13 +43,11 @@ router.post(
     )
       throw new BadRequestError('address or phoneNumber is empty');
 
-    const passwordHash = await bcrypt.hash(req.body.password, 10);
-
     const credential = {
       authenticationType: AuthenticationType.PASSWORD,
       userType: UserType.CLIENT,
       username: req.body.username,
-      password: passwordHash,
+      password: req.body.password,
     } as Credential;
     const createdCredential = await CredentialRepo.create(credential);
 

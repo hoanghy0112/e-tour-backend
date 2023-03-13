@@ -49,7 +49,17 @@ async function findByUsername({
     .exec();
 }
 
+async function findByCredentialId(id: string): Promise<Staff | null> {
+  const credential = await CredentialModel.findById(id);
+
+  return StaffModel.findOne({ credential: credential?._id.toString() })
+    .populate('credential')
+    .lean()
+    .exec();
+}
+
 export default {
   create,
   findByUsername,
+  findByCredentialId,
 };

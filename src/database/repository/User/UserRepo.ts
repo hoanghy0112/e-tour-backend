@@ -13,6 +13,17 @@ export async function findById(id: Types.ObjectId): Promise<User | null> {
     .exec();
 }
 
+export async function findByCredentialId(id: string): Promise<User | null> {
+  const credential = await CredentialModel.findById(id);
+
+  if (!credential) return null;
+
+  return await UserModel.findOne({ credential: credential._id.toString() })
+    .populate('credential')
+    .lean()
+    .exec();
+}
+
 export async function findByUsername(username: string): Promise<User | null> {
   const credential = await CredentialModel.findOne({ username });
 
@@ -37,5 +48,6 @@ export async function create(user: User): Promise<User> {
 export default {
   findById,
   findByUsername,
+  findByCredentialId,
   create,
 };
