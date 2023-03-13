@@ -22,6 +22,7 @@ import {
 } from './mock';
 import path from 'path';
 import { connection } from '../../../../src/database';
+import { v4 } from 'uuid';
 
 describe('Company sign up', () => {
   const endpoint = '/company/signup/basic';
@@ -29,8 +30,8 @@ describe('Company sign up', () => {
 
   beforeAll(async () => {
     await UserModel.deleteMany({});
-    await CompanyModel.deleteMany({});
     await StaffModel.deleteMany({});
+    await CompanyModel.deleteMany({});
     await CredentialModel.deleteMany({});
     await KeystoreModel.deleteMany({});
 
@@ -85,13 +86,13 @@ describe('Company sign up', () => {
       .field('description', description)
       .field('address', address)
       .field('phone', phone)
-      .field('username', username)
+      .field('username', v4())
       .field('password', password)
       .attach('image', path.resolve(__dirname, './image.png'))
       .attach('previewImages', path.resolve(__dirname, './preview1.png'))
       .attach('previewImages', path.resolve(__dirname, './preview2.png'));
 
     expect(response.status).toBe(200);
-    expect(response.body.data.previewImages.length).toBe(2);
+    expect(response.body.data.createdCompany.previewImages.length).toBe(2);
   });
 });

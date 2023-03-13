@@ -24,7 +24,7 @@ router.post(
       username: req.body.username,
     });
 
-    if (admin) throw new BadRequestError('User already registered');
+    if (admin) throw new BadRequestError('Username already registered');
 
     let image;
     let previewImages;
