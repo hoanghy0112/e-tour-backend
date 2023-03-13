@@ -1,9 +1,11 @@
 import Logger from './core/Logger';
 import { port } from './config';
-import app from './app';
+import httpServer from './httpServer';
+import { runSocketServer } from './socketServer';
 
-app
+httpServer
   .listen(port, () => {
+    runSocketServer();
     Logger.info({ env: process.env });
     Logger.info(`server running on port : ${port}`);
   })

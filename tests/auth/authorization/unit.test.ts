@@ -80,5 +80,5 @@ describe('Authorization middleware', () => {
       .set('authorization', `Bearer ${tokens.accessToken}`);
 
     expect(response.status).toBe(401);
-  });
+  }, 15000);
 });

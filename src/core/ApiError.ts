@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { Socket } from 'socket.io';
 import { environment } from '../config';
 import {
   AuthFailureResponse,
@@ -50,6 +51,33 @@ export abstract class ApiError extends Error {
         // Do not send failure message in production as it may send sensitive data
         if (environment === 'production') message = 'Something wrong happened.';
         return new InternalErrorResponse(message).send(res);
+      }
+    }
+  }
+
+  public static handleSocket(err: ApiError, socket: Socket): void {
+    switch (err.type) {
+      case ErrorType.BAD_TOKEN:
+      case ErrorType.TOKEN_EXPIRED:
+      case ErrorType.UNAUTHORIZED:
+        return new AuthFailureResponse(err.message).sendSocket(socket);
+      case ErrorType.ACCESS_TOKEN:
+        return new AccessTokenErrorResponse(err.message).sendSocket(socket);
+      case ErrorType.INTERNAL:
+        return new InternalErrorResponse(err.message).sendSocket(socket);
+      case ErrorType.NOT_FOUND:
+      case ErrorType.NO_ENTRY:
+      case ErrorType.NO_DATA:
+        return new NotFoundResponse(err.message).sendSocket(socket);
+      case ErrorType.BAD_REQUEST:
+        return new BadRequestResponse(err.message).sendSocket(socket);
+      case ErrorType.FORBIDDEN:
+        return new ForbiddenResponse(err.message).sendSocket(socket);
+      default: {
+        let message = err.message;
+        // Do not send failure message in production as it may send sensitive data
+        if (environment === 'production') message = 'Something wrong happened.';
+        return new InternalErrorResponse(message).sendSocket(socket);
       }
     }
   }

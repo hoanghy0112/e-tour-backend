@@ -17,27 +17,56 @@ import validator, { ValidationSource } from '@helpers/validator';
 import schema from './schema';
 import asyncHandler from '@helpers/asyncHandler';
 import StaffRepo from '../database/repository/Company/StaffRepo/StaffRepo';
+import { User } from '../database/model/User/User';
+import { Staff } from '../database/model/Company/Staff';
 
-const userAuthentication = express.Router();
-const staffAuthentication = express.Router();
+const userAuthenticationMiddleware = express.Router();
+const staffAuthenticationMiddleware = express.Router();
 
-userAuthentication.use(
+export async function authenticateUser(
+  accessToken: string,
+): Promise<{ user: User | null; primaryKey: string }> {
+  const payload = await JWT.validate(accessToken);
+  validateTokenData(payload);
+
+  const user = await UserRepo.findByCredentialId(
+    new Types.ObjectId(payload.sub).toString(),
+  );
+
+  return {
+    user,
+    primaryKey: payload.prm,
+  };
+}
+
+export async function authenticateStaff(
+  accessToken: string,
+): Promise<{ staff: Staff | null; primaryKey: string }> {
+  const payload = await JWT.validate(accessToken);
+  validateTokenData(payload);
+
+  const staff = await StaffRepo.findByCredentialId(
+    new Types.ObjectId(payload.sub).toString(),
+  );
+
+  return {
+    staff,
+    primaryKey: payload.prm,
+  };
+}
+
+userAuthenticationMiddleware.use(
   validator(schema.auth, ValidationSource.HEADER),
   asyncHandler(async (req: ProtectedUserRequest, res, next) => {
     req.accessToken = getAccessToken(req.headers.authorization); // Express headers are auto converted to lowercase
 
     try {
-      const payload = await JWT.validate(req.accessToken);
-      validateTokenData(payload);
-
-      const user = await UserRepo.findByCredentialId(
-        new Types.ObjectId(payload.sub).toString(),
-      );
+      const { user, primaryKey } = await authenticateUser(req.accessToken);
 
       if (!user) throw new AuthFailureError('Invalid access token');
       req.user = user;
 
-      const keystore = await KeystoreRepo.findforKey(payload.prm);
+      const keystore = await KeystoreRepo.findforKey(primaryKey);
       if (!keystore) throw new AuthFailureError('Invalid access token');
       req.keystore = keystore;
 
@@ -49,22 +78,18 @@ userAuthentication.use(
   }),
 );
 
-staffAuthentication.use(
+staffAuthenticationMiddleware.use(
   validator(schema.auth, ValidationSource.HEADER),
   asyncHandler(async (req: ProtectedStaffRequest, res, next) => {
     req.accessToken = getAccessToken(req.headers.authorization); // Express headers are auto converted to lowercase
 
     try {
-      const payload = await JWT.validate(req.accessToken);
-      validateTokenData(payload);
+      const { staff, primaryKey } = await authenticateStaff(req.accessToken);
 
-      const staff = await StaffRepo.findByCredentialId(
-        new Types.ObjectId(payload.sub).toString(),
-      );
       if (!staff) throw new AuthFailureError('Staff not registered');
       req.staff = staff;
 
-      const keystore = await KeystoreRepo.findforKey(payload.prm);
+      const keystore = await KeystoreRepo.findforKey(primaryKey);
       if (!keystore) throw new AuthFailureError('Invalid access token');
       req.keystore = keystore;
 
@@ -77,6 +102,6 @@ staffAuthentication.use(
 );
 
 export default {
-  userAuthentication,
-  staffAuthentication,
+  userAuthentication: userAuthenticationMiddleware,
+  staffAuthentication: staffAuthenticationMiddleware,
 };
