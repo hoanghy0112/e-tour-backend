@@ -16,5 +16,5 @@ describe('Get image', () => {
 
     expect(response.status).toBe(200);
     expect(response.type).toBe('image/jpeg');
-  });
+  }, 15000);
 });

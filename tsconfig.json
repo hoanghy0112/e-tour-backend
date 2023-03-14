@@ -26,6 +26,6 @@
       "@repository/*": ["src/database/repository/*"]
     }
   },
-  "include": ["src/**/*", "src/types"],
+  "include": ["src/**/*", "src/types/*"],
   "exclude": [".templates"]
 }

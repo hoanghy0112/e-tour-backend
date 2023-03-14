@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { Socket } from 'socket.io';
+import { SocketServerEvent } from '../types/socket';
 
 // Helper code for the API consumer to understand the error and handle is accordingly
 enum StatusCode {
@@ -41,9 +42,15 @@ abstract class ApiResponse {
     return this.prepare<ApiResponse>(res, this, headers);
   }
 
-  public sendSocket(socket: Socket): void {
+  public sendSocket(
+    socket: Socket,
+    eventName = SocketServerEvent.RESPONSE,
+  ): void {
     const response = ApiResponse.sanitize<ApiResponse>(this);
-    socket.emit('error', response);
+    socket.emit(eventName, {
+      ...response,
+      status: this.status,
+    });
   }
 
   private static sanitize<T extends ApiResponse>(response: T): T {
