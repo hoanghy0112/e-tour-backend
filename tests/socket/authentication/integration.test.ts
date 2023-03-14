@@ -11,9 +11,12 @@ describe('Authentication in socket', () => {
   let clientSocket: Socket;
 
   beforeAll(async () => {
-    runHttpServer();
-    runSocketServer();
+    await runHttpServer();
+    await runSocketServer();
     clientSocket = io(`http://localhost`, { path: '/socket' });
+    await new Promise((resolve) => {
+      clientSocket.on('connect', () => resolve(''));
+    });
   }, 15000);
 
   afterAll(async () => {
@@ -31,6 +34,5 @@ describe('Authentication in socket', () => {
     });
 
     console.log(response.data);
-    // expect(response.status).toBe(400);
   }, 15000);
 });
