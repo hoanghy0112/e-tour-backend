@@ -1,5 +1,6 @@
 import { authenticateStaff, authenticateUser } from '../auth/authentication';
 import { User } from '../database/model/User/User';
+import { AuthenticationData } from '../types/app-request';
 
 export const socketAuthenticateUser =
   (callback: (d: AuthenticationData & { user: User } & any) => any) =>

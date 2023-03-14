@@ -32,3 +32,7 @@ declare interface Tokens {
   accessToken: string;
   refreshToken: string;
 }
+
+declare interface AuthenticationData {
+  accessToken: string;
+}
