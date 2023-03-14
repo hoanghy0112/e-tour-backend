@@ -6,19 +6,23 @@ import {
   SocketClientEvent,
   SocketServerEvent,
 } from '../../../src/types/socket';
+import httpServer from '../../../src/httpServer';
 
 describe('Socket test', () => {
   let clientSocket: Socket;
 
-  beforeAll(() => {
-    runHttpServer();
-    runSocketServer();
+  beforeAll(async () => {
+    await runHttpServer();
+    await runSocketServer();
     clientSocket = io(`http://localhost`, { path: '/socket' });
-    // clientSocket.on('connect', done);
+    await new Promise((resolve) => {
+      clientSocket.on('connect', () => resolve(''));
+    });
   }, 15000);
 
   afterAll(async () => {
     socketServer.close();
+    httpServer.close();
     clientSocket.close();
   });
 

@@ -6,6 +6,7 @@ import {
 import socketRequest from '../../../src/helpers/socketRequest';
 import socketServer from '../../../src/socketServer';
 import { runSocketServer, runHttpServer } from '../../../src/runServer';
+import httpServer from '../../../src/httpServer';
 
 describe('Authentication in socket', () => {
   let clientSocket: Socket;
@@ -21,6 +22,7 @@ describe('Authentication in socket', () => {
 
   afterAll(async () => {
     socketServer.close();
+    httpServer.close();
     clientSocket.close();
   });
 
