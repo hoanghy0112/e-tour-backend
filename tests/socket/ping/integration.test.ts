@@ -23,7 +23,7 @@ describe('Socket test', () => {
   afterAll(async () => {
     socketServer.close();
     httpServer.close();
-  });
+  }, 20000);
 
   test('Should return data if data is {text: "OK"}', async () => {
     clientSocket.emit(SocketClientEvent.PING, { text: 'OK' });
