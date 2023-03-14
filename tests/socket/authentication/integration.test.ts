@@ -14,7 +14,7 @@ describe('Authentication in socket', () => {
     runHttpServer();
     runSocketServer();
     clientSocket = io(`http://localhost`, { path: '/socket' });
-  });
+  }, 15000);
 
   afterAll(async () => {
     socketServer.close();

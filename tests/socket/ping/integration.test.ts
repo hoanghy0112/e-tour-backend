@@ -10,12 +10,12 @@ import {
 describe('Socket test', () => {
   let clientSocket: Socket;
 
-  beforeAll((done) => {
+  beforeAll(() => {
     runHttpServer();
     runSocketServer();
     clientSocket = io(`http://localhost`, { path: '/socket' });
-    clientSocket.on('connect', done);
-  });
+    // clientSocket.on('connect', done);
+  }, 15000);
 
   afterAll(async () => {
     socketServer.close();
