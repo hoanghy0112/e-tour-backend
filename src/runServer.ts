@@ -25,7 +25,7 @@ export function runHttpServer(): Promise<any> {
       })
       .on('error', (e) => {
         Logger.error(e);
-        reject();
+        reject(e);
       });
   });
 }
