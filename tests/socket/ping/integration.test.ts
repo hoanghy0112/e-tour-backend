@@ -1,5 +1,7 @@
 import { Socket, io } from 'socket.io-client';
 import socketRequest from '../../../src/helpers/socketRequest';
+import socketServer from '../../../src/socketServer';
+import { runHttpServer, runSocketServer } from '../../../src/runServer';
 import {
   SocketClientEvent,
   SocketServerEvent,
@@ -8,11 +10,15 @@ import {
 describe('Socket test', () => {
   let clientSocket: Socket;
 
-  beforeAll(async () => {
+  beforeAll((done) => {
+    runHttpServer();
+    runSocketServer();
     clientSocket = io(`http://localhost`, { path: '/socket' });
+    clientSocket.on('connect', done);
   });
 
   afterAll(async () => {
+    socketServer.close();
     clientSocket.close();
   });
 
@@ -32,7 +38,6 @@ describe('Socket test', () => {
     clientSocket.emit(SocketClientEvent.PING, { text: 'not-OK' });
     const response = await socketRequest((resolve, reject) => {
       clientSocket.on(SocketServerEvent.RESPONSE, (d) => {
-        console.log({ res: d });
         resolve(d);
       });
     });
