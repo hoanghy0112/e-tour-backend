@@ -23,7 +23,6 @@ describe('Authentication in socket', () => {
   afterAll(async () => {
     socketServer.close();
     httpServer.close();
-    clientSocket.close();
   });
 
   test('Should send error if Authorization not found', async () => {

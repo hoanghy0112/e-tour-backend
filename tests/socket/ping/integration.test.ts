@@ -23,7 +23,6 @@ describe('Socket test', () => {
   afterAll(async () => {
     socketServer.close();
     httpServer.close();
-    clientSocket.close();
   });
 
   test('Should return data if data is {text: "OK"}', async () => {
