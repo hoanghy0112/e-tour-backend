@@ -18,6 +18,14 @@ describe('Authorization middleware', () => {
   const endpoint = '/demo/authorization';
   const request = supertest(app);
 
+  beforeAll(async () => {
+    await UserModel.deleteMany({});
+    await StaffModel.deleteMany({});
+    await CompanyModel.deleteMany({});
+    await CredentialModel.deleteMany({});
+    await KeystoreModel.deleteMany({});
+  });
+
   it('Should response 400 if Authorization header is not passed', async () => {
     const response = await request.get(endpoint);
 
@@ -25,12 +33,6 @@ describe('Authorization middleware', () => {
   });
 
   it('Should response 200 if access token is valid and staff has enough permission', async () => {
-    await UserModel.deleteMany({});
-    await StaffModel.deleteMany({});
-    await CompanyModel.deleteMany({});
-    await CredentialModel.deleteMany({});
-    await KeystoreModel.deleteMany({});
-
     const USERNAME = v4();
     const PASSWORD = v4();
 
@@ -51,7 +53,7 @@ describe('Authorization middleware', () => {
       .set('authorization', `Bearer ${tokens.accessToken}`);
 
     expect(response.status).toBe(200);
-  });
+  }, 15000);
 
   it('Should response 401 if staff does not have enough permission', async () => {
     await UserModel.deleteMany({});

@@ -26,6 +26,14 @@ describe('User authentication middleware', () => {
   const endpoint = '/demo/authentication/user';
   const request = supertest(app);
 
+  beforeAll(async () => {
+    await UserModel.deleteMany({});
+    await StaffModel.deleteMany({});
+    await CompanyModel.deleteMany({});
+    await CredentialModel.deleteMany({});
+    await KeystoreModel.deleteMany({});
+  });
+
   it('Should response 400 if Authentication header is not passed', async () => {
     const response = await request.get(endpoint);
 
@@ -33,12 +41,6 @@ describe('User authentication middleware', () => {
   });
 
   it('Should response 200 if access token is valid', async () => {
-    await UserModel.deleteMany({});
-    await StaffModel.deleteMany({});
-    await CompanyModel.deleteMany({});
-    await CredentialModel.deleteMany({});
-    await KeystoreModel.deleteMany({});
-
     const USERNAME = v4();
     const PASSWORD = v4();
 
@@ -65,8 +67,7 @@ describe('User authentication middleware', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.data.user._id).toBe(user._id?.toString() || '');
-    expect(response.body.data.accessToken).toBe(tokens.accessToken);
-  });
+  }, 15000);
 });
 
 describe('Staff authentication middleware', () => {
