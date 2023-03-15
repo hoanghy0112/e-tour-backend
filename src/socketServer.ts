@@ -1,9 +1,5 @@
 import { Server } from 'socket.io';
 import server from './httpServer';
-import { ApiError, ErrorType, InternalError } from './core/ApiError';
-import Logger from './core/Logger';
-import { environment } from './config';
-import socketRouter from './routes/socket';
 
 const io = new Server(server, {
   path: '/socket/',
@@ -24,6 +20,5 @@ io.use((socket, next) => {
 
   next();
 });
-
 
 export default io;

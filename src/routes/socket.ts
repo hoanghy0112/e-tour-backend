@@ -13,7 +13,7 @@ export default function socketRouter(socket: Socket) {
       if (data.text !== 'OK') throw new BadRequestError('Text data is not ok');
       return new SuccessResponse('connection is ok', {
         text: 'Yes',
-        data: socket.data,
+        data: socket,
       }).sendSocket(socket);
     }),
   );

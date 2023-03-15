@@ -1,9 +1,10 @@
 import { Socket } from 'socket.io';
-import Logger from '../core/Logger';
-import { ApiError, ErrorType, InternalError } from '../core/ApiError';
 import { environment } from '../config';
+import { ApiError, ErrorType, InternalError } from '../core/ApiError';
+import Logger from '../core/Logger';
 
-type AsyncFunction = (...data: any) => Promise<any>;
+type MiddlewareFunction = (socket: Socket, data: any) => any;
+type HandlerFunction = (data: any) => Promise<any>;
 
 const errorHandler = (socket: Socket) => (err: any) => {
   if (err instanceof ApiError) {
@@ -25,9 +26,19 @@ const errorHandler = (socket: Socket) => (err: any) => {
 };
 
 const socketAsyncHandler =
-  (socket: Socket, execution: AsyncFunction) =>
-  (...data: any) => {
-    execution(...data).catch(errorHandler(socket));
+  (socket: Socket, ...func: (MiddlewareFunction | HandlerFunction)[]) =>
+  async (data: any) => {
+    const middlewares = func.slice(0, func.length - 1);
+    const execution = func.at(-1) as HandlerFunction;
+
+    try {
+      await Promise.all(
+        middlewares.map(async (middleware) => await middleware?.(socket, data)),
+      );
+      await execution?.(data);
+    } catch (error) {
+      errorHandler(socket)(error);
+    }
   };
 
 export default socketAsyncHandler;
