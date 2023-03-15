@@ -1,7 +1,7 @@
 import { Socket, io } from 'socket.io-client';
 import {
-  SocketClientEvent,
-  SocketServerEvent,
+  SocketClientMessage,
+  SocketServerMessage,
 } from '../../../src/types/socket';
 import socketRequest from '../../../src/helpers/socketRequest';
 import socketServer from '../../../src/socketServer';

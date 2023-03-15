@@ -4,10 +4,10 @@ export interface AuthenticationData {
   accessToken: string;
 }
 
-export enum SocketServerEvent {
+export enum SocketServerMessage {
   RESPONSE = 'response',
 }
 
-export enum SocketClientEvent {
+export enum SocketClientMessage {
   PING = 'ping',
 }

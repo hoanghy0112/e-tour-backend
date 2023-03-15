@@ -3,8 +3,8 @@ import socketRequest from '../../../src/helpers/socketRequest';
 import socketServer from '../../../src/socketServer';
 import { runHttpServer, runSocketServer } from '../../../src/runServer';
 import {
-  SocketClientEvent,
-  SocketServerEvent,
+  SocketClientMessage,
+  SocketServerMessage,
 } from '../../../src/types/socket';
 import httpServer from '../../../src/httpServer';
 
@@ -19,7 +19,6 @@ describe('Socket test', () => {
     // //   clientSocket.on('connect', () => resolve(''));
     // // });
     // clientSocket.on('connect', () => {
-
     // });
   });
 
@@ -35,7 +34,6 @@ describe('Socket test', () => {
     //     resolve(d);
     //   });
     // });
-
     // expect(response.status).toBe(200);
     // expect(response.data.text).toBe('Yes');
   });
@@ -47,7 +45,6 @@ describe('Socket test', () => {
     //     resolve(d);
     //   });
     // });
-
     // expect(response.status).toBe(400);
   });
 });

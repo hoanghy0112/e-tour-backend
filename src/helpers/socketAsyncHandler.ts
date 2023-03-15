@@ -6,7 +6,7 @@ import Logger from '../core/Logger';
 type MiddlewareFunction = (socket: Socket, data: any) => any;
 type HandlerFunction = (data: any) => Promise<any>;
 
-const errorHandler = (socket: Socket) => (err: any) => {
+export const socketErrorHandler = (socket: Socket) => (err: any) => {
   if (err instanceof ApiError) {
     ApiError.handleSocket(err, socket);
     if (err.type === ErrorType.INTERNAL)
@@ -37,7 +37,7 @@ const socketAsyncHandler =
       );
       await execution?.(data);
     } catch (error) {
-      errorHandler(socket)(error);
+      socketErrorHandler(socket)(error);
     }
   };
 

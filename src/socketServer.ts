@@ -1,5 +1,8 @@
 import { Server } from 'socket.io';
 import server from './httpServer';
+import { SocketServerMessage } from './types/socket';
+import { socketErrorHandler } from './helpers/socketAsyncHandler';
+import { BadRequestError } from './core/ApiError';
 
 const io = new Server(server, {
   path: '/socket/',
@@ -10,10 +13,18 @@ const io = new Server(server, {
 });
 
 io.use((socket, next) => {
-  const token = socket.handshake.auth.token;
-  const userType = socket.handshake.query.type; // client or staff
+  const token = socket.handshake.query.token || '';
+  const userType = (socket.handshake.query.type as string) || ''; // client or staff
 
-  socket.data = {
+  if (!['client', 'staff'].includes(userType)) {
+    const error = new BadRequestError(
+      'userType is invalid (only "client" or "staff" is allowed',
+    );
+
+    next(error);
+  }
+
+  socket.data.auth = {
     token,
     userType,
   };
