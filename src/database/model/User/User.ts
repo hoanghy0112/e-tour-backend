@@ -1,5 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 import { Credential } from '../Credential';
+import watch from '../../../helpers/realtime/watch';
 
 export interface User {
   _id?: Types.ObjectId;
@@ -57,8 +58,8 @@ const schema = new Schema<User>(
     },
     credential: {
       type: Schema.Types.ObjectId,
-      ref: 'Credential'
-    }
+      ref: 'Credential',
+    },
   },
   {
     timestamps: true,
@@ -68,5 +69,7 @@ const schema = new Schema<User>(
 schema.index({ email: 1 });
 
 const UserModel = model('User', schema);
+
+UserModel.watch().on('change', watch<User>(UserModel));
 
 export default UserModel;
