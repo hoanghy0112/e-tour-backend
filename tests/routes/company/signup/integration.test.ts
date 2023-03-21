@@ -46,7 +46,6 @@ describe('Company sign up', () => {
   });
 
   afterAll(async () => {
-    connection.close();
     jest.unmock('../../../../src/database/s3');
   });
 

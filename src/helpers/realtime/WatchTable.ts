@@ -1,6 +1,5 @@
 import { Model } from 'mongoose';
 import { v4 } from 'uuid';
-import Logger from '../../core/Logger';
 
 type FilterFunction = <T>(data: any) => boolean;
 type CallbackFunction = <T>(data: any) => void;
@@ -60,7 +59,6 @@ export default class WatchTable {
 
   static execute(model: Model<any>, data: any) {
     const normalizedCollectionName = model.modelName.toLowerCase();
-    Logger.debug(this.table);
 
     (
       (WatchTable.table.get(normalizedCollectionName) as Map<

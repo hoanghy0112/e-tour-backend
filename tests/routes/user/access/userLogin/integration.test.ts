@@ -58,7 +58,7 @@ describe('User login by username and password', () => {
     await UserModel.deleteMany({});
     await CredentialModel.deleteMany({});
     await KeystoreModel.deleteMany({});
-    connection.close();
+    // connection.close();
   });
 
   test('Should send error response when username is invalid', async () => {

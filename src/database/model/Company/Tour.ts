@@ -5,7 +5,7 @@ export enum TourType {
   PROMOTION = 'promotion',
 }
 
-export interface TourInterface {
+export interface Tour {
   departureAt: Date;
   type: TourType;
   image: string;
@@ -35,6 +35,6 @@ const tourSchema = new Schema(
   },
 );
 
-const Tour = model('Tour', tourSchema);
+const TourModel = model('Tour', tourSchema);
 
-module.exports = Tour;
+module.exports = TourModel;

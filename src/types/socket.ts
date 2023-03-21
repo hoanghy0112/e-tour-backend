@@ -10,4 +10,5 @@ export enum SocketServerMessage {
 
 export enum SocketClientMessage {
   PING = 'ping',
+  CREATE_COMPANY = 'create-company',
 }

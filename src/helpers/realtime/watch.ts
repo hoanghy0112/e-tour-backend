@@ -1,16 +1,20 @@
 import { Model } from 'mongoose';
 import WatchTable from './WatchTable';
+import { InternalError } from '../../core/ApiError';
 
 const watch =
   <T>(model: Model<any>) =>
   async (data: any) => {
-    // @ts-ignore
-    const id = data.documentKey._id;
-    const document = await model.findById(id);
+    const id = data.documentKey._id.toString();
+    if (!id) throw new InternalError('id not found');
 
-    if (document) {
-      WatchTable.execute(model, document)
-    }
+    try {
+      const document = await model.findById(id);
+
+      if (document) {
+        WatchTable.execute(model, document);
+      }
+    } catch (err) {}
   };
 
 export default watch;

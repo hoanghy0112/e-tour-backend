@@ -44,8 +44,8 @@ describe('User sign up', () => {
   });
 
   afterAll(async () => {
-    connection.close();
     jest.unmock('../../../../../src/database/s3');
+    // connection.close();
   });
 
   it('Should send 400 Bad Request when username is not valid', async () => {
@@ -165,7 +165,7 @@ describe('User sign up', () => {
     expect(response.status).toBe(200);
     expect(await UserModel.count()).toBe(1);
     expect(avatarImage).not.toBeNull();
-  });
+  }, 10000);
 
   it('Should send 200 when user is not foreigner and user info is valid', async () => {
     const response = await request

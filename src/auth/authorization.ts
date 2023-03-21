@@ -3,10 +3,10 @@ import { ProtectedStaffRequest } from '@/types/app-request';
 import { AuthFailureError } from '@core/ApiError';
 import asyncHandler from '@helpers/asyncHandler';
 import authentication from './authentication';
-import { Permission } from '../database/model/Company/Staff';
+import { StaffPermission } from '../database/model/Company/Staff';
 
 // This middleware is only used to determine permissions of a staff
-export default function authorization(permissions: Permission[]) {
+export default function authorization(permissions: StaffPermission[]) {
   const router = express.Router();
 
   return router.use(

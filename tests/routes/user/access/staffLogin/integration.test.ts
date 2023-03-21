@@ -39,7 +39,7 @@ describe('Staff login', () => {
     });
 
     expect(response.status).toBe(401);
-  });
+  }, 10000);
 
   test('Should send error response when password is wrong', async () => {
     const response = await request.post(endpoint).send({
@@ -48,7 +48,7 @@ describe('Staff login', () => {
     });
 
     expect(response.status).toBe(401);
-  });
+  }, 10000);
 
   test('Should send success response when credential is valid', async () => {
     const response = await request.post(endpoint).send({

@@ -19,7 +19,6 @@ describe('WatchTable', () => {
   });
 
   afterAll(async () => {
-    // await UserModel.deleteMany({});
     connection.close();
   });
 

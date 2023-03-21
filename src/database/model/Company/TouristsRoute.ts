@@ -5,7 +5,7 @@ export enum TouristsRouteType {
   FOREIGN = 'foreign',
 }
 
-export interface TouristsRouteInterface {
+export interface TouristsRoute {
   reservationFee: number;
   name: string;
   description: string;
@@ -15,7 +15,7 @@ export interface TouristsRouteInterface {
   companyId: mongoose.Types.ObjectId;
 }
 
-const touristsRouteSchema = new mongoose.Schema(
+const touristsRouteSchema = new mongoose.Schema<TouristsRoute>(
   {
     reservationFee: {
       type: Number,
@@ -54,6 +54,6 @@ const touristsRouteSchema = new mongoose.Schema(
   },
 );
 
-const TouristsRoute = mongoose.model('TouristsRoute', touristsRouteSchema);
+const TouristsRouteModel = mongoose.model('TouristsRoute', touristsRouteSchema);
 
-module.exports = TouristsRoute;
+export default TouristsRouteModel;
