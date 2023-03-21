@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import app from '../../../src/app';
 import UserModel from '../../../src/database/model/User/User';
 import {
-  Permission,
+  StaffPermission,
   Staff,
   StaffModel,
   StaffRole,
@@ -40,7 +40,7 @@ describe('Authorization middleware', () => {
       staff: {
         fullName: 'HY',
         role: StaffRole.STAFF,
-        permissions: [Permission.EDIT_ROUTE, Permission.EDIT_TOUR],
+        permissions: [StaffPermission.EDIT_ROUTE, StaffPermission.EDIT_TOUR],
       } as Staff,
       username: USERNAME,
       password: PASSWORD,
@@ -69,7 +69,7 @@ describe('Authorization middleware', () => {
       staff: {
         fullName: 'HY',
         role: StaffRole.STAFF,
-        permissions: [Permission.EDIT_ROUTE],
+        permissions: [StaffPermission.EDIT_ROUTE],
       } as Staff,
       username: USERNAME,
       password: PASSWORD,
