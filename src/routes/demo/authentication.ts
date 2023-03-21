@@ -6,6 +6,7 @@ import {
 } from '../../types/app-request';
 import { SuccessResponse } from '../../core/ApiResponse';
 import authentication from '../../auth/authentication';
+import WatchTable from '../../helpers/realtime/WatchTable';
 
 const testAuthenticationRouter = express.Router();
 

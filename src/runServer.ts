@@ -6,6 +6,8 @@ import socketRouter from './routes/socket';
 import io from './socketServer';
 import { authenticateStaff, authenticateUser } from './auth/authentication';
 import { BadRequestError } from './core/ApiError';
+import WatchTable from './helpers/realtime/WatchTable';
+import UserModel from './database/model/User/User';
 
 export function runSocketServer(): Promise<any> {
   io.use(async (socket, next) => {

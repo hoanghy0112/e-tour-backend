@@ -1,31 +1,76 @@
+import { Model } from 'mongoose';
+import { v4 } from 'uuid';
+import Logger from '../../core/Logger';
+
 type FilterFunction = <T>(data: any) => boolean;
-type NormalFunction = <T>(data: any) => void;
+type CallbackFunction = <T>(data: any) => void;
 
 interface TableElement {
-  filter: FilterFunction;
-  callback: NormalFunction;
+  filters: FilterFunction[];
+  callbacks: CallbackFunction[];
 }
 
-// key is collection name
-const table = new Map();
+export class RegistedCommand {
+  private id: string;
+  private model: Model<any>;
+  private filters: FilterFunction[];
+  private callbacks: CallbackFunction[];
 
-function register(
-  collectionName: string,
-  filter: FilterFunction,
-  callback: NormalFunction,
-) {
-  table.set(collectionName, [
-    ...table.get(collectionName),
-    { filter, callback },
-  ]);
+  constructor(model: Model<any>) {
+    this.model = model;
+    this.filters = [];
+    this.callbacks = [];
+    this.id = v4();
+  }
+
+  filter(func: FilterFunction): RegistedCommand {
+    this.filters.push(func);
+    return this;
+  }
+
+  do(func: CallbackFunction): RegistedCommand {
+    this.callbacks.push(func);
+    WatchTable._setHandler(this.model, this.id, this.filters, this.callbacks);
+    return this;
+  }
 }
 
-function execute(collectionName: string, data: any) {
-  ((table.get(collectionName) as TableElement[]) || []).forEach(
-    ({ filter, callback }) => {
-      if (filter?.(data)) {
-        callback(data);
+export default class WatchTable {
+  // key of this map is collection name
+  private static table = new Map<string, Map<string, TableElement>>();
+
+  static register(model: Model<any>) {
+    return new RegistedCommand(model);
+  }
+
+  static _setHandler(
+    model: Model<any>,
+    id: string,
+    filters: FilterFunction[],
+    callbacks: CallbackFunction[],
+  ) {
+    const normalizedCollectionName = model.modelName.toLowerCase();
+
+    const collectionWatchTable =
+      WatchTable.table.get(normalizedCollectionName) || new Map();
+    collectionWatchTable.set(id, { filters, callbacks });
+
+    WatchTable.table.set(normalizedCollectionName, collectionWatchTable);
+  }
+
+  static execute(model: Model<any>, data: any) {
+    const normalizedCollectionName = model.modelName.toLowerCase();
+    Logger.debug(this.table);
+
+    (
+      (WatchTable.table.get(normalizedCollectionName) as Map<
+        string,
+        TableElement
+      >) || []
+    ).forEach(({ filters, callbacks }) => {
+      if (filters?.every((func) => func(data))) {
+        callbacks.forEach((func) => func(data));
       }
-    },
-  );
+    });
+  }
 }
