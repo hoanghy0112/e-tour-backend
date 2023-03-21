@@ -61,10 +61,8 @@ export async function deleteImageFromS3(
 
   try {
     const data = await client.send(command);
-    console.log({ data });
     return true;
   } catch (error) {
-    console.log({ error });
     return false;
   }
 }
