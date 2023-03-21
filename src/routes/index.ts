@@ -4,7 +4,7 @@ import companyLogin from './company/login';
 import userSignup from './user/access/signup';
 import userLogin from './user/access/login';
 import profileRouter from './user/access/profile';
-import imageRouter from './imageStorage/getImage';
+import imageRouter from './imageStorage/image';
 import demoRouter from './demo';
 
 const router = express.Router();
