@@ -9,6 +9,7 @@ import {
   BadRequestResponse,
   ForbiddenResponse,
 } from './ApiResponse';
+import { SocketServerMessage } from '../types/socket';
 
 export enum ErrorType {
   BAD_TOKEN = 'BadTokenError',
@@ -60,24 +61,27 @@ export abstract class ApiError extends Error {
       case ErrorType.BAD_TOKEN:
       case ErrorType.TOKEN_EXPIRED:
       case ErrorType.UNAUTHORIZED:
-        return new AuthFailureResponse(err.message).sendSocket(socket);
+        return new AuthFailureResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
       case ErrorType.ACCESS_TOKEN:
-        return new AccessTokenErrorResponse(err.message).sendSocket(socket);
+        return new AccessTokenErrorResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
       case ErrorType.INTERNAL:
-        return new InternalErrorResponse(err.message).sendSocket(socket);
+        return new InternalErrorResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
       case ErrorType.NOT_FOUND:
       case ErrorType.NO_ENTRY:
       case ErrorType.NO_DATA:
-        return new NotFoundResponse(err.message).sendSocket(socket);
+        return new NotFoundResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
       case ErrorType.BAD_REQUEST:
-        return new BadRequestResponse(err.message).sendSocket(socket);
+        return new BadRequestResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
       case ErrorType.FORBIDDEN:
-        return new ForbiddenResponse(err.message).sendSocket(socket);
+        return new ForbiddenResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
       default: {
         let message = err.message;
         // Do not send failure message in production as it may send sensitive data
         if (environment === 'production') message = 'Something wrong happened.';
-        return new InternalErrorResponse(message).sendSocket(socket);
+        return new InternalErrorResponse(message).sendSocket(
+          socket,
+          SocketServerMessage.ERROR,
+        );
       }
     }
   }

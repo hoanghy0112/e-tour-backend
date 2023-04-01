@@ -1,9 +1,11 @@
 import { Socket } from 'socket.io';
 import { StaffPermission } from '../database/model/Company/Staff';
 import { BadRequestError, ForbiddenError } from '../core/ApiError';
+import Logger from '../core/Logger';
 
 const socketAuthorization =
   (permissions: StaffPermission[]) => (socket: Socket) => {
+    Logger.debug(socket.data);
     const staff = socket.data?.staff;
     if (!staff) throw new BadRequestError('User is not a staff');
     const staffPermissions: string[] = staff.permissions || [];

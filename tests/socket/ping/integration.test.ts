@@ -27,7 +27,7 @@ describe('Socket test', () => {
   });
 
   beforeEach(async () => {
-    clientSocket = await getSocketInstance();
+    clientSocket = await getSocketInstance('staff');
   });
 
   afterEach(() => {
@@ -52,7 +52,7 @@ describe('Socket test', () => {
   test('Should send error if data is invalid', async () => {
     clientSocket.emit(SocketClientMessage.PING, { text: 'not-OK' });
     const response = await socketRequest((resolve, reject) => {
-      clientSocket.on(SocketServerMessage.RESPONSE, (d) => {
+      clientSocket.on(SocketServerMessage.ERROR, (d) => {
         resolve(d);
       });
     });

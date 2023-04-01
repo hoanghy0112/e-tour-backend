@@ -8,6 +8,8 @@ import { authenticateStaff, authenticateUser } from './auth/authentication';
 import { BadRequestError } from './core/ApiError';
 import WatchTable from './helpers/realtime/WatchTable';
 import UserModel from './database/model/User/User';
+import { BadRequestResponse } from './core/ApiResponse';
+import { SocketServerMessage } from './types/socket';
 
 export function runSocketServer(): Promise<any> {
   io.use(async (socket, next) => {
@@ -15,7 +17,6 @@ export function runSocketServer(): Promise<any> {
     const userType = (socket.handshake.query.type as string) || ''; // client or staff
 
     if (!userType) return next();
-    Logger.debug({ userType });
 
     try {
       switch (userType) {
@@ -35,8 +36,7 @@ export function runSocketServer(): Promise<any> {
           );
       }
     } catch (error: any) {
-      if (error.name === 'TokenExpiredError')
-        return next(new BadRequestError('token is expired'));
+      return next(new BadRequestError('Token is wrong'));
     }
 
     next();

@@ -34,13 +34,14 @@ app.use((req, res, next) => next(new NotFoundError()));
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ApiError) {
     ApiError.handle(err, res);
-    if (err.type === ErrorType.INTERNAL)
+    if (err.type === ErrorType.INTERNAL) {
       Logger.error(
-        `500 - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`,
+        `500 - ${err.message} - ${err.stack} - ${req.originalUrl} - ${req.method} - ${req.ip}`,
       );
+    }
   } else {
     Logger.error(
-      `500 - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`,
+      `500 - ${err.message} - ${err.stack} - ${req.originalUrl} - ${req.method} - ${req.ip}`,
     );
     Logger.error(err);
     if (environment === 'development') {

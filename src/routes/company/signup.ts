@@ -10,6 +10,7 @@ import validator from '../../helpers/validator';
 import schema from './schema';
 import multer from 'multer';
 import { uploadImageToS3 } from '../../database/s3';
+import Logger from '../../core/Logger';
 
 const router = express.Router();
 

@@ -11,6 +11,7 @@ import {
   createReturn,
   findByIdParameter,
 } from './CompanyRepoSchema';
+import Logger from '../../../../core/Logger';
 
 export async function create({
   company,

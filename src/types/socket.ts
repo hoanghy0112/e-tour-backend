@@ -6,6 +6,8 @@ export interface AuthenticationData {
 
 export enum SocketServerMessage {
   RESPONSE = 'response',
+  ERROR = 'error',
+  CREATE_COMPANY_RESULT = 'create-company-result',
 }
 
 export enum SocketClientMessage {

@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { TouristsRoute } from '../../database/model/Company/TouristsRoute';
-import { SocketClientMessage } from '../../types/socket';
+import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import schema from './schema';
@@ -9,6 +9,7 @@ import socketAuthorization from '../../auth/socketAuthorization';
 import { StaffPermission } from '../../database/model/Company/Staff';
 import TourRouteRepo from '../../database/repository/Company/TourRoute/TourRouteRepo';
 import { BadRequestError } from '../../core/ApiError';
+import Logger from '../../core/Logger';
 
 export default function handleTourRouteSocket(socket: Socket) {
   handleCreateTourRoute(socket);
@@ -28,9 +29,10 @@ async function handleCreateTourRoute(socket: Socket) {
 
         TourRouteRepo.create(tourRoute);
 
-        return new SuccessResponse('Create tourist route successfully', {
+        return new SuccessResponse(
+          'Create tourist route successfully',
           tourRoute,
-        }).sendSocket(socket);
+        ).sendSocket(socket, SocketServerMessage.CREATE_COMPANY_RESULT);
       },
     ),
   );

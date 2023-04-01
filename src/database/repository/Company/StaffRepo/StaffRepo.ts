@@ -9,6 +9,8 @@ import {
 } from '@model/Credential';
 import { createParameter, findByUsernameParameter } from './StaffRepoSchema';
 import CredentialRepo from '../../CredentialRepo';
+import KeystoreRepo from '../../KeystoreRepo';
+import Logger from '../../../../core/Logger';
 
 async function create({
   staff,

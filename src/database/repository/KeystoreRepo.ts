@@ -5,6 +5,7 @@ import Keystore, { KeystoreModel } from '@model/Keystore';
 import { Types } from 'mongoose';
 import { User } from '@model/User/User';
 import { Credential, CredentialModel } from '@model/Credential';
+import Logger from '../../core/Logger';
 
 async function findforKey(key: string): Promise<Keystore | null> {
   return KeystoreModel.findOne({
@@ -40,9 +41,11 @@ async function find(
 async function create(credential: Credential): Promise<Tokens> {
   const accessTokenKey = crypto.randomBytes(64).toString('hex');
   const refreshTokenKey = crypto.randomBytes(64).toString('hex');
+  const creadentialId = credential?._id || credential;
+  // if (creadentialId == undefined) Logger.debug({ credential });
 
   const keystore = await KeystoreModel.create({
-    client: (credential._id || credential).toString(),
+    client: creadentialId.toString(),
     primaryKey: accessTokenKey,
     secondaryKey: refreshTokenKey,
   });
@@ -54,8 +57,6 @@ async function create(credential: Credential): Promise<Tokens> {
 
 export default {
   findforKey,
-  // remove,
-  // removeAllForClient,
   find,
   create,
 };
