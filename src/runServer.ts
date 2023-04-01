@@ -14,21 +14,29 @@ export function runSocketServer(): Promise<any> {
     const token = (socket.handshake.query.token as string) || '';
     const userType = (socket.handshake.query.type as string) || ''; // client or staff
 
-    switch (userType) {
-      case 'client':
-        const { user } = await authenticateUser(token);
-        socket.data.user = user;
-        break;
-      case 'staff':
-        const { staff } = await authenticateStaff(token);
-        socket.data.staff = staff;
-        break;
-      default:
-        next(
-          new BadRequestError(
-            'userType is invalid (only "client" or "staff" is allowed',
-          ),
-        );
+    if (!userType) return next();
+    Logger.debug({ userType });
+
+    try {
+      switch (userType) {
+        case 'client':
+          const { user } = await authenticateUser(token);
+          socket.data.user = user;
+          break;
+        case 'staff':
+          const { staff } = await authenticateStaff(token);
+          socket.data.staff = staff;
+          break;
+        default:
+          return next(
+            new BadRequestError(
+              'userType is invalid (only "client" or "staff" is allowed)',
+            ),
+          );
+      }
+    } catch (error: any) {
+      if (error.name === 'TokenExpiredError')
+        return next(new BadRequestError('token is expired'));
     }
 
     next();
@@ -37,6 +45,7 @@ export function runSocketServer(): Promise<any> {
   return new Promise((resolve, reject) => {
     io.on('connection', async (socket) => {
       Logger.debug('New connection');
+      console.log('New connection');
 
       socketRouter(socket);
     });

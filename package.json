@@ -13,7 +13,7 @@
     "watch-ts": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "eslint": "eslint . --ext .js,.ts",
     "upgrade": "npm update --save-dev && npm update --save",
-    "test": "jest --forceExit --detectOpenHandles --verbose",
+    "test": "jest --forceExit --detectOpenHandles --verbose false",
     "deploy": "docker build . -t hoanghy/e-tour && docker push hoanghy/e-tour",
     "test-watch": "jest --watch --detectOpenHandles --verbose"
   },
