@@ -21,7 +21,7 @@ import {
   username,
 } from './mock';
 import path from 'path';
-import { connection } from '../../../../src/database';
+import { connectMongo, connection } from '../../../../src/database';
 import { v4 } from 'uuid';
 
 describe('Company sign up', () => {
@@ -29,6 +29,7 @@ describe('Company sign up', () => {
   const request = supertest(app);
 
   beforeAll(async () => {
+    await connectMongo();
     await UserModel.deleteMany({});
     await StaffModel.deleteMany({});
     await CompanyModel.deleteMany({});
@@ -47,6 +48,7 @@ describe('Company sign up', () => {
 
   afterAll(async () => {
     jest.unmock('../../../../src/database/s3');
+    connection.close();
   });
 
   test('Should send 400 when username and password is invalid', async () => {

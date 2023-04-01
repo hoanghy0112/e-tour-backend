@@ -1,17 +1,10 @@
 import { readFileSync } from 'fs';
+import path from 'path';
 import {
-  client,
   deleteImageFromS3,
   getS3Image,
   uploadImageToS3,
 } from '../../../src/database/s3';
-import path from 'path';
-import {
-  DeleteObjectCommand,
-  DeleteObjectsCommand,
-  GetObjectCommand,
-} from '@aws-sdk/client-s3';
-import { Bucket } from '../../../src/config';
 
 describe('S3 helpers function', () => {
   const FILENAME = 'file.png';

@@ -14,7 +14,7 @@ import supertest from 'supertest';
 import app from '../../../../../src/app';
 import { addHeaders } from './mock';
 import JWT from '../../../../../src/core/JWT';
-import { connection } from '../../../../../src/database';
+import { connectMongo, connection } from '../../../../../src/database';
 
 describe('User login by username and password', () => {
   const USERNAME = 'username';
@@ -26,6 +26,7 @@ describe('User login by username and password', () => {
   let credentialId = '';
 
   beforeAll(async () => {
+    await connectMongo();
     await UserModel.deleteMany({});
     await CredentialModel.deleteMany({});
     await KeystoreModel.deleteMany({});
@@ -58,7 +59,7 @@ describe('User login by username and password', () => {
     await UserModel.deleteMany({});
     await CredentialModel.deleteMany({});
     await KeystoreModel.deleteMany({});
-    // connection.close();
+    connection.close();
   });
 
   test('Should send error response when username is invalid', async () => {

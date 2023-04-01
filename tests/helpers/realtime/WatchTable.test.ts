@@ -1,10 +1,11 @@
 import WatchTable from '../../../src/helpers/realtime/WatchTable';
 import UserModel from '../../../src/database/model/User/User';
-import { connection } from '../../../src/database';
+import { connectMongo, connection } from '../../../src/database';
 import { v4 } from 'uuid';
 
 describe('WatchTable', () => {
   beforeAll(async () => {
+    await connectMongo();
     await UserModel.findOneAndUpdate(
       {
         email: 'asdfa@gmail.com',

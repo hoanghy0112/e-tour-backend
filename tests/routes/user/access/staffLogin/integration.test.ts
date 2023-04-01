@@ -10,13 +10,14 @@ import { KeystoreModel } from '../../../../../src/database/model/Keystore';
 import UserModel from '../../../../../src/database/model/User/User';
 import StaffRepo from '../../../../../src/database/repository/Company/StaffRepo/StaffRepo';
 import { PASSWORD, USERNAME } from './mock';
-import { connection } from '../../../../../src/database';
+import { connectMongo, connection } from '../../../../../src/database';
 
 describe('Staff login', () => {
   const endpoint = '/company/login/basic';
   const request = supertest(app);
 
   beforeEach(async () => {
+    await connectMongo();
     await UserModel.deleteMany({});
     await StaffModel.deleteMany({});
     await CredentialModel.deleteMany({});
@@ -30,6 +31,10 @@ describe('Staff login', () => {
       username: USERNAME,
       password: PASSWORD,
     });
+  });
+
+  afterAll(() => {
+    connection.close();
   });
 
   test('Should send error response when username is invalid', async () => {

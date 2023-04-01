@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 
 import app from '../../../src/app';
-import { connection } from '../../../src/database';
+import { connectMongo, connection } from '../../../src/database';
 import UserModel, { User } from '../../../src/database/model/User/User';
 import {
   Staff,
@@ -27,11 +27,16 @@ describe('User authentication middleware', () => {
   const request = supertest(app);
 
   beforeAll(async () => {
+    await connectMongo();
     await UserModel.deleteMany({});
     await StaffModel.deleteMany({});
     await CompanyModel.deleteMany({});
     await CredentialModel.deleteMany({});
     await KeystoreModel.deleteMany({});
+  });
+
+  afterAll(() => {
+    connection.close();
   });
 
   it('Should response 400 if Authentication header is not passed', async () => {
@@ -73,6 +78,14 @@ describe('User authentication middleware', () => {
 describe('Staff authentication middleware', () => {
   const endpoint = '/demo/authentication/staff';
   const request = supertest(app);
+
+  beforeAll(async () => {
+    await connectMongo();
+  });
+
+  afterAll(() => {
+    connection.close();
+  });
 
   it('Should response 400 if Authorization header is not passed', async () => {
     //

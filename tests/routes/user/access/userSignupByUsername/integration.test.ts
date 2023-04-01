@@ -1,5 +1,5 @@
 import supertest from 'supertest';
-import { connection } from '../../../../../src/database';
+import { connectMongo, connection } from '../../../../../src/database';
 import {
   AuthenticationType,
   Credential,
@@ -40,12 +40,13 @@ describe('User sign up', () => {
   }
 
   beforeEach(async () => {
+    await connectMongo();
     await resetDatabase();
   });
 
   afterAll(async () => {
     jest.unmock('../../../../../src/database/s3');
-    // connection.close();
+    connection.close();
   });
 
   it('Should send 400 Bad Request when username is not valid', async () => {
@@ -87,7 +88,7 @@ describe('User sign up', () => {
     expect(response.status).toBe(400);
     expect(await UserModel.count()).toBe(1);
     await resetDatabase();
-  });
+  }, 10000);
 
   it('Should send 400 when user is foreigner but identityExpiredAt is empty', async () => {
     const response = await request

@@ -20,22 +20,28 @@ function setRunValidators() {
 
 mongoose.set('strictQuery', true);
 
-// Create the database connection
-mongoose
-  .plugin((schema: any) => {
-    schema.pre('findOneAndUpdate', setRunValidators);
-    schema.pre('updateMany', setRunValidators);
-    schema.pre('updateOne', setRunValidators);
-    schema.pre('update', setRunValidators);
-  })
-  .connect(dbURI, options)
-  .then(() => {
-    Logger.info('Mongoose connection done');
-  })
-  .catch((e) => {
-    Logger.info('Mongoose connection error');
-    Logger.error(e);
+export async function connectMongo() {
+  // Create the database connection
+  return new Promise<void>((resolve, reject) => {
+    mongoose
+      .plugin((schema: any) => {
+        schema.pre('findOneAndUpdate', setRunValidators);
+        schema.pre('updateMany', setRunValidators);
+        schema.pre('updateOne', setRunValidators);
+        schema.pre('update', setRunValidators);
+      })
+      .connect(dbURI, options)
+      .then(() => {
+        Logger.info('Mongoose connection done');
+        resolve();
+      })
+      .catch((e) => {
+        Logger.info('Mongoose connection error');
+        Logger.error(e);
+        reject(e);
+      });
   });
+}
 
 // CONNECTION EVENTS
 // When successfully connected

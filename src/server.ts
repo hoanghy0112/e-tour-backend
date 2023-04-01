@@ -1,4 +1,10 @@
+import { connectMongo } from './database';
 import { runHttpServer, runSocketServer } from './runServer';
 
-runSocketServer();
-runHttpServer();
+async function startServer() {
+  await connectMongo();
+  runSocketServer();
+  runHttpServer();
+}
+
+startServer();

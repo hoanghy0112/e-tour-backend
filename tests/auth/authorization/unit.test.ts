@@ -13,17 +13,23 @@ import { KeystoreModel } from '../../../src/database/model/Keystore';
 import { v4 } from 'uuid';
 import StaffRepo from '../../../src/database/repository/Company/StaffRepo/StaffRepo';
 import KeystoreRepo from '../../../src/database/repository/KeystoreRepo';
+import { connectMongo, connection } from '../../../src/database';
 
 describe('Authorization middleware', () => {
   const endpoint = '/demo/authorization';
   const request = supertest(app);
 
   beforeAll(async () => {
+    await connectMongo();
     await UserModel.deleteMany({});
     await StaffModel.deleteMany({});
     await CompanyModel.deleteMany({});
     await CredentialModel.deleteMany({});
     await KeystoreModel.deleteMany({});
+  });
+
+  afterAll(() => {
+    connection.close();
   });
 
   it('Should response 400 if Authorization header is not passed', async () => {
