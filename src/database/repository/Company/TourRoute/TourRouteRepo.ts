@@ -15,6 +15,13 @@ async function list(
   return tourRoutes;
 }
 
+async function findById(
+  id: string | Types.ObjectId,
+): Promise<TouristsRoute | null> {
+  const tourRoutes = await TouristsRouteModel.findById(id);
+  return tourRoutes;
+}
+
 async function filter({
   route,
   keyword,
@@ -24,11 +31,13 @@ async function filter({
 }) {
   const touristRoutes = await TouristsRouteModel.find({
     $and: [
-      {
-        route: {
-          $all: route || [],
-        },
-      },
+      route
+        ? {
+            route: {
+              $all: route,
+            },
+          }
+        : {},
       keyword
         ? {
             name: {
@@ -47,4 +56,5 @@ export default {
   create,
   list,
   filter,
+  findById,
 };

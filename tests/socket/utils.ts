@@ -42,7 +42,9 @@ export async function getSocketInstance(
         .field('fullName', 'full name')
         .field('identity', '00000000')
         .field('isForeigner', false)
-        .field('email', 'email@gmail.com');
+        .field('email', 'email@gmail.com')
+        .field('address', 'Tay Son');
+      console.log({ body: response.body });
       token = response.body.data.tokens.accessToken;
       break;
     case 'staff':

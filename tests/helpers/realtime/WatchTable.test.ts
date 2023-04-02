@@ -31,6 +31,11 @@ describe('WatchTable', () => {
           resolve(data);
         });
 
+      console.log(await UserModel.find({}));
+      UserModel.watch().on('change', (data) => {
+        console.log({ data });
+      });
+
       await UserModel.findOneAndUpdate(
         {
           email: 'asdfa@gmail.com',
@@ -42,6 +47,7 @@ describe('WatchTable', () => {
         },
         { upsert: true },
       );
+      console.log(await UserModel.find({}));
     })) as any;
 
     expect(response.identity).toBe('testing-hy');

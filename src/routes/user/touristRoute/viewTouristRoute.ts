@@ -7,7 +7,7 @@ import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
 import socketValidator from '../../../helpers/socketValidator';
 import TourRouteRepo from '../../../database/repository/Company/TourRoute/TourRouteRepo';
 import schema from './schema';
-import { SuccessResponse } from '../../../core/ApiResponse';
+import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
 import WatchTable from '../../../helpers/realtime/WatchTable';
 import TouristsRouteModel, {
   TouristsRoute,
@@ -16,11 +16,45 @@ import Logger from '../../../core/Logger';
 
 export async function handleViewTouristRoute(socket: Socket) {
   handleViewRecommendTouristRoute(socket);
+  handleViewTouristRouteById(socket);
   handleViewTouristRouteByFilter(socket);
 }
 
 async function handleViewRecommendTouristRoute(socket: Socket) {
   //
+}
+
+async function handleViewTouristRouteById(socket: Socket) {
+  socket.on(
+    SocketClientMessage.VIEW_ROUTE,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.viewTour.byId),
+      async ({ id }: { id: string }) => {
+        WatchTable.register(TouristsRouteModel)
+          .filter((data: TouristsRoute) => data._id.toString() === id)
+          .do((data) => {
+            new SuccessResponse('update route', data).sendSocket(
+              socket,
+              SocketServerMessage.ROUTE,
+            );
+          });
+        try {
+          const touristRoute = await TourRouteRepo.findById(id);
+
+          return new SuccessResponse(
+            'successfully retrieve tourist route',
+            touristRoute,
+          ).sendSocket(socket, SocketServerMessage.ROUTE);
+        } catch (e) {
+          return new BadRequestResponse('Tourist route not found').sendSocket(
+            socket,
+            SocketServerMessage.ERROR,
+          );
+        }
+      },
+    ),
+  );
 }
 
 async function handleViewTouristRouteByFilter(socket: Socket) {
@@ -32,12 +66,9 @@ async function handleViewTouristRouteByFilter(socket: Socket) {
       async ({ route, keyword }: { route: string[]; keyword: string }) => {
         WatchTable.register(TouristsRouteModel)
           .filter(
-            (data: TouristsRoute) => {
-              console.log('new data');
-              return true;
-            },
-            // route.every((place) => data.route.includes(place)) &&
-            // data.name.search(keyword) !== -1,
+            (data: TouristsRoute) =>
+              route.every((place) => data.route.includes(place)) &&
+              data.name.search(keyword) !== -1,
           )
           .do((data) => {
             Logger.debug('new route');

@@ -6,5 +6,8 @@ export default {
       route: Joi.array().items(Joi.string()),
       keyword: Joi.string().optional(),
     }),
+    byId: Joi.object().keys({
+      id: Joi.string(),
+    }),
   },
 };

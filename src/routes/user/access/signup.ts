@@ -39,7 +39,8 @@ router.post(
       throw new BadRequestError('identityExpiredAt is empty');
     if (
       req.body.isForeigner === 'false' &&
-      (!req.body.address || !req.body.phoneNumber)
+      !req.body.address &&
+      !req.body.phoneNumber
     )
       throw new BadRequestError('address or phoneNumber is empty');
 
