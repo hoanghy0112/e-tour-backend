@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { TouristsRouteType } from '../../database/model/Company/TouristsRoute';
+import { TourType } from '../../database/model/Company/Tour';
 
 export default {
   credential: Joi.object().keys({
@@ -36,5 +37,14 @@ export default {
       .default(TouristsRouteType.COUNTRY),
     route: Joi.array().items(Joi.string()),
     image: Joi.any(),
+  }),
+  createTour: Joi.object().keys({
+    from: Joi.date().required(),
+    to: Joi.date().required(),
+    type: Joi.string()
+      .valid(...Object.values(TourType))
+      .default(TourType.NORMAL),
+    image: Joi.string(),
+    touristRoute: Joi.string().required(),
   }),
 };

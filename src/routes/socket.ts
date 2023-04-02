@@ -6,8 +6,10 @@ import Logger from '../core/Logger';
 import { SocketClientMessage, SocketServerMessage } from '../types/socket';
 import handleTourRouteSocket from './company/tourRoute';
 import { handleViewTouristRoute } from './user/touristRoute/viewTouristRoute';
+import handleTourSocket from './company/tour';
 
 export default function socketRouter(socket: Socket) {
+  handleTourSocket(socket);
   handleTourRouteSocket(socket);
   handleViewTouristRoute(socket);
 

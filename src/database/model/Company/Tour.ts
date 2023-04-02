@@ -6,15 +6,21 @@ export enum TourType {
 }
 
 export interface Tour {
-  departureAt: Date;
+  // departureAt: Date;
+  from: Date;
+  to: Date;
   type: TourType;
   image: string;
-  touristsRoute: Types.ObjectId;
+  touristRoute: Types.ObjectId;
 }
 
-const tourSchema = new Schema(
+const tourSchema = new Schema<Tour>(
   {
-    departureAt: {
+    from: {
+      type: Date,
+      default: Date.now(),
+    },
+    to: {
       type: Date,
       default: Date.now(),
     },
@@ -25,7 +31,7 @@ const tourSchema = new Schema(
     image: {
       type: String,
     },
-    touristsRouteId: {
+    touristRoute: {
       type: Schema.Types.ObjectId,
       ref: 'TouristsRoute',
     },
@@ -37,4 +43,4 @@ const tourSchema = new Schema(
 
 const TourModel = model('Tour', tourSchema);
 
-module.exports = TourModel;
+export default TourModel;
