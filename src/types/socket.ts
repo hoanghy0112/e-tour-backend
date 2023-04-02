@@ -7,11 +7,13 @@ export interface AuthenticationData {
 export enum SocketServerMessage {
   RESPONSE = 'response',
   ERROR = 'error',
-  CREATE_COMPANY_RESULT = 'create-company-result',
-  RETRIEVE_TOURIST_ROUTE = 'retrieve-tourist-route',
+  CREATE_ROUTE_RESULT = 'create-route-result',
+  RETRIEVE_TOURIST_ROUTES = 'retrieve-tourist-route',
+  NEW_ROUTE = 'new-route',
 }
 
 export enum SocketClientMessage {
   PING = 'ping',
-  CREATE_COMPANY = 'create-company',
+  CREATE_ROUTE = 'create-route',
+  FILTER_ROUTE = 'filter-route',
 }

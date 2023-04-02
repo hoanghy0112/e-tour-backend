@@ -1,6 +1,7 @@
 import { Model } from 'mongoose';
 import WatchTable from './WatchTable';
 import { InternalError } from '../../core/ApiError';
+import Logger from '../../core/Logger';
 
 const watch =
   <T>(model: Model<any>) =>
@@ -10,6 +11,7 @@ const watch =
 
     try {
       const document = await model.findOne({ _id: id });
+      console.log({ document });
 
       if (document) {
         WatchTable.execute(model, document);

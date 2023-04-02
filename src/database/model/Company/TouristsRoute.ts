@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import watch from '../../../helpers/realtime/watch';
 
 export enum TouristsRouteType {
   COUNTRY = 'country',
@@ -55,5 +56,7 @@ const touristsRouteSchema = new mongoose.Schema<TouristsRoute>(
 );
 
 const TouristsRouteModel = mongoose.model('TouristsRoute', touristsRouteSchema);
+
+TouristsRouteModel.watch().on('change', watch<TouristsRoute>(TouristsRouteModel))
 
 export default TouristsRouteModel;

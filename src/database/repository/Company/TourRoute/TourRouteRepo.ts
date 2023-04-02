@@ -26,15 +26,17 @@ async function filter({
     $and: [
       {
         route: {
-          $all: route,
+          $all: route || [],
         },
       },
-      {
-        name: {
-          $regex: keyword,
-          $options: 'i',
-        },
-      },
+      keyword
+        ? {
+            name: {
+              $regex: keyword,
+              $options: 'i',
+            },
+          }
+        : {},
     ],
   });
 

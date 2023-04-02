@@ -5,7 +5,6 @@ import Logger from '../core/Logger';
 
 const socketAuthorization =
   (permissions: StaffPermission[]) => (socket: Socket) => {
-    Logger.debug(socket.data);
     const staff = socket.data?.staff;
     if (!staff) throw new BadRequestError('User is not a staff');
     const staffPermissions: string[] = staff.permissions || [];

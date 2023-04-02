@@ -17,7 +17,7 @@ export default function handleTourRouteSocket(socket: Socket) {
 
 async function handleCreateTourRoute(socket: Socket) {
   socket.on(
-    SocketClientMessage.CREATE_COMPANY,
+    SocketClientMessage.CREATE_ROUTE,
     socketAsyncHandler(
       socket,
       socketValidator(schema.createTourRoute),
@@ -32,7 +32,7 @@ async function handleCreateTourRoute(socket: Socket) {
         return new SuccessResponse(
           'Create tourist route successfully',
           tourRoute,
-        ).sendSocket(socket, SocketServerMessage.CREATE_COMPANY_RESULT);
+        ).sendSocket(socket, SocketServerMessage.CREATE_ROUTE_RESULT);
       },
     ),
   );

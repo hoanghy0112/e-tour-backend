@@ -1,15 +1,11 @@
-import Logger from './core/Logger';
 import { port } from './config';
+import Logger from './core/Logger';
 import httpServer from './httpServer';
 
-import socketRouter from './routes/socket';
-import io from './socketServer';
 import { authenticateStaff, authenticateUser } from './auth/authentication';
 import { BadRequestError } from './core/ApiError';
-import WatchTable from './helpers/realtime/WatchTable';
-import UserModel from './database/model/User/User';
-import { BadRequestResponse } from './core/ApiResponse';
-import { SocketServerMessage } from './types/socket';
+import socketRouter from './routes/socket';
+import io from './socketServer';
 
 export function runSocketServer(): Promise<any> {
   io.use(async (socket, next) => {
@@ -45,7 +41,6 @@ export function runSocketServer(): Promise<any> {
   return new Promise((resolve, reject) => {
     io.on('connection', async (socket) => {
       Logger.debug('New connection');
-      console.log('New connection');
 
       socketRouter(socket);
     });

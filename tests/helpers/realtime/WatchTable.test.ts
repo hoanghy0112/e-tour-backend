@@ -28,7 +28,6 @@ describe('WatchTable', () => {
       WatchTable.register(UserModel)
         .filter(() => true)
         .do((data) => {
-          console.log({ data });
           resolve(data);
         });
 
@@ -44,7 +43,6 @@ describe('WatchTable', () => {
         { upsert: true },
       );
     })) as any;
-    console.log({ response });
 
     expect(response.identity).toBe('testing-hy');
   }, 15000);

@@ -33,7 +33,7 @@ describe('Company tour route', () => {
   test('Company create tour route successfully', async () => {
     await TouristsRouteModel.remove({});
 
-    clientSocket.emit(SocketClientMessage.CREATE_COMPANY, {
+    clientSocket.emit(SocketClientMessage.CREATE_ROUTE, {
       reservationFee: 5,
       name: 'Vacation tour to Tay Son',
       description: 'Lorem ipsum',
@@ -42,7 +42,7 @@ describe('Company tour route', () => {
     });
 
     const response = await socketRequest((resolve, reject) => {
-      clientSocket.on(SocketServerMessage.CREATE_COMPANY_RESULT, (d) => {
+      clientSocket.on(SocketServerMessage.CREATE_ROUTE_RESULT, (d) => {
         resolve(d);
       });
       clientSocket.on(SocketServerMessage.ERROR, (e) => {
