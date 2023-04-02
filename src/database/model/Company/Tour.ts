@@ -7,6 +7,7 @@ export enum TourType {
 
 export interface Tour {
   // departureAt: Date;
+  _id: Types.ObjectId;
   from: Date;
   to: Date;
   type: TourType;

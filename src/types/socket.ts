@@ -11,8 +11,10 @@ export enum SocketServerMessage {
   CREATE_ROUTE_RESULT = 'create-route-result',
   EDIT_ROUTE_RESULT = 'edit-route-result',
   RETRIEVE_TOURIST_ROUTES = 'retrieve-tourist-route',
+  LIST_TOUR = 'list-tour',
   NEW_ROUTE = 'new-route',
   ROUTE = 'route',
+  TOUR = 'tour',
 }
 
 export enum SocketClientMessage {
@@ -21,5 +23,7 @@ export enum SocketClientMessage {
   CREATE_TOUR = 'create-tour',
   EDIT_ROUTE = 'edit-route',
   FILTER_ROUTE = 'filter-route',
+  FILTER_TOUR = 'filter-tour',
   VIEW_ROUTE = 'view-route',
+  VIEW_TOUR = 'view-tour',
 }

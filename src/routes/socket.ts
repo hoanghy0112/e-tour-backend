@@ -7,9 +7,11 @@ import { SocketClientMessage, SocketServerMessage } from '../types/socket';
 import handleTourRouteSocket from './company/tourRoute';
 import { handleViewTouristRoute } from './user/touristRoute/viewTouristRoute';
 import handleTourSocket from './company/tour';
+import { handleViewTour } from './user/tour/viewTour';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
+  handleViewTour(socket);
   handleTourRouteSocket(socket);
   handleViewTouristRoute(socket);
 

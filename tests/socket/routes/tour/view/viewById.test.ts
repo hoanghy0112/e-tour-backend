@@ -11,13 +11,20 @@ import {
 } from '../../../../../src/types/socket';
 import socketRequest from '../../../../../src/helpers/socketRequest';
 import { Types } from 'mongoose';
+import TourModel, {
+  TourType,
+} from '../../../../../src/database/model/Company/Tour';
 
-describe('View tourist route by id', () => {
+describe('View tour by id', () => {
   let clientSocket: Socket;
+  let tourId: Types.ObjectId;
   let routeId: Types.ObjectId;
 
   beforeAll(async () => {
     setupTestedSocketServer();
+    await TouristsRouteModel.deleteMany({});
+    await TourModel.deleteMany({});
+
     const route = await TouristsRouteModel.create({
       reservationFee: 5,
       name: 'First vacation',
@@ -25,7 +32,14 @@ describe('View tourist route by id', () => {
       route: ['Sai Gon', 'Tay Son'],
       companyId: '6406e44a7144bb633674d32e',
     });
+    const tour = await TourModel.create({
+      from: new Date(),
+      to: new Date(),
+      type: TourType.NORMAL,
+      touristRoute: route._id,
+    });
     routeId = route._id;
+    tourId = tour._id;
   });
 
   afterAll(async () => {
@@ -40,23 +54,24 @@ describe('View tourist route by id', () => {
     clientSocket.close();
   });
 
-  test('Valid route id', async () => {
-    clientSocket.emit(SocketClientMessage.VIEW_ROUTE, { id: routeId });
+  test('Valid tour id', async () => {
+    clientSocket.emit(SocketClientMessage.VIEW_TOUR, { id: tourId });
     const response = await socketRequest((resolve, reject) => {
-      clientSocket.on(SocketServerMessage.ROUTE, (d) => {
+      clientSocket.on(SocketServerMessage.TOUR, (d) => {
         resolve(d);
       });
       clientSocket.on(SocketServerMessage.ERROR, (e) => {
         reject(e);
       });
     });
-    expect(response.data.name).toBe('First vacation');
+
+    expect(response.data.touristRoute).toBe(routeId.toString());
   });
 
   test('Invalid route id', async () => {
-    clientSocket.emit(SocketClientMessage.VIEW_ROUTE, { id: 'something else' });
+    clientSocket.emit(SocketClientMessage.VIEW_TOUR, { id: 'something else' });
     const response = await socketRequest((resolve, reject) => {
-      clientSocket.on(SocketServerMessage.ROUTE, (d) => {
+      clientSocket.on(SocketServerMessage.TOUR, (d) => {
         resolve(d);
       });
       clientSocket.on(SocketServerMessage.ERROR, (e) => {
