@@ -11,7 +11,6 @@ const watch =
 
     try {
       const document = await model.findOne({ _id: id });
-      console.log({ document });
 
       if (document) {
         WatchTable.execute(model, document);

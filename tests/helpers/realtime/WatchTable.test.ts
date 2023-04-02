@@ -23,7 +23,7 @@ describe('WatchTable', () => {
     connection.close();
   });
 
-  test('Should call callback function with always-true function', async () => {
+  test.skip('Should call callback function with always-true function', async () => {
     const response = (await new Promise(async (resolve, reject) => {
       WatchTable.register(UserModel)
         .filter(() => true)

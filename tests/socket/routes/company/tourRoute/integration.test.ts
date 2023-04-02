@@ -31,7 +31,7 @@ describe('Company tour route', () => {
   });
 
   test('Company create tour route successfully', async () => {
-    await TouristsRouteModel.remove({});
+    await TouristsRouteModel.deleteMany({});
 
     clientSocket.emit(SocketClientMessage.CREATE_ROUTE, {
       reservationFee: 5,

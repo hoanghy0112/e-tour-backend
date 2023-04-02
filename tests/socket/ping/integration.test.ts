@@ -44,7 +44,6 @@ describe('Socket test', () => {
         resolve(d);
       });
     });
-    console.log({ response });
     expect(response.status).toBe(200);
     expect(response.data.text).toBe('Yes');
   });
