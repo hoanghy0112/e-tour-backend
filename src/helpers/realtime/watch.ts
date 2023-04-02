@@ -9,7 +9,7 @@ const watch =
     if (!id) throw new InternalError('id not found');
 
     try {
-      const document = await model.findById(id);
+      const document = await model.findOne({ _id: id });
 
       if (document) {
         WatchTable.execute(model, document);

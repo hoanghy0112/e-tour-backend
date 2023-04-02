@@ -15,7 +15,34 @@ async function list(
   return tourRoutes;
 }
 
+async function filter({
+  route,
+  keyword,
+}: {
+  route: string[];
+  keyword: string;
+}) {
+  const touristRoutes = await TouristsRouteModel.find({
+    $and: [
+      {
+        route: {
+          $all: route,
+        },
+      },
+      {
+        name: {
+          $regex: keyword,
+          $options: 'i',
+        },
+      },
+    ],
+  });
+
+  return touristRoutes;
+}
+
 export default {
   create,
   list,
+  filter,
 };

@@ -12,7 +12,7 @@ describe('WatchTable', () => {
       },
       {
         fullName: '___',
-        identity: 'testing-hy',
+        identity: 'test-hy',
         email: 'asdfa@gmail.com',
       },
       { upsert: true },
@@ -23,11 +23,12 @@ describe('WatchTable', () => {
     connection.close();
   });
 
-  test.skip('Should call callback function with always-true function', async () => {
+  test('Should call callback function with always-true function', async () => {
     const response = (await new Promise(async (resolve, reject) => {
       WatchTable.register(UserModel)
         .filter(() => true)
         .do((data) => {
+          console.log({ data });
           resolve(data);
         });
 
@@ -43,6 +44,7 @@ describe('WatchTable', () => {
         { upsert: true },
       );
     })) as any;
+    console.log({ response });
 
     expect(response.identity).toBe('testing-hy');
   }, 15000);
