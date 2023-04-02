@@ -18,8 +18,18 @@ async function list(
 async function findById(
   id: string | Types.ObjectId,
 ): Promise<TouristsRoute | null> {
-  const tourRoutes = await TouristsRouteModel.findById(id);
-  return tourRoutes;
+  const tourRoute = await TouristsRouteModel.findById(id);
+  return tourRoute;
+}
+
+async function edit(
+  id: string | Types.ObjectId,
+  data: TouristsRoute,
+): Promise<TouristsRoute | null> {
+  const tourRoute = await TouristsRouteModel.findByIdAndUpdate(id, data, {
+    new: true,
+  });
+  return tourRoute;
 }
 
 async function filter({
@@ -57,4 +67,5 @@ export default {
   list,
   filter,
   findById,
+  edit,
 };

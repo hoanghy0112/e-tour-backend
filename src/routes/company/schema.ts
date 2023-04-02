@@ -26,4 +26,15 @@ export default {
     image: Joi.any(),
     companyId: Joi.string().required(),
   }),
+  editTourRoute: Joi.object().keys({
+    _id: Joi.string().required(),
+    reservationFee: Joi.number().optional().default(0),
+    name: Joi.string().optional().min(1),
+    description: Joi.string().optional().min(1),
+    type: Joi.string()
+      .valid(...Object.values(TouristsRouteType))
+      .default(TouristsRouteType.COUNTRY),
+    route: Joi.array().items(Joi.string()),
+    image: Joi.any(),
+  }),
 };

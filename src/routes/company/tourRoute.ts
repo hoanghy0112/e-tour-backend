@@ -12,7 +12,34 @@ import { BadRequestError } from '../../core/ApiError';
 import Logger from '../../core/Logger';
 
 export default function handleTourRouteSocket(socket: Socket) {
+  handleChangeTourRoute(socket);
   handleCreateTourRoute(socket);
+}
+
+async function handleChangeTourRoute(socket: Socket) {
+  socket.on(
+    SocketClientMessage.EDIT_ROUTE,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.editTourRoute),
+      socketAuthorization([StaffPermission.EDIT_ROUTE]),
+      async (tourRoute: TouristsRoute) => {
+        const { _id, ...data } = tourRoute;
+
+        try {
+          const touristRoute = await TourRouteRepo.edit(
+            _id,
+            data as TouristsRoute,
+          );
+
+          return new SuccessResponse(
+            'Update tourist route successfully',
+            touristRoute,
+          ).sendSocket(socket, SocketServerMessage.EDIT_ROUTE_RESULT);
+        } catch (e) {}
+      },
+    ),
+  );
 }
 
 async function handleCreateTourRoute(socket: Socket) {

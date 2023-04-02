@@ -11,7 +11,7 @@ import {
 import socketRequest from '../../../../../src/helpers/socketRequest';
 import TouristsRouteModel from '../../../../../src/database/model/Company/TouristsRoute';
 
-describe('Company tour route', () => {
+describe('Company create tour route', () => {
   let clientSocket: Socket;
 
   beforeAll(async () => {

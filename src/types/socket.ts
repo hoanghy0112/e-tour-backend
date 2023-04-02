@@ -8,6 +8,7 @@ export enum SocketServerMessage {
   RESPONSE = 'response',
   ERROR = 'error',
   CREATE_ROUTE_RESULT = 'create-route-result',
+  EDIT_ROUTE_RESULT = 'edit-route-result',
   RETRIEVE_TOURIST_ROUTES = 'retrieve-tourist-route',
   NEW_ROUTE = 'new-route',
   ROUTE = 'route'
@@ -16,6 +17,7 @@ export enum SocketServerMessage {
 export enum SocketClientMessage {
   PING = 'ping',
   CREATE_ROUTE = 'create-route',
+  EDIT_ROUTE = 'edit-route',
   FILTER_ROUTE = 'filter-route',
   VIEW_ROUTE = 'view-route'
 }
