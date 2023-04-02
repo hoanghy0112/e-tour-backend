@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+
 import Logger from '@/core/Logger';
 import { db } from '@/config';
 
-const dbURI = db.connectionString;
+let dbURI = db.connectionString;
+let mongod: MongoMemoryServer;
 
 const options = {
   autoIndex: true,
@@ -21,6 +24,12 @@ function setRunValidators() {
 mongoose.set('strictQuery', true);
 
 export async function connectMongo() {
+  if (!dbURI) {
+    mongod = await MongoMemoryServer.create();
+
+    dbURI = mongod.getUri();
+  }
+
   // Create the database connection
   return new Promise<void>((resolve, reject) => {
     mongoose
@@ -60,13 +69,14 @@ mongoose.connection.on('disconnected', () => {
 });
 
 // If the Node process ends, close the Mongoose connection
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   mongoose.connection.close(() => {
     Logger.info(
       'Mongoose default connection disconnected through app termination',
     );
     process.exit(0);
   });
+  if (mongod) await mongod.stop();
 });
 
 export const connection = mongoose.connection;

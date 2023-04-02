@@ -25,8 +25,8 @@ export async function getSocketInstance(
   type: 'client' | 'staff',
 ): Promise<Socket> {
   const request = supertest(app);
-  await UserModel.remove({});
-  await StaffModel.remove({});
+  await UserModel.deleteMany({});
+  await StaffModel.deleteMany({});
   const username = 'username';
   const password = 'password';
 
@@ -56,7 +56,7 @@ export async function getSocketInstance(
       break;
   }
 
-  const clientSocket = io(`http://localhost:3000`, {
+  const clientSocket = io(`http://localhost:${process.env.PORT}`, {
     path: '/socket',
     query: {
       type,
