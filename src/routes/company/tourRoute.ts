@@ -50,15 +50,17 @@ async function handleCreateTourRoute(socket: Socket) {
       socketValidator(schema.createTourRoute),
       socketAuthorization([StaffPermission.EDIT_ROUTE]),
       async (tourRoute: TouristsRoute) => {
-        const listRoute = await TourRouteRepo.list(tourRoute.companyId);
+        const companyId = socket.data.staff.companyId;
+        const data = { ...tourRoute, companyId };
+        const listRoute = await TourRouteRepo.list(companyId);
         if (listRoute?.find((v) => v.name === tourRoute.name))
           throw new BadRequestError('Route name exists');
 
-        TourRouteRepo.create(tourRoute);
+        TourRouteRepo.create(data);
 
         return new SuccessResponse(
           'Create tourist route successfully',
-          tourRoute,
+          data,
         ).sendSocket(socket, SocketServerMessage.CREATE_ROUTE_RESULT);
       },
     ),

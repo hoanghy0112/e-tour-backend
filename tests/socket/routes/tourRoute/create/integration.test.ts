@@ -38,7 +38,6 @@ describe('Company create tour route', () => {
       name: 'Vacation tour to Tay Son',
       description: 'Lorem ipsum',
       route: ['Sai Gon', 'Tay Son'],
-      companyId: '6406e44a7144bb633674d32e',
     });
 
     const response = await socketRequest((resolve, reject) => {
