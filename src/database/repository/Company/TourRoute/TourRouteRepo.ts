@@ -41,7 +41,7 @@ async function filter({
 }) {
   const touristRoutes = await TouristsRouteModel.find({
     $and: [
-      route
+      route && route.length > 0
         ? {
             route: {
               $all: route,

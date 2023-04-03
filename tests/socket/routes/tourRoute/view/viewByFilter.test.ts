@@ -49,6 +49,7 @@ describe('View tourist route by filter', () => {
     { route: ['Sai Gon'], number: 2 },
     { route: ['Ha Noi'], number: 1 },
     { route: ['Ha Noi', 'Sai Gon'], number: 1 },
+    { route: [], number: 2 },
   ])('Filter by route', async ({ route, number }) => {
     clientSocket.emit(SocketClientMessage.FILTER_ROUTE, { route });
     const response = await socketRequest((resolve, reject) => {
@@ -66,6 +67,7 @@ describe('View tourist route by filter', () => {
     { keyword: 'vacation', number: 2 },
     { keyword: 'Vacation', number: 2 },
     { keyword: 'First', number: 1 },
+    { keyword: '', number: 2 },
   ])('Filter by keyword', async ({ keyword, number }) => {
     clientSocket.emit(SocketClientMessage.FILTER_ROUTE, { keyword });
     const response = await socketRequest((resolve, reject) => {
