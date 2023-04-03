@@ -1,5 +1,6 @@
 import { Company } from '@model/Company/Company';
 import { Staff } from '@model/Company/Staff';
+import { Types } from 'mongoose';
 
 declare interface createParameter {
   company: Company;
@@ -8,7 +9,7 @@ declare interface createParameter {
 }
 
 declare interface findByIdParameter {
-  id: string;
+  id: string | Types.ObjectId;
 }
 
 declare interface createReturn {

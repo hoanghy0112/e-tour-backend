@@ -49,8 +49,8 @@ export async function getSocketInstance(
     case 'staff':
       response = await request
         .post('/company/signup/basic')
-        .field('name', v4())
-        .field('email', 'fasdfa@gmail.com')
+        .field('name', 'congty')
+        .field('email', 'congty@gmail.com')
         .field('username', username)
         .field('password', password);
       token = response.body.data.tokens.accessToken;

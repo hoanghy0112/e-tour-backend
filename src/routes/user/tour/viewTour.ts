@@ -15,6 +15,7 @@ import TouristsRouteModel, {
 import Logger from '../../../core/Logger';
 import TourModel, { Tour } from '../../../database/model/Company/Tour';
 import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
+import { BadRequestError } from '../../../core/ApiError';
 
 export async function handleViewTour(socket: Socket) {
   handleViewRecommendTour(socket);
@@ -49,10 +50,11 @@ async function handleViewTourById(socket: Socket) {
             tour,
           ).sendSocket(socket, SocketServerMessage.TOUR);
         } catch (e) {
-          return new BadRequestResponse('Tour not found').sendSocket(
-            socket,
-            SocketServerMessage.ERROR,
-          );
+          throw new BadRequestError('Tour not found')
+          // return new BadRequestResponse('Tour not found').sendSocket(
+          //   socket,
+          //   SocketServerMessage.ERROR,
+          // );
         }
       },
     ),

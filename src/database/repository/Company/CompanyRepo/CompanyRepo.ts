@@ -12,6 +12,7 @@ import {
   findByIdParameter,
 } from './CompanyRepoSchema';
 import Logger from '../../../../core/Logger';
+import { Types } from 'mongoose';
 
 export async function create({
   company,
@@ -41,7 +42,9 @@ export async function create({
 
 export async function findById({
   id,
-}: findByIdParameter): Promise<Company | null> {
+}: {
+  id: Types.ObjectId | string;
+}): Promise<Company | null> {
   const company = await CompanyModel.findById(id);
 
   return company;

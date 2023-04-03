@@ -6,6 +6,7 @@ import WatchTable from '../../helpers/realtime/WatchTable';
 import { Staff, StaffModel } from '../../database/model/Company/Staff';
 import { BadRequestResponse, SuccessResponse } from '../../core/ApiResponse';
 import StaffRepo from '../../database/repository/Company/StaffRepo/StaffRepo';
+import { InternalError } from '../../core/ApiError';
 
 export async function handleViewStaffInformation(socket: Socket) {
   socket.on(
@@ -22,17 +23,14 @@ export async function handleViewStaffInformation(socket: Socket) {
           );
         });
       try {
-        const tour = await StaffRepo.findById(staffId);
+        const staff = await StaffRepo.findById(staffId);
 
         return new SuccessResponse(
-          'successfully retrieve tour',
-          tour,
+          'successfully retrieve staff information',
+          staff,
         ).sendSocket(socket, SocketServerMessage.STAFF_INFO);
       } catch (e) {
-        return new BadRequestResponse('Invalid staff id').sendSocket(
-          socket,
-          SocketServerMessage.ERROR,
-        );
+        throw new InternalError('Invalid staff');
       }
     }),
   );
