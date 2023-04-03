@@ -57,7 +57,7 @@ async function filter({
           }
         : {},
     ],
-  });
+  }).sort({ createdAt: -1 });
 
   return touristRoutes;
 }
