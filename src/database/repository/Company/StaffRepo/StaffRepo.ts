@@ -11,6 +11,7 @@ import { createParameter, findByUsernameParameter } from './StaffRepoSchema';
 import CredentialRepo from '../../CredentialRepo';
 import KeystoreRepo from '../../KeystoreRepo';
 import Logger from '../../../../core/Logger';
+import { Types } from 'mongoose';
 
 async function create({
   staff,
@@ -49,6 +50,11 @@ async function findByUsername({
     .exec();
 }
 
+async function findById(id: Types.ObjectId | string): Promise<Staff | null> {
+  const staff = await StaffModel.findById(id);
+  return staff;
+}
+
 async function findByCredentialId(id: string): Promise<Staff | null> {
   const credential = await CredentialModel.findById(id);
 
@@ -62,4 +68,5 @@ export default {
   create,
   findByUsername,
   findByCredentialId,
+  findById
 };

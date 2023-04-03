@@ -8,12 +8,14 @@ import handleTourRouteSocket from './company/tourRoute';
 import { handleViewTouristRoute } from './user/touristRoute/viewTouristRoute';
 import handleTourSocket from './company/tour';
 import { handleViewTour } from './user/tour/viewTour';
+import { handleViewStaffInformation } from './company/staffInformation';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
   handleViewTour(socket);
   handleTourRouteSocket(socket);
   handleViewTouristRoute(socket);
+  handleViewStaffInformation(socket);
 
   socket.on(
     SocketClientMessage.PING,
