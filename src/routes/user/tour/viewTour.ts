@@ -51,10 +51,6 @@ async function handleViewTourById(socket: Socket) {
           ).sendSocket(socket, SocketServerMessage.TOUR);
         } catch (e) {
           throw new BadRequestError('Tour not found')
-          // return new BadRequestResponse('Tour not found').sendSocket(
-          //   socket,
-          //   SocketServerMessage.ERROR,
-          // );
         }
       },
     ),

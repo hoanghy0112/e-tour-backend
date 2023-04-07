@@ -10,6 +10,7 @@ import handleTourSocket from './company/tour';
 import { handleViewTour } from './user/tour/viewTour';
 import { handleViewStaffInformation } from './company/staffInformation';
 import { handleViewCompanyInformation } from './company/viewCompanyInformation';
+import { handleViewUserProfile } from './user/access/profile';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
@@ -18,6 +19,7 @@ export default function socketRouter(socket: Socket) {
   handleViewTouristRoute(socket);
   handleViewStaffInformation(socket);
   handleViewCompanyInformation(socket);
+  handleViewUserProfile(socket);
 
   socket.on(
     SocketClientMessage.PING,

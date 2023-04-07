@@ -17,6 +17,7 @@ export enum SocketServerMessage {
   TOUR = 'tour',
   STAFF_INFO = 'staff-info',
   COMPANY_INFO = 'company-info',
+  USER_PROFILE = 'user-profile',
 }
 
 export enum SocketClientMessage {
@@ -30,4 +31,5 @@ export enum SocketClientMessage {
   VIEW_TOUR = 'view-tour',
   VIEW_STAFF_INFO = 'view-staff-info',
   VIEW_COMPANY_INFO = 'view-company-info',
+  VIEW_USER_PROFILE = 'view-user-profile',
 }
