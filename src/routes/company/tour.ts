@@ -24,10 +24,9 @@ export function handleCreateTour(socket: Socket) {
       socketAuthorization([StaffPermission.EDIT_TOUR]),
       async (tour: Tour) => {
         try {
-          // fix after: Wrong error message when touristRoute is passed with wrong format
-          const tourRoute = await TourRouteRepo.findById(tour.touristRoute);
-          if (!tourRoute)
-            return new BadRequestResponse('Tour route not found').sendSocket(
+          const newTour = await TourRepo.findById(tour.touristRoute);
+          if (!newTour)
+            return new BadRequestResponse('Tour not found').sendSocket(
               socket,
               SocketServerMessage.ERROR,
             );
