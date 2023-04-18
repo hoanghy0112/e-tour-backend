@@ -25,8 +25,8 @@ export function handleCreateTour(socket: Socket) {
       async (tour: Tour) => {
         try {
           const newTour = await TourRepo.findById(tour.touristRoute);
-          if (!newTour)
-            return new BadRequestResponse('Tour not found').sendSocket(
+          if (newTour)
+            return new BadRequestResponse('Tour has been existed').sendSocket(
               socket,
               SocketServerMessage.ERROR,
             );
