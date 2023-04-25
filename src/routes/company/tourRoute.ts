@@ -4,7 +4,7 @@ import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import schema from './schema';
-import { SuccessResponse } from '../../core/ApiResponse';
+import { BadRequestResponse, SuccessResponse } from '../../core/ApiResponse';
 import socketAuthorization from '../../auth/socketAuthorization';
 import { StaffPermission } from '../../database/model/Company/Staff';
 import TourRouteRepo from '../../database/repository/Company/TourRoute/TourRouteRepo';
@@ -36,7 +36,12 @@ async function handleChangeTourRoute(socket: Socket) {
             'Update tourist route successfully',
             touristRoute,
           ).sendSocket(socket, SocketServerMessage.EDIT_ROUTE_RESULT);
-        } catch (e) {}
+        } catch (e) {
+          return new BadRequestResponse('Update tourist route fail').sendSocket(
+            socket,
+            SocketServerMessage.ERROR,
+          );
+        }
       },
     ),
   );

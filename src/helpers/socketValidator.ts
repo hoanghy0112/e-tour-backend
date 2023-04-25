@@ -10,30 +10,18 @@ export type ISocketValidator = (socket: Socket, data: any) => void;
 const socketValidator =
   (schema: Joi.AnySchema) =>
   (socket: Socket, data: any): void => {
-    try {
-      const { error } = schema.validate(data);
+    const { error } = schema.validate(data);
 
-      if (!error) return;
+    if (!error) return;
 
-      const { details } = error;
-      const message = details
-        .map((i) => i.message.replace(/['"]+/g, ''))
-        .join(',');
+    const { details } = error;
+    const message = details
+      .map((i) => i.message.replace(/['"]+/g, ''))
+      .join(',');
 
-      Logger.error(message);
+    Logger.error(message);
 
-      throw new BadRequestError(message);
-      // new BadRequestResponse(message).sendSocket(
-      //   socket,
-      //   SocketServerMessage.ERROR,
-      // );
-    } catch (error) {
-      throw new InternalError(JSON.stringify(error));
-      // new InternalErrorResponse(JSON.stringify(error)).sendSocket(
-      //   socket,
-      //   SocketServerMessage.ERROR,
-      // );
-    }
+    throw new BadRequestError(message);
   };
 
 export default socketValidator;

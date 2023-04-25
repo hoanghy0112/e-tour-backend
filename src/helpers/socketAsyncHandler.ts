@@ -1,12 +1,25 @@
 import { Socket } from 'socket.io';
 import { environment } from '../config';
-import { ApiError, ErrorType, InternalError } from '../core/ApiError';
+import {
+  ApiError,
+  BadRequestError,
+  ErrorType,
+  InternalError,
+} from '../core/ApiError';
 import Logger from '../core/Logger';
+import { BadRequestResponse } from '../core/ApiResponse';
+import { SocketServerMessage } from '../types/socket';
 
 type MiddlewareFunction = (socket: Socket, data: any) => any;
 type HandlerFunction = (data: any) => Promise<any>;
 
 export const socketErrorHandler = (socket: Socket) => (err: any) => {
+  if (err instanceof BadRequestError) {
+    return new BadRequestResponse(err.message).sendSocket(
+      socket,
+      SocketServerMessage.ERROR,
+    );
+  }
   if (err instanceof ApiError) {
     ApiError.handleSocket(err, socket);
     if (err.type === ErrorType.INTERNAL)
