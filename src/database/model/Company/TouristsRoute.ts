@@ -13,7 +13,7 @@ export interface TouristsRoute {
   description: string;
   type: TouristsRouteType;
   route: string[];
-  image: string;
+  images: string[];
   companyId: mongoose.Types.ObjectId;
 }
 
@@ -43,8 +43,8 @@ const touristsRouteSchema = new mongoose.Schema<TouristsRoute>(
         type: String,
       },
     ],
-    image: {
-      type: String,
+    images: {
+      type: [String],
     },
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
