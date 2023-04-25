@@ -22,6 +22,22 @@ async function findById(
   return tourRoute;
 }
 
+async function findRecommend(num = 1): Promise<TouristsRoute[] | null> {
+  const count = await TouristsRouteModel.count();
+  const recommendedRoutes = (await Promise.all(
+    Array(Math.min(num, count))
+      .fill('')
+      .map(
+        async () =>
+          await TouristsRouteModel.findOne().skip(
+            Math.floor(Math.random() * Math.min(num, count)),
+          ),
+      ),
+  )) as TouristsRoute[];
+
+  return recommendedRoutes;
+}
+
 async function edit(
   id: string | Types.ObjectId,
   data: TouristsRoute,
@@ -67,5 +83,6 @@ export default {
   list,
   filter,
   findById,
+  findRecommend,
   edit,
 };

@@ -18,10 +18,21 @@ export async function handleViewTouristRoute(socket: Socket) {
   handleViewRecommendTouristRoute(socket);
   handleViewTouristRouteById(socket);
   handleViewTouristRouteByFilter(socket);
+  handleViewRecommendTouristRoute(socket);
 }
 
 async function handleViewRecommendTouristRoute(socket: Socket) {
-  //
+  socket.on(
+    SocketClientMessage.VIEW_RECOMMEND_ROUTE,
+    socketAsyncHandler(socket, async ({ num }: { num: number }) => {
+      const touristRoutes = await TourRouteRepo.findRecommend(num || 1);
+
+      return new SuccessResponse(
+        'Successfully retrieve tourist route',
+        touristRoutes,
+      ).sendSocket(socket, SocketServerMessage.LIST_ROUTE);
+    }),
+  );
 }
 
 async function handleViewTouristRouteById(socket: Socket) {
