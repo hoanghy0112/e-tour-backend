@@ -22,17 +22,17 @@ const socketValidator =
 
       Logger.error(message);
 
-      // throw new BadRequestError(message);
-      new BadRequestResponse(message).sendSocket(
-        socket,
-        SocketServerMessage.ERROR,
-      );
+      throw new BadRequestError(message);
+      // new BadRequestResponse(message).sendSocket(
+      //   socket,
+      //   SocketServerMessage.ERROR,
+      // );
     } catch (error) {
-      // throw new InternalError(JSON.stringify(error));
-      new InternalErrorResponse(JSON.stringify(error)).sendSocket(
-        socket,
-        SocketServerMessage.ERROR,
-      );
+      throw new InternalError(JSON.stringify(error));
+      // new InternalErrorResponse(JSON.stringify(error)).sendSocket(
+      //   socket,
+      //   SocketServerMessage.ERROR,
+      // );
     }
   };
 

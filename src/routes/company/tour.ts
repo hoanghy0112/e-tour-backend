@@ -2,14 +2,12 @@ import { Socket } from 'socket.io';
 import socketAuthorization from '../../auth/socketAuthorization';
 import { BadRequestResponse, SuccessResponse } from '../../core/ApiResponse';
 import { StaffPermission } from '../../database/model/Company/Staff';
-import { TouristsRoute } from '../../database/model/Company/TouristsRoute';
-import TourRouteRepo from '../../database/repository/Company/TourRoute/TourRouteRepo';
+import { Tour } from '../../database/model/Company/Tour';
+import TourRepo from '../../database/repository/Company/TourRepo/TourRepo';
 import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
-import { Tour } from '../../database/model/Company/Tour';
-import TourRepo from '../../database/repository/Company/TourRepo/TourRepo';
 
 export default function handleTourSocket(socket: Socket) {
   handleCreateTour(socket);
@@ -34,7 +32,7 @@ export function handleCreateTour(socket: Socket) {
           const createdTour = await TourRepo.create(tour);
 
           return new SuccessResponse(
-            'Update tourist route successfully',
+            'Create tour successfully',
             createdTour,
           ).sendSocket(socket, SocketServerMessage.CREATE_TOUR_RESULT);
         } catch (e) {
