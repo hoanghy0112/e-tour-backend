@@ -1,4 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
+import watch from '../../../helpers/realtime/watch';
 
 export enum TourType {
   NORMAL = 'normal',
@@ -42,5 +43,7 @@ const tourSchema = new Schema<Tour>(
 );
 
 const TourModel = model('Tour', tourSchema);
+
+TourModel.watch().on('change', watch<Tour>(TourModel));
 
 export default TourModel;
