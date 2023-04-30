@@ -14,6 +14,7 @@ import { handleViewUserProfile } from './user/access/profile';
 import { handleBookTicket } from './user/ticket/bookTicket';
 import { handleViewTicketList } from './user/ticket/viewTicket';
 import { handleCreateRate } from './user/rating/createRate';
+import { handleViewRate } from './user/rating/viewRate';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
@@ -28,6 +29,7 @@ export default function socketRouter(socket: Socket) {
   handleViewTicketList(socket);
 
   handleCreateRate(socket);
+  handleViewRate(socket)
 
   socket.on(
     SocketClientMessage.PING,

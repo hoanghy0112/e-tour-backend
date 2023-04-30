@@ -16,7 +16,7 @@ async function findById(id: string | Types.ObjectId) {
   return rate;
 }
 
-async function getRatingOfRoute(
+async function getOverallRatingOfRoute(
   touristsRouteId: string | Types.ObjectId,
 ): Promise<number> {
   const rateList = (await RateModel.find({ touristsRouteId })) as IRate[];
@@ -41,6 +41,6 @@ async function getDetailRatingOfRoute(
 export default {
   create,
   findById,
-  getRatingOfRoute,
+  getOverallRatingOfRoute,
   getDetailRatingOfRoute,
 };

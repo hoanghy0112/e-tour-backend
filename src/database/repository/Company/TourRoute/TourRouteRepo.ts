@@ -26,7 +26,7 @@ async function findById(
 
   if (!tourRoute) throw new RouteError(RouteErrorType.ROUTE_NOT_FOUND);
 
-  const rate = await RateRepo.getRatingOfRoute(id);
+  const rate = await RateRepo.getOverallRatingOfRoute(id);
 
   return {
     ...tourRoute,

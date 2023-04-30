@@ -1,24 +1,22 @@
-import { Socket } from 'socket.io-client';
 import { Types } from 'mongoose';
+import { Socket } from 'socket.io-client';
+import TourModel, {
+  TourType,
+} from '../../../../src/database/model/Company/Tour';
+import TouristsRouteModel from '../../../../src/database/model/Company/TouristsRoute';
+import TicketModel, {
+  PaymentStatus
+} from '../../../../src/database/model/User/Ticket';
+import socketRequest from '../../../../src/helpers/socketRequest';
+import {
+  SocketClientMessage,
+  SocketServerMessage,
+} from '../../../../src/types/socket';
 import {
   cleanUpSocketServer,
   getSocketInstance,
   setupTestedSocketServer,
 } from '../../utils';
-import TouristsRouteModel from '../../../../src/database/model/Company/TouristsRoute';
-import TourModel, {
-  TourType,
-} from '../../../../src/database/model/Company/Tour';
-import {
-  SocketClientMessage,
-  SocketServerMessage,
-} from '../../../../src/types/socket';
-import socketRequest from '../../../../src/helpers/socketRequest';
-import TicketModel, {
-  ITicket,
-  PaymentStatus,
-} from '../../../../src/database/model/User/Ticket';
-import { RateType } from '../../../../src/database/model/User/Rate';
 
 describe('Create new rate', () => {
   let clientSocket: Socket;

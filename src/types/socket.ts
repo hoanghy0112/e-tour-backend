@@ -23,6 +23,9 @@ export enum SocketServerMessage {
 
   CREATE_RATE_RESULT = 'create-rate-result',
   UPDATED_RATE = 'updated-rate',
+
+  RATE_ITEM = 'rate-item',
+  RATE_OF_ROUTE = 'rate-of-route',
 }
 
 export enum SocketClientMessage {
@@ -42,4 +45,6 @@ export enum SocketClientMessage {
   BOOK_TICKET = 'book-ticket',
 
   CREATE_RATE = 'create-rate',
+
+  VIEW_RATE_OF_ROUTE = 'view-rate-of-route',
 }
