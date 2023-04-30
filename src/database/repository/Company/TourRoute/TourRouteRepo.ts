@@ -2,6 +2,8 @@ import { Types } from 'mongoose';
 import TouristsRouteModel, {
   TouristsRoute,
 } from '../../../model/Company/TouristsRoute';
+import { RouteError, RouteErrorType } from '../../../error/TouristRoute';
+import RateRepo from '../../User/RateRepo';
 
 async function create(tourRoute: TouristsRoute): Promise<TouristsRoute | null> {
   const createdTourRoute = await TouristsRouteModel.create(tourRoute);
@@ -17,9 +19,17 @@ async function list(
 
 async function findById(
   id: string | Types.ObjectId,
-): Promise<TouristsRoute | null> {
+): Promise<TouristsRoute & { rate: number }> {
   const tourRoute = await TouristsRouteModel.findById(id);
-  return tourRoute;
+
+  if (!tourRoute) throw new RouteError(RouteErrorType.ROUTE_NOT_FOUND);
+
+  const rate = await RateRepo.getRatingOfRoute(id);
+
+  return {
+    ...tourRoute,
+    rate,
+  };
 }
 
 async function findRecommend(num = 1): Promise<TouristsRoute[] | null> {
@@ -77,6 +87,8 @@ async function filter({
 
   return touristRoutes;
 }
+
+async function 
 
 export default {
   create,

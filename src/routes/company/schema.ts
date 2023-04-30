@@ -40,6 +40,7 @@ export default {
   createTour: Joi.object().keys({
     from: Joi.date().required(),
     to: Joi.date().required(),
+    price: Joi.number().optional().default(0),
     type: Joi.string()
       .valid(...Object.values(TourType))
       .default(TourType.NORMAL),

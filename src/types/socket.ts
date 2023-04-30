@@ -19,6 +19,10 @@ export enum SocketServerMessage {
   USER_PROFILE = 'user-profile',
 
   BOOKED_TICKET = 'booked-ticket',
+  UPDATED_TICKET = 'updated-ticket',
+
+  CREATE_RATE_RESULT = 'create-rate-result',
+  UPDATED_RATE = 'updated-rate',
 }
 
 export enum SocketClientMessage {
@@ -36,4 +40,6 @@ export enum SocketClientMessage {
   VIEW_RECOMMEND_ROUTE = 'view-recommend-route',
 
   BOOK_TICKET = 'book-ticket',
+
+  CREATE_RATE = 'create-rate',
 }

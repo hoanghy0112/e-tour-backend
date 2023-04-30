@@ -1,13 +1,18 @@
 import { Types } from 'mongoose';
 import TourModel, { ITour } from '../../../model/Company/Tour';
+import { TourError, TourErrorType } from '../../../error/Tour';
+import RateRepo from '../../User/RateRepo';
 
 async function create(tour: ITour): Promise<ITour | null> {
   const createdTour = await TourModel.create(tour);
   return createdTour;
 }
 
-async function findById(id: Types.ObjectId | string): Promise<ITour | null> {
+async function findById(id: Types.ObjectId | string): Promise<ITour> {
   const createdTour = await TourModel.findById(id);
+
+  if (!createdTour) throw new TourError(TourErrorType.TOUR_NOT_FOUND);
+
   return createdTour;
 }
 

@@ -3,6 +3,8 @@ import TicketModel, { ITicket } from '../../model/User/Ticket';
 import { InternalError } from '../../../core/ApiError';
 import VoucherRepo from './VoucherRepo';
 import TourModel, { ITour } from '../../model/Company/Tour';
+import { Types } from 'mongoose';
+import TourRouteRepo from '../Company/TourRoute/TourRouteRepo';
 
 export async function create({
   ticketInfo,
@@ -31,6 +33,18 @@ export async function create({
   throw new InternalError('Something went wrong when create ticket');
 }
 
+async function findCustomerTicketOfRoute({
+  userId,
+  routeId,
+}: {
+  userId: string | Types.ObjectId;
+  routeId: string | Types.ObjectId;
+}): Promise<ITicket> {
+  const customerTicket = (await TicketModel.find({ userId })) as ITicket[];
+  const tourOfRoute = await TourRouteRepo.findById
+}
+
 export default {
   create,
+  findCustomerTicketOfRoute,
 };

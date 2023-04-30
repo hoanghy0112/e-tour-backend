@@ -45,7 +45,7 @@ export async function handleBookTicket(socket: Socket) {
             .do((data) => {
               new SuccessResponse('Updated ticket', data).sendSocket(
                 socket,
-                SocketServerMessage.BOOKED_TICKET,
+                SocketServerMessage.UPDATED_RATE,
               );
             });
 
@@ -59,9 +59,8 @@ export async function handleBookTicket(socket: Socket) {
               throw new BadRequestError('Voucher not found');
             else if (e.type === VoucherErrorType.EXPIRED_VOUCHER)
               throw new BadRequestError('Voucher is expired');
-          } else {
-            throw new InternalError(e?.stack);
-          }
+          } else if (e instanceof BadRequestError) throw e;
+          else throw new InternalError(e?.stack);
         }
       },
     ),

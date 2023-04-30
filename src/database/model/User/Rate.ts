@@ -1,15 +1,24 @@
 import { Schema, model, Types } from 'mongoose';
+import watch from '../../../helpers/realtime/watch';
 
-export interface RateInterface {
+export enum RateType {
+  ROUTE = 'route',
+  COMPANY = 'company',
+  STAFF = 'staff',
+}
+
+export interface IRate {
+  _id?: Types.ObjectId | string;
   star: number;
   description: string;
   userId: Types.ObjectId;
+  rateType: RateType;
   companyId?: Types.ObjectId;
   staffId?: Types.ObjectId;
   touristsRouteId?: Types.ObjectId;
 }
 
-const rateSchema = new Schema<RateInterface>(
+const rateSchema = new Schema<IRate>(
   {
     star: {
       type: Number,
@@ -35,6 +44,10 @@ const rateSchema = new Schema<RateInterface>(
       type: Schema.Types.ObjectId,
       ref: 'TouristsRoute',
     },
+    rateType: {
+      type: String,
+      enum: Object.values(RateType),
+    },
   },
   {
     timestamps: true,
@@ -46,6 +59,8 @@ rateSchema.index({ companyId: 1 });
 rateSchema.index({ staffId: 1 });
 rateSchema.index({ touristsRouteId: 1 });
 
-const Rate = model('Rate', rateSchema);
+const RateModel = model('Rate', rateSchema);
 
-export default Rate;
+RateModel.watch().on('change', watch<IRate>(RateModel));
+
+export default RateModel;
