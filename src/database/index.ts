@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
-import Logger from '@/core/Logger';
-import { db } from '@/config';
+import Logger from '../core/Logger';
+import { db } from '../config';
 
 let dbURI = db.connectionString;
 let mongod: MongoMemoryServer;
