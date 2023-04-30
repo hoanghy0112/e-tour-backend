@@ -25,7 +25,7 @@ async function handleViewRateOfRoute(socket: Socket) {
     socketAsyncHandler(
       socket,
       socketValidator(schema.viewRateOfRoute),
-      async (id: string | Types.ObjectId) => {
+      async ({ id }: { id: string | Types.ObjectId }) => {
         try {
           const rateList = await RateRepo.getDetailRatingOfRoute(id);
 

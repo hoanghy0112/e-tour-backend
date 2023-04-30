@@ -76,6 +76,7 @@ describe('View rate of route', () => {
     const rate = await RateModel.create({
       star: 8,
       description: 'Good good',
+      userId,
       rateType: RateType.ROUTE,
       touristsRouteId: routeId,
     });
