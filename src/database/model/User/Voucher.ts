@@ -1,4 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
+import watch from '../../../helpers/realtime/watch';
 
 export enum VoucherType {
   DISCOUNT = 'discount',
@@ -6,7 +7,7 @@ export enum VoucherType {
   NORMAL = 'normal',
 }
 
-export interface VoucherInterface {
+export interface IVoucher {
   companyId: Types.ObjectId;
   expiredAt: Date;
   type: VoucherType;
@@ -16,7 +17,7 @@ export interface VoucherInterface {
   value: number;
 }
 
-const voucherSchema = new Schema<VoucherInterface>(
+const voucherSchema = new Schema<IVoucher>(
   {
     expiredAt: {
       type: Date,
@@ -52,6 +53,8 @@ const voucherSchema = new Schema<VoucherInterface>(
 
 voucherSchema.index({ companyId: 1 });
 
-const Voucher = model('Voucher', voucherSchema);
+const VoucherModel = model('Voucher', voucherSchema);
 
-module.exports = Voucher;
+VoucherModel.watch().on('change', watch<IVoucher>(VoucherModel));
+
+export default VoucherModel

@@ -34,7 +34,7 @@ describe('Company edit tour route', () => {
   });
 
   beforeEach(async () => {
-    clientSocket = await getSocketInstance('staff');
+    clientSocket = (await getSocketInstance('staff')).socket;
   });
 
   afterEach(() => {

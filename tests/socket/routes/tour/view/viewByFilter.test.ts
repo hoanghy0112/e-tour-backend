@@ -47,7 +47,7 @@ describe('View tour by filter', () => {
   });
 
   beforeEach(async () => {
-    clientSocket = await getSocketInstance('client');
+    clientSocket = (await getSocketInstance('client')).socket;
   });
 
   afterEach(() => {

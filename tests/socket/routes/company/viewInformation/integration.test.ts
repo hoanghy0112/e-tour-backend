@@ -22,7 +22,7 @@ describe('View company information', () => {
   });
 
   beforeEach(async () => {
-    clientSocket = await getSocketInstance('staff');
+    clientSocket = (await getSocketInstance('staff')).socket;
   });
 
   afterEach(() => {

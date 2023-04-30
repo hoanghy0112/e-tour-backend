@@ -1,5 +1,3 @@
-import { Staff } from '../database/model/Company/Staff';
-
 export interface AuthenticationData {
   accessToken: string;
 }
@@ -19,6 +17,8 @@ export enum SocketServerMessage {
   STAFF_INFO = 'staff-info',
   COMPANY_INFO = 'company-info',
   USER_PROFILE = 'user-profile',
+
+  BOOKED_TICKET = 'booked-ticket',
 }
 
 export enum SocketClientMessage {
@@ -34,4 +34,6 @@ export enum SocketClientMessage {
   VIEW_COMPANY_INFO = 'view-company-info',
   VIEW_USER_PROFILE = 'view-user-profile',
   VIEW_RECOMMEND_ROUTE = 'view-recommend-route',
+
+  BOOK_TICKET = 'book-ticket',
 }

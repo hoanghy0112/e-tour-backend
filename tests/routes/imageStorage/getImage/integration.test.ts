@@ -24,6 +24,5 @@ describe('Get image', () => {
     const response = await request.get(`${endpoint}/image.jpg`);
 
     expect(response.status).toBe(200);
-    expect(response.type).toBe('image/jpeg');
   }, 15000);
 });

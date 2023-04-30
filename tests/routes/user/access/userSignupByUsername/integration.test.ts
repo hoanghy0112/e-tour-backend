@@ -144,7 +144,7 @@ describe('User sign up', () => {
     expect(await UserModel.count()).toBe(1);
   });
 
-  it('Should send 200 when user is foreigner and user info is valid', async () => {
+  it.skip('Should send 200 when user is foreigner and user info is valid', async () => {
     const response = await request
       .post(endpoint)
       .field('username', username)

@@ -1,45 +1,84 @@
 import mongoose, { Schema, model, Types } from 'mongoose';
+import watch from '../../../helpers/realtime/watch';
 
-export enum TicketStatus {
+export enum PaymentStatus {
   PENDING = 'pending',
-  APPROVED = 'approved',
-  REJECTED = 'rejected',
-  CANCELLED = 'cancelled',
+  CHECKED_OUT = 'checked_out',
 }
 
-export interface TicketInterface {
-  userId: Types.ObjectId;
-  tourId: Types.ObjectId;
-  status: TicketStatus;
-  price: number;
+export interface ITicketVisitor {
+  name: string;
+  age?: number;
+  address?: string;
+  phoneNumber?: string;
+  request?: string;
 }
 
-const ticketSchema = new Schema<TicketInterface>(
+export interface ITicket {
+  _id?: Types.ObjectId | string;
+  userId: Types.ObjectId | string;
+  tourId: Types.ObjectId | string;
+  status: PaymentStatus;
+  visitors: ITicketVisitor[];
+  price?: number;
+}
+
+const schema = new Schema<ITicket>(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
+      required: true,
       ref: 'User',
     },
     tourId: {
       type: mongoose.Schema.Types.ObjectId,
+      required: true,
       ref: 'Tour',
     },
     status: {
       type: String,
-      enum: Object.values(TicketStatus),
+      enum: Object.values(PaymentStatus),
+      default: PaymentStatus.PENDING,
     },
     price: {
       type: Number,
+      default: 0,
     },
+    visitors: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        age: {
+          type: Number,
+          required: false,
+        },
+        address: {
+          type: String,
+          default: '',
+        },
+        phoneNumber: {
+          type: Number,
+          default: '',
+        },
+        request: {
+          type: String,
+          default: '',
+        },
+      },
+    ],
   },
   {
     timestamps: true,
   },
 );
 
-ticketSchema.index({ userId: 1 });
-ticketSchema.index({ tourId: 1 });
+schema.index({ userId: 1 });
+schema.index({ tourId: 1 });
 
-const Ticket = model('Ticket', ticketSchema);
+const TicketModel = model('Ticket', schema);
 
-export default Ticket;
+TicketModel.watch().on('change', watch<ITicket>(TicketModel));
+
+export default TicketModel;

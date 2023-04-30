@@ -13,7 +13,7 @@ import TouristsRouteModel, {
   TouristsRoute,
 } from '../../../database/model/Company/TouristsRoute';
 import Logger from '../../../core/Logger';
-import TourModel, { Tour } from '../../../database/model/Company/Tour';
+import TourModel, { ITour } from '../../../database/model/Company/Tour';
 import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
 import { BadRequestError } from '../../../core/ApiError';
 
@@ -35,7 +35,7 @@ async function handleViewTourById(socket: Socket) {
       socketValidator(schema.viewTour.byId),
       async ({ id }: { id: string }) => {
         WatchTable.register(TourModel)
-          .filter((data: Tour) => data._id.toString() === id)
+          .filter((data: ITour) => data._id.toString() === id)
           .do((data) => {
             new SuccessResponse('update tour', data).sendSocket(
               socket,
@@ -50,7 +50,7 @@ async function handleViewTourById(socket: Socket) {
             tour,
           ).sendSocket(socket, SocketServerMessage.TOUR);
         } catch (e) {
-          throw new BadRequestError('Tour not found')
+          throw new BadRequestError('Tour not found');
         }
       },
     ),
@@ -73,11 +73,11 @@ async function handleViewTourByFilter(socket: Socket) {
         to: Date;
       }) => {
         WatchTable.register(TourModel)
-          .filter((data: Tour) =>
+          .filter((data: ITour) =>
             touristRoute ? data.touristRoute.toString() == touristRoute : true,
           )
-          .filter((data: Tour) => (from ? data.from > from : true))
-          .filter((data: Tour) => (to ? data.to < to : true))
+          .filter((data: ITour) => (from ? data.from > from : true))
+          .filter((data: ITour) => (to ? data.to < to : true))
           .do((data) => {
             new SuccessResponse('update tour filter', data).sendSocket(
               socket,

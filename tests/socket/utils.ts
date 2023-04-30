@@ -21,9 +21,10 @@ export async function cleanUpSocketServer() {
   httpServer.close();
 }
 
-export async function getSocketInstance(
-  type: 'client' | 'staff',
-): Promise<Socket> {
+export async function getSocketInstance(type: 'client' | 'staff'): Promise<{
+  socket: Socket;
+  id: string;
+}> {
   const request = supertest(app);
   await UserModel.deleteMany({});
   await StaffModel.deleteMany({});
@@ -31,6 +32,7 @@ export async function getSocketInstance(
   const password = 'password';
 
   let token = '';
+  let id = '';
   let response;
 
   switch (type) {
@@ -45,6 +47,7 @@ export async function getSocketInstance(
         .field('email', 'email@gmail.com')
         .field('address', 'Tay Son');
       token = response.body.data.tokens.accessToken;
+      id = response.body.data.user._id;
       break;
     case 'staff':
       response = await request
@@ -69,5 +72,8 @@ export async function getSocketInstance(
     clientSocket.on('connect', () => resolve());
   });
 
-  return clientSocket;
+  return {
+    socket: clientSocket,
+    id,
+  };
 }

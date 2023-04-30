@@ -1,24 +1,29 @@
 import { Socket } from 'socket.io-client';
+import { Types } from 'mongoose';
 import {
   cleanUpSocketServer,
   getSocketInstance,
   setupTestedSocketServer,
-} from '../../../utils';
-import TouristsRouteModel from '../../../../../src/database/model/Company/TouristsRoute';
+} from '../../utils';
+import TouristsRouteModel from '../../../../src/database/model/Company/TouristsRoute';
+import TourModel, {
+  TourType,
+} from '../../../../src/database/model/Company/Tour';
 import {
   SocketClientMessage,
   SocketServerMessage,
-} from '../../../../../src/types/socket';
-import socketRequest from '../../../../../src/helpers/socketRequest';
-import { Types } from 'mongoose';
-import TourModel, {
-  TourType,
-} from '../../../../../src/database/model/Company/Tour';
+} from '../../../../src/types/socket';
+import socketRequest from '../../../../src/helpers/socketRequest';
+import {
+  ITicket,
+  PaymentStatus,
+} from '../../../../src/database/model/User/Ticket';
 
-describe('View tour by id', () => {
+describe('Book new ticket', () => {
   let clientSocket: Socket;
   let tourId: Types.ObjectId;
   let routeId: Types.ObjectId;
+  let userId: string;
 
   beforeAll(async () => {
     setupTestedSocketServer();
@@ -32,12 +37,14 @@ describe('View tour by id', () => {
       route: ['Sai Gon', 'Tay Son'],
       companyId: '6406e44a7144bb633674d32e',
     });
+
     const tour = await TourModel.create({
       from: new Date(),
       to: new Date(),
       type: TourType.NORMAL,
       touristRoute: route._id,
     });
+
     routeId = route._id;
     tourId = tour._id;
   });
@@ -47,17 +54,31 @@ describe('View tour by id', () => {
   });
 
   beforeEach(async () => {
-    clientSocket = (await getSocketInstance('client')).socket;
+    const socketInstance = await getSocketInstance('client');
+    clientSocket = socketInstance.socket;
+    userId = socketInstance.id;
   });
 
   afterEach(() => {
     clientSocket.close();
   });
 
-  test('Valid tour id', async () => {
-    clientSocket.emit(SocketClientMessage.VIEW_TOUR, { id: tourId });
+  test('Book new ticket', async () => {
+    clientSocket.emit(SocketClientMessage.BOOK_TICKET, {
+      ticketInfo: {
+        userId,
+        tourId,
+        status: PaymentStatus.PENDING,
+        visitors: [
+          {
+            name: 'Hoang Hy',
+            age: 19,
+          },
+        ],
+      },
+    } as { ticketInfo: ITicket; voucherIds?: string[] });
     const response = await socketRequest((resolve, reject) => {
-      clientSocket.on(SocketServerMessage.TOUR, (d) => {
+      clientSocket.on(SocketServerMessage.BOOKED_TICKET, (d) => {
         resolve(d);
       });
       clientSocket.on(SocketServerMessage.ERROR, (e) => {
@@ -65,20 +86,6 @@ describe('View tour by id', () => {
       });
     });
 
-    expect(response.data.touristRoute).toBe(routeId.toString());
-  });
-
-  test('Invalid route id', async () => {
-    clientSocket.emit(SocketClientMessage.VIEW_TOUR, { id: 'something else' });
-    const response = await socketRequest((resolve, reject) => {
-      clientSocket.on(SocketServerMessage.TOUR, (d) => {
-        resolve(d);
-      });
-      clientSocket.on(SocketServerMessage.ERROR, (e) => {
-        resolve(e);
-      });
-    });
-
-    expect(response.status).toBe(400);
+    expect(response.data.tourId).toBe(tourId.toString());
   });
 });

@@ -6,16 +6,17 @@ export enum TourType {
   PROMOTION = 'promotion',
 }
 
-export interface Tour {
+export interface ITour {
   _id: Types.ObjectId;
   from: Date;
   to: Date;
   type: TourType;
   image: string;
   touristRoute: Types.ObjectId;
+  price: number;
 }
 
-const tourSchema = new Schema<Tour>(
+const tourSchema = new Schema<ITour>(
   {
     from: {
       type: Date,
@@ -36,6 +37,10 @@ const tourSchema = new Schema<Tour>(
       type: Schema.Types.ObjectId,
       ref: 'TouristsRoute',
     },
+    price: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
@@ -44,6 +49,6 @@ const tourSchema = new Schema<Tour>(
 
 const TourModel = model('Tour', tourSchema);
 
-TourModel.watch().on('change', watch<Tour>(TourModel));
+TourModel.watch().on('change', watch<ITour>(TourModel));
 
 export default TourModel;

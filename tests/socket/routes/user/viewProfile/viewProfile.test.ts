@@ -25,7 +25,7 @@ describe('View user profile', () => {
   });
 
   beforeEach(async () => {
-    clientSocket = await getSocketInstance('client');
+    clientSocket = (await getSocketInstance('client')).socket;
   });
 
   afterEach(() => {

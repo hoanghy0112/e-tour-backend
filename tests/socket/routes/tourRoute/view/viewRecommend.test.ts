@@ -33,7 +33,7 @@ describe('View recommend tourist route', () => {
   });
 
   beforeEach(async () => {
-    clientSocket = await getSocketInstance('client');
+    clientSocket = (await getSocketInstance('client')).socket;
   });
 
   afterEach(() => {

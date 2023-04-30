@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 import socketAuthorization from '../../auth/socketAuthorization';
 import { BadRequestResponse, SuccessResponse } from '../../core/ApiResponse';
 import { StaffPermission } from '../../database/model/Company/Staff';
-import { Tour } from '../../database/model/Company/Tour';
+import { ITour } from '../../database/model/Company/Tour';
 import TourRepo from '../../database/repository/Company/TourRepo/TourRepo';
 import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
@@ -20,7 +20,7 @@ export function handleCreateTour(socket: Socket) {
       socket,
       socketValidator(schema.createTour),
       socketAuthorization([StaffPermission.EDIT_TOUR]),
-      async (tour: Tour) => {
+      async (tour: ITour) => {
         try {
           const newTour = await TourRepo.findById(tour.touristRoute);
           if (newTour)

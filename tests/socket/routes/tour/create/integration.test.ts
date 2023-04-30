@@ -37,7 +37,7 @@ describe('Company create tour', () => {
   });
 
   beforeEach(async () => {
-    clientSocket = await getSocketInstance('staff');
+    clientSocket = (await getSocketInstance('staff')).socket;
   });
 
   afterEach(() => {
