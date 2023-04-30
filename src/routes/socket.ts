@@ -12,6 +12,7 @@ import { handleViewStaffInformation } from './company/staffInformation';
 import { handleViewCompanyInformation } from './company/viewCompanyInformation';
 import { handleViewUserProfile } from './user/access/profile';
 import { handleBookTicket } from './user/ticket/bookTicket';
+import { handleViewTicketList } from './user/ticket/viewTicket';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
@@ -23,6 +24,7 @@ export default function socketRouter(socket: Socket) {
   handleViewUserProfile(socket);
 
   handleBookTicket(socket);
+  handleViewTicketList(socket);
 
   socket.on(
     SocketClientMessage.PING,

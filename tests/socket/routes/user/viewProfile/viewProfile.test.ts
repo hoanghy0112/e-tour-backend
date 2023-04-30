@@ -55,7 +55,7 @@ describe('View user profile', () => {
   });
 
   test('Invalid user', async () => {
-    clientSocket = await getSocketInstance('staff');
+    clientSocket = (await getSocketInstance('staff')).socket;
 
     clientSocket.emit(SocketClientMessage.VIEW_USER_PROFILE);
     const response = await getResponse();

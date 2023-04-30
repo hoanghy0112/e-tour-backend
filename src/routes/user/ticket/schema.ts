@@ -21,4 +21,7 @@ export default {
     }),
     voucherIds: Joi.array().items(Joi.string()),
   }),
+  viewTicketList: Joi.object().keys({
+    num: Joi.number().optional().default(5),
+  }),
 };
