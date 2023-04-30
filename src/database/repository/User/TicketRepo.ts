@@ -33,18 +33,22 @@ export async function create({
   throw new InternalError('Something went wrong when create ticket');
 }
 
-async function findCustomerTicketOfRoute({
+async function haveCustomerVisitRoute({
   userId,
   routeId,
 }: {
   userId: string | Types.ObjectId;
   routeId: string | Types.ObjectId;
-}): Promise<ITicket> {
+}): Promise<boolean> {
   const customerTicket = (await TicketModel.find({ userId })) as ITicket[];
-  const tourOfRoute = await TourRouteRepo.findById
+  const tourList = (await TourModel.find({ touristRoute: routeId })) as ITour[];
+
+  return customerTicket.some((ticket) =>
+    tourList.some((tour) => ticket._id == tour._id),
+  );
 }
 
 export default {
   create,
-  findCustomerTicketOfRoute,
+  haveCustomerVisitRoute,
 };

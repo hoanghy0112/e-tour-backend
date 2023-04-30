@@ -37,7 +37,14 @@ export async function handleCreateRate(socket: Socket) {
               'touristsRouteId | companyId | staffId must not be empty',
             );
 
-          const customerTicketOfRoute = await TicketRepo.
+          if (
+            rateInfo.touristsRouteId &&
+            !TicketRepo.haveCustomerVisitRoute({
+              userId: socket.data?.user._id,
+              routeId: rateInfo?.touristsRouteId,
+            })
+          )
+            throw new BadRequestError('User has not visit this route');
 
           const rate = await RateRepo.create(rateInfo);
 

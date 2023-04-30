@@ -4,6 +4,8 @@ import TouristsRouteModel, {
 } from '../../../model/Company/TouristsRoute';
 import { RouteError, RouteErrorType } from '../../../error/TouristRoute';
 import RateRepo from '../../User/RateRepo';
+import TourModel, { ITour } from '../../../model/Company/Tour';
+import TourRepo from '../TourRepo/TourRepo';
 
 async function create(tourRoute: TouristsRoute): Promise<TouristsRoute | null> {
   const createdTourRoute = await TouristsRouteModel.create(tourRoute);
@@ -88,7 +90,13 @@ async function filter({
   return touristRoutes;
 }
 
-async function 
+// async function findTourList(
+//   routeId: string | Types.ObjectId,
+// ): Promise<ITour[]> {
+//   const tourList = await TourModel.find({ touristRoute: routeId });
+
+//   return tourList;
+// }
 
 export default {
   create,

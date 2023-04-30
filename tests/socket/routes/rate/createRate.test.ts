@@ -83,7 +83,7 @@ describe('Create new rate', () => {
   test('Create new rate', async () => {
     clientSocket.emit(SocketClientMessage.CREATE_RATE, {
       star: 8,
-      descripton: 'Good good',
+      description: 'Good good',
       touristsRouteId: routeId,
     });
     const response = await socketRequest((resolve, reject) => {
