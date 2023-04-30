@@ -35,17 +35,7 @@ imageRouter.get(
 
       const body = data.Body as Readable;
 
-      body
-        .pipe(writable)
-        .on('finish', () => {
-          res.status(200).sendFile(filePath);
-        })
-        .on('close', () => {
-          // Delete temporary file after send it to client
-          setTimeout(() => {
-            rmSync(filePath, { force: true });
-          }, 20000);
-        });
+      body.pipe(res);
     } catch (e) {
       return new BadRequestResponse(JSON.stringify(e)).send(res);
     }
