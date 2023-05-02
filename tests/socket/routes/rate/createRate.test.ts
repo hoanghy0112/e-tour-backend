@@ -60,6 +60,7 @@ describe('Create new rate', () => {
 
     const ticket = await TicketModel.create({
       tourId,
+      userId,
       phoneNumber: "000000",
       status: PaymentStatus.PENDING,
       visitors: [
