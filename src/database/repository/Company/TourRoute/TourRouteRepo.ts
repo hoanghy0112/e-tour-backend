@@ -36,16 +36,17 @@ async function findById(
 
 async function findRecommend(num = 1): Promise<TouristsRoute[] | null> {
   const count = await TouristsRouteModel.count();
-  const recommendedRoutes = (await Promise.all(
-    Array(Math.min(num, count))
-      .fill('')
-      .map(
-        async () =>
-          await TouristsRouteModel.findOne().skip(
-            Math.floor(Math.random() * Math.min(num, count)),
-          ),
-      ),
-  )) as TouristsRoute[];
+  // const recommendedRoutes = (await Promise.all(
+  //   Array(Math.min(num, count))
+  //     .fill('')
+  //     .map(
+  //       async () =>
+  //         await TouristsRouteModel.findOne().skip(
+  //           Math.floor(Math.random() * Math.min(num, count)),
+  //         ),
+  //     ),
+  // )) as TouristsRoute[];
+  const recommendedRoutes = await TouristsRouteModel.find({});
 
   return recommendedRoutes;
 }
