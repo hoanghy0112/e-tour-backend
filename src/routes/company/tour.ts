@@ -8,6 +8,8 @@ import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
+import { BadRequestError, InternalError } from '../../core/ApiError';
+import { TourError, TourErrorType } from '../../database/error/Tour';
 
 export default function handleTourSocket(socket: Socket) {
   handleCreateTour(socket);
@@ -21,26 +23,33 @@ export function handleCreateTour(socket: Socket) {
       socketValidator(schema.createTour),
       socketAuthorization([StaffPermission.EDIT_TOUR]),
       async (tour: ITour) => {
+        let newTour;
         try {
-          const newTour = await TourRepo.findById(tour.touristRoute);
+          newTour = await TourRepo.findById(tour.touristRoute);
+
           if (newTour)
             return new BadRequestResponse('Tour has been existed').sendSocket(
               socket,
               SocketServerMessage.ERROR,
             );
-
-          const createdTour = await TourRepo.create(tour);
-
-          return new SuccessResponse(
-            'Create tour successfully',
-            createdTour,
-          ).sendSocket(socket, SocketServerMessage.CREATE_TOUR_RESULT);
-        } catch (e) {
-          return new BadRequestResponse('Failed to create tour').sendSocket(
-            socket,
-            SocketServerMessage.ERROR,
-          );
+        } catch (e: any) {
+          if (
+            e instanceof TourError &&
+            e.type == TourErrorType.TOUR_NOT_FOUND
+          ) {
+          } else if (e.name == 'CastError') {
+            throw new BadRequestError('Tourist route is invalid');
+          } else {
+            throw e;
+          }
         }
+
+        const createdTour = await TourRepo.create(tour);
+
+        return new SuccessResponse(
+          'Create tour successfully',
+          createdTour,
+        ).sendSocket(socket, SocketServerMessage.CREATE_TOUR_RESULT);
       },
     ),
   );

@@ -29,7 +29,7 @@ async function findById(
   const rate = await RateRepo.getOverallRatingOfRoute(id);
 
   return {
-    ...tourRoute,
+    ...JSON.parse(JSON.stringify(tourRoute)),
     rate,
   };
 }

@@ -50,6 +50,10 @@ describe('View tourist route by id', () => {
         reject(e);
       });
     });
+
+    console.log(response.data);
+
+    expect(response.status).toBe(200);
     expect(response.data.name).toBe('First vacation');
   });
 
