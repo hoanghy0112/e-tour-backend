@@ -18,7 +18,6 @@ export async function handleViewTouristRoute(socket: Socket) {
   handleViewRecommendTouristRoute(socket);
   handleViewTouristRouteById(socket);
   handleViewTouristRouteByFilter(socket);
-  handleViewRecommendTouristRoute(socket);
 }
 
 async function handleViewRecommendTouristRoute(socket: Socket) {
