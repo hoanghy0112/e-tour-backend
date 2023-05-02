@@ -38,6 +38,8 @@ export default {
     image: Joi.any(),
   }),
   createTour: Joi.object().keys({
+    name: Joi.string().optional().default(''),
+    description: Joi.string().optional().default(''),
     from: Joi.date().required(),
     to: Joi.date().required(),
     price: Joi.number().optional().default(0),

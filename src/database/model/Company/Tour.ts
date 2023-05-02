@@ -8,6 +8,8 @@ export enum TourType {
 
 export interface ITour {
   _id: Types.ObjectId;
+  name: string;
+  description: string;
   from: Date;
   to: Date;
   type: TourType;
@@ -18,6 +20,14 @@ export interface ITour {
 
 const tourSchema = new Schema<ITour>(
   {
+    name: {
+      type: String,
+      default: '',
+    },
+    description: {
+      type: String,
+      default: '',
+    },
     from: {
       type: Date,
       default: Date.now(),
