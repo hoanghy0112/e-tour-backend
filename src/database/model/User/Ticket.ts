@@ -19,6 +19,9 @@ export interface ITicket {
   userId: Types.ObjectId | string;
   tourId: Types.ObjectId | string;
   status: PaymentStatus;
+  fullName: string;
+  phoneNumber: string;
+  email: string;
   visitors: ITicketVisitor[];
   price?: number;
 }
@@ -35,6 +38,18 @@ const schema = new Schema<ITicket>(
       required: true,
       ref: 'Tour',
     },
+    fullName: {
+      type: String,
+      default: "",
+    }, 
+    email: {
+      type: String,
+      default: "",
+    }, 
+    phoneNumber: {
+      type: String,
+      required: true,
+    }, 
     status: {
       type: String,
       enum: Object.values(PaymentStatus),
