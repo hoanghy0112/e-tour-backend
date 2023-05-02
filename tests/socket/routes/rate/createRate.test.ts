@@ -59,8 +59,8 @@ describe('Create new rate', () => {
     userId = socketInstance.id;
 
     const ticket = await TicketModel.create({
-      userId,
       tourId,
+      phoneNumber: "000000",
       status: PaymentStatus.PENDING,
       visitors: [
         {

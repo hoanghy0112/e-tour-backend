@@ -61,8 +61,8 @@ describe('View rate of route', () => {
     userId = socketInstance.id;
 
     const ticket = await TicketModel.create({
-      userId,
       tourId,
+      phoneNumber: "000000",
       status: PaymentStatus.PENDING,
       visitors: [
         {

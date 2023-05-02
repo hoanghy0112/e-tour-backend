@@ -67,6 +67,7 @@ describe('Book new ticket', () => {
     clientSocket.emit(SocketClientMessage.BOOK_TICKET, {
       ticketInfo: {
         tourId,
+        phoneNumber: '000000',
         status: PaymentStatus.PENDING,
         visitors: [
           {
