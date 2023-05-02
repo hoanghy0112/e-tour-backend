@@ -66,7 +66,6 @@ describe('Book new ticket', () => {
   test('Book new ticket', async () => {
     clientSocket.emit(SocketClientMessage.BOOK_TICKET, {
       ticketInfo: {
-        userId,
         tourId,
         status: PaymentStatus.PENDING,
         visitors: [

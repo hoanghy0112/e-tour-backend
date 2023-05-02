@@ -4,7 +4,7 @@ import { PaymentStatus } from '../../../database/model/User/Ticket';
 export default {
   bookTicket: Joi.object().keys({
     ticketInfo: Joi.object().keys({
-      userId: Joi.string().required(),
+      // userId: Joi.string().required(),
       tourId: Joi.string().required(),
       status: Joi.string().valid(...Object.values(PaymentStatus)),
       visitors: Joi.array()

@@ -32,6 +32,9 @@ export async function handleBookTicket(socket: Socket) {
         voucherIds?: string[];
       }) => {
         try {
+          const userId = socket.data?.user._id;
+          ticketInfo.userId = userId;
+
           const createdTicket = await TicketRepo.create({
             ticketInfo,
             voucherIds,
