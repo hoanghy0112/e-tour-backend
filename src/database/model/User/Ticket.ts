@@ -65,22 +65,27 @@ const schema = new Schema<ITicket>(
       {
         name: {
           type: String,
-          required: true,
+          default: '',
+          required: false,
         },
         age: {
           type: Number,
+          default: 0,
           required: false,
         },
         address: {
           type: String,
+          required: false,
           default: '',
         },
         phoneNumber: {
           type: Number,
+          required: false,
           default: '',
         },
         request: {
           type: String,
+          required: false,
           default: '',
         },
       },

@@ -22,7 +22,7 @@ export default {
             name: Joi.string().required(),
             age: Joi.number().required(),
             address: Joi.string().optional().default(''),
-            phoneNumber: Joi.number().optional().default(''),
+            phoneNumber: Joi.string().optional().default(''),
             request: Joi.string().optional().default(''),
           }),
         ),
