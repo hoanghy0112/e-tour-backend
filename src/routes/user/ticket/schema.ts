@@ -16,9 +16,9 @@ export default {
           Joi.object().keys({
             name: Joi.string().required(),
             age: Joi.number().required(),
-            address: Joi.string().optional(),
-            phoneNumber: Joi.number().optional(),
-            request: Joi.string().optional(),
+            address: Joi.string().optional().default(""),
+            phoneNumber: Joi.number().optional().default(""),
+            request: Joi.string().optional().default(""),
           }),
         ),
     }),
