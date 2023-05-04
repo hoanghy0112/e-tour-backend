@@ -9,7 +9,10 @@ export default {
       fullName: Joi.string().optional().default(''),
       email: Joi.string().optional().default(''),
       phoneNumber: Joi.string().required(),
-      status: Joi.string().valid(...Object.values(PaymentStatus)),
+      status: Joi.string()
+        .valid(...Object.values(PaymentStatus))
+        .optional()
+        .default(PaymentStatus.CHECKED_OUT),
       specialRequirement: Joi.string().optional().default(''),
       pickupLocation: Joi.string().optional().default(''),
       visitors: Joi.array()
