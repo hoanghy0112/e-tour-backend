@@ -23,6 +23,8 @@ export interface ITicket {
   phoneNumber: string;
   email: string;
   visitors: ITicketVisitor[];
+  specialRequirement: string;
+  pickupLocation: string;
   price?: number;
 }
 
@@ -40,16 +42,16 @@ const schema = new Schema<ITicket>(
     },
     fullName: {
       type: String,
-      default: "",
-    }, 
+      default: '',
+    },
     email: {
       type: String,
-      default: "",
-    }, 
+      default: '',
+    },
     phoneNumber: {
       type: String,
       required: true,
-    }, 
+    },
     status: {
       type: String,
       enum: Object.values(PaymentStatus),
@@ -83,6 +85,14 @@ const schema = new Schema<ITicket>(
         },
       },
     ],
+    specialRequirement: {
+      type: String,
+      default: '',
+    },
+    pickupLocation: {
+      type: String,
+      default: '',
+    },
   },
   {
     timestamps: true,
