@@ -6,24 +6,24 @@ export default {
     ticketInfo: Joi.object().keys({
       // userId: Joi.string().required(),
       tourId: Joi.string().required(),
-      fullName: Joi.string().optional().default(''),
-      email: Joi.string().optional().default(''),
+      fullName: Joi.string().optional().allow("").default(''),
+      email: Joi.string().optional().allow("").default(''),
       phoneNumber: Joi.string().required(),
       status: Joi.string()
         .valid(...Object.values(PaymentStatus))
         .optional()
         .default(PaymentStatus.CHECKED_OUT),
-      specialRequirement: Joi.string().optional().default(''),
-      pickupLocation: Joi.string().optional().default(''),
+      specialRequirement: Joi.string().optional().allow("").default(''),
+      pickupLocation: Joi.string().optional().allow("").default(''),
       visitors: Joi.array()
         .optional()
         .items(
           Joi.object().keys({
             name: Joi.string().required(),
             age: Joi.number().required(),
-            address: Joi.string().optional().default(''),
-            phoneNumber: Joi.string().optional().default(''),
-            request: Joi.string().optional().default(''),
+            address: Joi.string().optional().allow("").default(''),
+            phoneNumber: Joi.string().optional().allow("").default(''),
+            request: Joi.string().optional().allow("").default(''),
           }),
         ),
     }),
