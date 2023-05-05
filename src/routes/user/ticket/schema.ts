@@ -6,7 +6,7 @@ export default {
     ticketInfo: Joi.object().keys({
       // userId: Joi.string().required(),
       tourId: Joi.string().required(),
-      fullName: Joi.string().optional().allow('').default(''),
+      fullName: Joi.string().required(),
       email: Joi.string().optional().allow('').default(''),
       phoneNumber: Joi.string().required(),
       status: Joi.string()
