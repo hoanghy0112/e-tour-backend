@@ -25,29 +25,37 @@ async function filter({
   from: Date;
   to: Date;
 }): Promise<ITour[]> {
-  const tour = await TourModel.find({
-    $and: [
-      touristRoute
-        ? {
-            touristRoute,
-          }
-        : {},
-      from
-        ? {
-            from: {
-              $gt: from,
-            },
-          }
-        : {},
-      to
-        ? {
-            to: {
-              $lt: to,
-            },
-          }
-        : {},
-    ],
-  });
+  const tour = await TourModel.find(
+    {
+      $and: [
+        touristRoute
+          ? {
+              touristRoute,
+            }
+          : {},
+        from
+          ? {
+              from: {
+                $gt: from,
+              },
+            }
+          : {},
+        to
+          ? {
+              to: {
+                $lt: to,
+              },
+            }
+          : {},
+      ],
+    },
+    null,
+    {
+      sort: {
+        createdAt: -1,
+      },
+    },
+  );
   return tour || [];
 }
 

@@ -46,7 +46,9 @@ async function findRecommend(num = 1): Promise<TouristsRoute[] | null> {
   //         ),
   //     ),
   // )) as TouristsRoute[];
-  const recommendedRoutes = await TouristsRouteModel.find({});
+  const recommendedRoutes = await TouristsRouteModel.find({}, null, {
+    sort: { createdAt: -1 },
+  });
 
   return recommendedRoutes;
 }
@@ -90,14 +92,6 @@ async function filter({
 
   return touristRoutes;
 }
-
-// async function findTourList(
-//   routeId: string | Types.ObjectId,
-// ): Promise<ITour[]> {
-//   const tourList = await TourModel.find({ touristRoute: routeId });
-
-//   return tourList;
-// }
 
 export default {
   create,
