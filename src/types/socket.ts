@@ -30,6 +30,8 @@ export enum SocketServerMessage {
 
 export enum SocketClientMessage {
   PING = 'ping',
+  REMOVE_LISTENER = 'remove-listener',
+
   CREATE_ROUTE = 'create-route',
   CREATE_TOUR = 'create-tour',
   EDIT_ROUTE = 'edit-route',

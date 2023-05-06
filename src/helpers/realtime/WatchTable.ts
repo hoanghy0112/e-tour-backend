@@ -40,7 +40,14 @@ export class RegistedCommand {
 
 export default class WatchTable {
   // key of this map is collection name
-  private static table = new Map<string, Map<string, TableElement>>();
+  private static table = new Map<
+    string,
+    {
+      filters: FilterFunction[];
+      callbacks: CallbackFunction[];
+      modelName: string;
+    }
+  >();
 
   static register(model: Model<any>) {
     return new RegistedCommand(model);
@@ -54,22 +61,39 @@ export default class WatchTable {
   ) {
     const normalizedCollectionName = model.modelName.toLowerCase();
 
-    const collectionWatchTable =
-      WatchTable.table.get(normalizedCollectionName) || new Map();
-    collectionWatchTable.set(id, { filters, callbacks });
+    // const collectionWatchTable =
+    //   WatchTable.table.get(normalizedCollectionName) || new Map();
+    // collectionWatchTable.set(id, { filters, callbacks });
 
-    WatchTable.table.set(normalizedCollectionName, collectionWatchTable);
+    // WatchTable.table.set(normalizedCollectionName, collectionWatchTable);
+
+    WatchTable.table.set(id, {
+      filters,
+      callbacks,
+      modelName: normalizedCollectionName,
+    });
+  }
+
+  static removeListener(id: string) {
+    WatchTable.table.delete(id);
   }
 
   static execute(model: Model<any>, data: any) {
     const normalizedCollectionName = model.modelName.toLowerCase();
 
-    (
-      (WatchTable.table.get(normalizedCollectionName) as Map<
-        string,
-        TableElement
-      >) || []
-    ).forEach(({ filters, callbacks }) => {
+    // (
+    //   (WatchTable.table.get(normalizedCollectionName) as Map<
+    //     string,
+    //     TableElement
+    //   >) || []
+    // ).forEach(({ filters, callbacks }) => {
+    //   if (filters?.every((func) => func(data))) {
+    //     callbacks.forEach((func) => func(data));
+    //   }
+    // });
+
+    WatchTable.table.forEach(({ filters, callbacks, modelName }) => {
+      if (modelName !== normalizedCollectionName) return;
       if (filters?.every((func) => func(data))) {
         callbacks.forEach((func) => func(data));
       }
