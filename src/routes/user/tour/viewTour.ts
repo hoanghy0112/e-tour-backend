@@ -16,6 +16,7 @@ import Logger from '../../../core/Logger';
 import TourModel, { ITour } from '../../../database/model/Company/Tour';
 import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
 import { BadRequestError } from '../../../core/ApiError';
+import { dataWithListenerId } from '../../../helpers/formatter';
 
 export async function handleViewTour(socket: Socket) {
   handleViewRecommendTour(socket);
@@ -34,20 +35,21 @@ async function handleViewTourById(socket: Socket) {
       socket,
       socketValidator(schema.viewTour.byId),
       async ({ id }: { id: string }) => {
-        WatchTable.register(TourModel)
-          .filter((data: ITour) => data._id.toString() === id)
-          .do((data) => {
-            new SuccessResponse('update tour', data).sendSocket(
-              socket,
-              SocketServerMessage.TOUR,
-            );
-          });
         try {
           const tour = await TourRepo.findById(id);
 
+          const listener = WatchTable.register(TourModel)
+            .filter((data: ITour) => data._id.toString() === id)
+            .do((data) => {
+              new SuccessResponse('update tour', data).sendSocket(
+                socket,
+                SocketServerMessage.TOUR,
+              );
+            });
+
           return new SuccessResponse(
             'successfully retrieve tour',
-            tour,
+            dataWithListenerId(tour, listener.getId()),
           ).sendSocket(socket, SocketServerMessage.TOUR);
         } catch (e) {
           throw new BadRequestError('Tour not found');

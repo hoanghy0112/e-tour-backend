@@ -22,6 +22,10 @@ export class RegistedCommand {
     this.id = v4();
   }
 
+  getId(): string {
+    return this.id;
+  }
+
   filter(func: FilterFunction): RegistedCommand {
     this.filters.push(func);
     return this;
