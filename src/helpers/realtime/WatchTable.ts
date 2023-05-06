@@ -1,10 +1,9 @@
 import { Model } from 'mongoose';
-import { v4 } from 'uuid';
-import { dataWithListenerId } from '../formatter';
 import { Socket } from 'socket.io';
+import { v4 } from 'uuid';
 
 type FilterFunction = <T>(data: any) => boolean;
-type CallbackFunction = <T>(data: any) => void;
+type CallbackFunction = <T>(data: any, listenerId: string) => void;
 
 interface TableElement {
   filters: FilterFunction[];
@@ -56,7 +55,7 @@ export default class WatchTable {
     }
   >();
 
-  static register(model: Model<any>, socket: Socket | null = null) {
+  static register(model: Model<any>, socket: Socket | null) {
     return new RegistedCommand(model, socket);
   }
 
@@ -67,12 +66,6 @@ export default class WatchTable {
     callbacks: CallbackFunction[],
   ) {
     const normalizedCollectionName = model.modelName.toLowerCase();
-
-    // const collectionWatchTable =
-    //   WatchTable.table.get(normalizedCollectionName) || new Map();
-    // collectionWatchTable.set(id, { filters, callbacks });
-
-    // WatchTable.table.set(normalizedCollectionName, collectionWatchTable);
 
     WatchTable.table.set(id, {
       filters,
@@ -92,21 +85,10 @@ export default class WatchTable {
   static execute(model: Model<any>, data: any) {
     const normalizedCollectionName = model.modelName.toLowerCase();
 
-    // (
-    //   (WatchTable.table.get(normalizedCollectionName) as Map<
-    //     string,
-    //     TableElement
-    //   >) || []
-    // ).forEach(({ filters, callbacks }) => {
-    //   if (filters?.every((func) => func(data))) {
-    //     callbacks.forEach((func) => func(data));
-    //   }
-    // });
-
     WatchTable.table.forEach(({ filters, callbacks, modelName }, id) => {
       if (modelName !== normalizedCollectionName) return;
       if (filters?.every((func) => func(data))) {
-        callbacks.forEach((func) => func(dataWithListenerId(data, id)));
+        callbacks.forEach((func) => func(data, id));
       }
     });
   }

@@ -1,25 +1,18 @@
 import { Socket } from 'socket.io';
+import { BadRequestError, InternalError } from '../../../core/ApiError';
+import { SuccessResponse } from '../../../core/ApiResponse';
+import { RateError, RateErrorType } from '../../../database/error/Rate';
+import RateModel, { IRate, RateType } from '../../../database/model/User/Rate';
+import RateRepo from '../../../database/repository/User/RateRepo';
+import TicketRepo from '../../../database/repository/User/TicketRepo';
+import WatchTable from '../../../helpers/realtime/WatchTable';
+import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
+import socketValidator from '../../../helpers/socketValidator';
 import {
   SocketClientMessage,
   SocketServerMessage,
 } from '../../../types/socket';
-import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
-import socketValidator from '../../../helpers/socketValidator';
-import TourRouteRepo from '../../../database/repository/Company/TourRoute/TourRouteRepo';
 import schema from './schema';
-import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
-import WatchTable from '../../../helpers/realtime/WatchTable';
-import TouristsRouteModel, {
-  TouristsRoute,
-} from '../../../database/model/Company/TouristsRoute';
-import Logger from '../../../core/Logger';
-import TourModel, { ITour } from '../../../database/model/Company/Tour';
-import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
-import { BadRequestError, InternalError } from '../../../core/ApiError';
-import RateModel, { IRate, RateType } from '../../../database/model/User/Rate';
-import RateRepo from '../../../database/repository/User/RateRepo';
-import { RateError, RateErrorType } from '../../../database/error/Rate';
-import TicketRepo from '../../../database/repository/User/TicketRepo';
 
 export async function handleCreateRate(socket: Socket) {
   socket.on(
@@ -49,12 +42,12 @@ export async function handleCreateRate(socket: Socket) {
           rateInfo.userId = socket.data?.user._id;
           const rate = await RateRepo.create(rateInfo);
 
-          WatchTable.register(RateModel)
+          const listener = WatchTable.register(RateModel, socket)
             .filter(
               (data: IRate) => data._id?.toString() === rate._id?.toString(),
             )
-            .do((data) => {
-              new SuccessResponse('Updated rate', data).sendSocket(
+            .do((data, listenerId) => {
+              new SuccessResponse('Updated rate', data, listenerId).sendSocket(
                 socket,
                 SocketServerMessage.UPDATED_RATE,
               );
@@ -63,6 +56,7 @@ export async function handleCreateRate(socket: Socket) {
           return new SuccessResponse(
             'successfully create rate',
             rate,
+            listener.getId(),
           ).sendSocket(socket, SocketServerMessage.CREATE_RATE_RESULT);
         } catch (e: any) {
           if (e instanceof RateError) {

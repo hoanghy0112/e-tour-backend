@@ -1,22 +1,16 @@
 import { Socket } from 'socket.io';
+import { BadRequestError } from '../../../core/ApiError';
+import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
+import TourModel, { ITour } from '../../../database/model/Company/Tour';
+import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
+import WatchTable from '../../../helpers/realtime/WatchTable';
+import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
+import socketValidator from '../../../helpers/socketValidator';
 import {
   SocketClientMessage,
   SocketServerMessage,
 } from '../../../types/socket';
-import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
-import socketValidator from '../../../helpers/socketValidator';
-import TourRouteRepo from '../../../database/repository/Company/TourRoute/TourRouteRepo';
 import schema from './schema';
-import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
-import WatchTable from '../../../helpers/realtime/WatchTable';
-import TouristsRouteModel, {
-  TouristsRoute,
-} from '../../../database/model/Company/TouristsRoute';
-import Logger from '../../../core/Logger';
-import TourModel, { ITour } from '../../../database/model/Company/Tour';
-import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
-import { BadRequestError } from '../../../core/ApiError';
-import { dataWithListenerId } from '../../../helpers/formatter';
 
 export async function handleViewTour(socket: Socket) {
   handleViewRecommendTour(socket);
@@ -40,8 +34,8 @@ async function handleViewTourById(socket: Socket) {
 
           const listener = WatchTable.register(TourModel, socket)
             .filter((data: ITour) => data._id.toString() === id)
-            .do((data) => {
-              new SuccessResponse('update tour', data).sendSocket(
+            .do((data, listenerId) => {
+              new SuccessResponse('update tour', data, listenerId).sendSocket(
                 socket,
                 SocketServerMessage.TOUR,
               );
@@ -49,7 +43,8 @@ async function handleViewTourById(socket: Socket) {
 
           return new SuccessResponse(
             'successfully retrieve tour',
-            dataWithListenerId(tour, listener.getId()),
+            tour,
+            listener.getId(),
           ).sendSocket(socket, SocketServerMessage.TOUR);
         } catch (e) {
           throw new BadRequestError('Tour not found');
@@ -74,14 +69,14 @@ async function handleViewTourByFilter(socket: Socket) {
         from: Date;
         to: Date;
       }) => {
-        WatchTable.register(TourModel)
+        const listener = WatchTable.register(TourModel, socket)
           .filter((data: ITour) =>
             touristRoute ? data.touristRoute.toString() == touristRoute : true,
           )
           .filter((data: ITour) => (from ? data.from > from : true))
           .filter((data: ITour) => (to ? data.to < to : true))
-          .do((data) => {
-            new SuccessResponse('update tour filter', data).sendSocket(
+          .do((data, listenerId) => {
+            new SuccessResponse('update tour filter', data, listenerId).sendSocket(
               socket,
               SocketServerMessage.TOUR,
             );
@@ -92,6 +87,7 @@ async function handleViewTourByFilter(socket: Socket) {
           return new SuccessResponse(
             'successfully retrieve tour',
             tour,
+            listener.getId(),
           ).sendSocket(socket, SocketServerMessage.LIST_TOUR);
         } catch (e) {
           return new BadRequestResponse('Invalid tourist route').sendSocket(

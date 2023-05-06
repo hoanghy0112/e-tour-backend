@@ -1,10 +1,10 @@
+import { Types } from 'mongoose';
 import { Socket } from 'socket.io';
 import { BadRequestError, InternalError } from '../../../core/ApiError';
 import { SuccessResponse } from '../../../core/ApiResponse';
 import { RateError, RateErrorType } from '../../../database/error/Rate';
-import RateModel, { IRate, RateType } from '../../../database/model/User/Rate';
+import RateModel, { IRate } from '../../../database/model/User/Rate';
 import RateRepo from '../../../database/repository/User/RateRepo';
-import TicketRepo from '../../../database/repository/User/TicketRepo';
 import WatchTable from '../../../helpers/realtime/WatchTable';
 import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
 import socketValidator from '../../../helpers/socketValidator';
@@ -13,7 +13,6 @@ import {
   SocketServerMessage,
 } from '../../../types/socket';
 import schema from './schema';
-import { Types } from 'mongoose';
 
 export async function handleViewRate(socket: Socket) {
   handleViewRateOfRoute(socket);
@@ -29,13 +28,13 @@ async function handleViewRateOfRoute(socket: Socket) {
         try {
           const rateList = await RateRepo.getDetailRatingOfRoute(id);
 
-          WatchTable.register(RateModel)
+          const listener = WatchTable.register(RateModel, socket)
             .filter(
               (data: IRate) =>
                 data.touristsRouteId?._id?.toString() === id?.toString(),
             )
-            .do((data) => {
-              new SuccessResponse('Updated rate list', data).sendSocket(
+            .do((data, listenerId) => {
+              new SuccessResponse('Updated rate list', data, listenerId).sendSocket(
                 socket,
                 SocketServerMessage.RATE_OF_ROUTE,
               );
@@ -44,6 +43,7 @@ async function handleViewRateOfRoute(socket: Socket) {
           return new SuccessResponse(
             'successfully retrieve rate of route',
             rateList,
+            listener.getId(),
           ).sendSocket(socket, SocketServerMessage.RATE_OF_ROUTE);
         } catch (e: any) {
           if (e instanceof RateError) {

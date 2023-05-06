@@ -25,13 +25,12 @@ describe('WatchTable', () => {
 
   test.skip('Should call callback function with always-true function', async () => {
     const response = (await new Promise(async (resolve, reject) => {
-      WatchTable.register(UserModel)
+      WatchTable.register(UserModel, null)
         .filter(() => true)
         .do((data) => {
           resolve(data);
         });
 
-      console.log(await UserModel.find({}));
       UserModel.watch().on('change', (data) => {
         console.log({ data });
       });

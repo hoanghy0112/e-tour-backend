@@ -1,8 +1,12 @@
 import { Socket } from 'socket.io';
 import { BadRequestError, InternalError } from '../../../core/ApiError';
 import { SuccessResponse } from '../../../core/ApiResponse';
-import TourModel, { ITour } from '../../../database/model/Company/Tour';
-import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
+import {
+  VoucherError,
+  VoucherErrorType,
+} from '../../../database/error/Voucher';
+import TicketModel, { ITicket } from '../../../database/model/User/Ticket';
+import TicketRepo from '../../../database/repository/User/TicketRepo';
 import WatchTable from '../../../helpers/realtime/WatchTable';
 import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
 import socketValidator from '../../../helpers/socketValidator';
@@ -11,12 +15,6 @@ import {
   SocketServerMessage,
 } from '../../../types/socket';
 import schema from './schema';
-import TicketModel, { ITicket } from '../../../database/model/User/Ticket';
-import TicketRepo from '../../../database/repository/User/TicketRepo';
-import {
-  VoucherError,
-  VoucherErrorType,
-} from '../../../database/error/Voucher';
 
 export async function handleBookTicket(socket: Socket) {
   socket.on(
@@ -40,13 +38,13 @@ export async function handleBookTicket(socket: Socket) {
             voucherIds,
           });
 
-          WatchTable.register(TicketModel)
+          const listener = WatchTable.register(TicketModel, socket)
             .filter(
               (ticket: ITicket) =>
                 ticket._id?.toString() === createdTicket?._id,
             )
-            .do((data) => {
-              new SuccessResponse('Updated ticket', data).sendSocket(
+            .do((data, listenerId) => {
+              new SuccessResponse('Updated ticket', data, listenerId).sendSocket(
                 socket,
                 SocketServerMessage.UPDATED_RATE,
               );
@@ -55,6 +53,7 @@ export async function handleBookTicket(socket: Socket) {
           return new SuccessResponse(
             'Successfully book ticket',
             createdTicket,
+            listener.getId(),
           ).sendSocket(socket, SocketServerMessage.BOOKED_TICKET);
         } catch (e: any) {
           if (e instanceof VoucherError) {

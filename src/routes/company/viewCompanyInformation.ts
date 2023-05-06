@@ -1,14 +1,13 @@
 import { Socket } from 'socket.io';
-import schema from './schema';
-import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
-import socketAsyncHandler from '../../helpers/socketAsyncHandler';
-import WatchTable from '../../helpers/realtime/WatchTable';
-import { Staff, StaffModel } from '../../database/model/Company/Staff';
-import { BadRequestResponse, SuccessResponse } from '../../core/ApiResponse';
-import StaffRepo from '../../database/repository/Company/StaffRepo/StaffRepo';
-import CompanyRepo from '../../database/repository/Company/CompanyRepo/CompanyRepo';
+import { InternalError } from '../../core/ApiError';
+import { SuccessResponse } from '../../core/ApiResponse';
 import CompanyModel from '../../database/model/Company/Company';
-import { BadRequestError, InternalError } from '../../core/ApiError';
+import { Staff } from '../../database/model/Company/Staff';
+import CompanyRepo from '../../database/repository/Company/CompanyRepo/CompanyRepo';
+import StaffRepo from '../../database/repository/Company/StaffRepo/StaffRepo';
+import WatchTable from '../../helpers/realtime/WatchTable';
+import socketAsyncHandler from '../../helpers/socketAsyncHandler';
+import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 
 export async function handleViewCompanyInformation(socket: Socket) {
   socket.on(
@@ -23,12 +22,12 @@ export async function handleViewCompanyInformation(socket: Socket) {
         if (!company)
           throw new InternalError('Staff does not belong to any company');
 
-        WatchTable.register(CompanyModel)
+        const listener = WatchTable.register(CompanyModel, socket)
           .filter(
             (data: Staff) => data._id.toString() == company._id?.toString(),
           )
-          .do((data) => {
-            new SuccessResponse('update staff information', data).sendSocket(
+          .do((data, listenerId) => {
+            new SuccessResponse('update staff information', data, listenerId).sendSocket(
               socket,
               SocketServerMessage.COMPANY_INFO,
             );
@@ -37,6 +36,7 @@ export async function handleViewCompanyInformation(socket: Socket) {
         return new SuccessResponse(
           'successfully retrieve tour',
           company,
+          listener.getId(),
         ).sendSocket(socket, SocketServerMessage.COMPANY_INFO);
       } catch (e) {
         throw new InternalError('Staff does not belong to any company');

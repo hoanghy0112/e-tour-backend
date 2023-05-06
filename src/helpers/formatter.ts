@@ -4,7 +4,7 @@ export function fromDocToObject(doc: any) {
 
 export function dataWithListenerId(data: any, listenerId: string) {
   return {
-    ...fromDocToObject(data),
+    data: fromDocToObject(data),
     listenerId,
   };
 }
