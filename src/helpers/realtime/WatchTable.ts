@@ -1,5 +1,7 @@
 import { Model } from 'mongoose';
 import { v4 } from 'uuid';
+import { dataWithListenerId } from '../formatter';
+import { Socket } from 'socket.io';
 
 type FilterFunction = <T>(data: any) => boolean;
 type CallbackFunction = <T>(data: any) => void;
@@ -15,11 +17,16 @@ export class RegistedCommand {
   private filters: FilterFunction[];
   private callbacks: CallbackFunction[];
 
-  constructor(model: Model<any>) {
+  constructor(model: Model<any>, socket: Socket | null) {
     this.model = model;
     this.filters = [];
     this.callbacks = [];
     this.id = v4();
+
+    if (socket)
+      socket.on('disconnect', () => {
+        WatchTable.removeListener(this.id);
+      });
   }
 
   getId(): string {
@@ -49,8 +56,8 @@ export default class WatchTable {
     }
   >();
 
-  static register(model: Model<any>) {
-    return new RegistedCommand(model);
+  static register(model: Model<any>, socket: Socket | null = null) {
+    return new RegistedCommand(model, socket);
   }
 
   static _setHandler(
@@ -78,6 +85,10 @@ export default class WatchTable {
     WatchTable.table.delete(id);
   }
 
+  static getTableSize() {
+    return WatchTable.table.size;
+  }
+
   static execute(model: Model<any>, data: any) {
     const normalizedCollectionName = model.modelName.toLowerCase();
 
@@ -92,10 +103,10 @@ export default class WatchTable {
     //   }
     // });
 
-    WatchTable.table.forEach(({ filters, callbacks, modelName }) => {
+    WatchTable.table.forEach(({ filters, callbacks, modelName }, id) => {
       if (modelName !== normalizedCollectionName) return;
       if (filters?.every((func) => func(data))) {
-        callbacks.forEach((func) => func(data));
+        callbacks.forEach((func) => func(dataWithListenerId(data, id)));
       }
     });
   }

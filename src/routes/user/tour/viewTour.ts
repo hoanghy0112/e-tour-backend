@@ -38,7 +38,7 @@ async function handleViewTourById(socket: Socket) {
         try {
           const tour = await TourRepo.findById(id);
 
-          const listener = WatchTable.register(TourModel)
+          const listener = WatchTable.register(TourModel, socket)
             .filter((data: ITour) => data._id.toString() === id)
             .do((data) => {
               new SuccessResponse('update tour', data).sendSocket(

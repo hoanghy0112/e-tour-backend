@@ -16,6 +16,7 @@ import { handleViewTicketList } from './user/ticket/viewTicket';
 import { handleCreateRate } from './user/rating/createRate';
 import { handleViewRate } from './user/rating/viewRate';
 import { handleRemoveListener } from './socketManager/removeListener';
+import { handleTestWatchTable } from './socketManager/testWatchTable';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
@@ -33,6 +34,7 @@ export default function socketRouter(socket: Socket) {
   handleViewRate(socket);
 
   handleRemoveListener(socket);
+  handleTestWatchTable(socket);
 
   socket.on(
     SocketClientMessage.PING,
