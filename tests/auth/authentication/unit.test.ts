@@ -2,7 +2,7 @@ import supertest from 'supertest';
 
 import app from '../../../src/app';
 import { connectMongo, connection } from '../../../src/database';
-import UserModel, { User } from '../../../src/database/model/User/User';
+import UserModel, { IUser } from '../../../src/database/model/User/User';
 import {
   Staff,
   StaffModel,
@@ -62,7 +62,7 @@ describe('User authentication middleware', () => {
       identity: v4(),
       isForeigner: false,
       email: v4(),
-    } as User);
+    } as IUser);
 
     const tokens = await KeystoreRepo.create(user.credential);
 

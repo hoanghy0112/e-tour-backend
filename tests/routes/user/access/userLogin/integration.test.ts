@@ -8,7 +8,7 @@ import {
 import CredentialRepo from '../../../../../src/database/repository/CredentialRepo';
 import KeystoreRepo from '../../../../../src/database/repository/KeystoreRepo';
 import UserRepo from '../../../../../src/database/repository/User/UserRepo';
-import UserModel, { User } from '../../../../../src/database/model/User/User';
+import UserModel, { IUser } from '../../../../../src/database/model/User/User';
 import { KeystoreModel } from '../../../../../src/database/model/Keystore';
 import supertest from 'supertest';
 import app from '../../../../../src/app';
@@ -52,7 +52,7 @@ describe('User login by username and password', () => {
       address: '3/32 Quang Trung',
       phoneNumber: '0916769792',
       credential: createdCredential,
-    } as User);
+    } as IUser);
   });
 
   afterAll(async () => {

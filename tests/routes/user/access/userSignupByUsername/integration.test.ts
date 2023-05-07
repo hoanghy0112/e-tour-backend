@@ -6,7 +6,7 @@ import {
   CredentialModel,
   UserType,
 } from '../../../../../src/database/model/Credential';
-import UserModel, { User } from '../../../../../src/database/model/User/User';
+import UserModel, { IUser } from '../../../../../src/database/model/User/User';
 import app from '../../../../../src/app';
 import path from 'path';
 import {
@@ -68,7 +68,7 @@ describe('User sign up', () => {
       phoneNumber: phoneNumber,
       identityExpiredAt: identityExpiredAt,
       credential: createdCredential,
-    } as User);
+    } as IUser);
 
     const response = await request
       .post(endpoint)

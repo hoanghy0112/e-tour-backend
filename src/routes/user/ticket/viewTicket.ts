@@ -43,9 +43,17 @@ export async function handleViewTicketList(socket: Socket) {
               data?.userId?.toString() === client._id?.toString() ||
               Array.from(ticketsMap.keys()).includes(id),
           )
-          .do((data, listenerId, id) => {
+          .do(async (data: ITicket, listenerId, id) => {
             if (data == null) ticketsMap.delete(id);
-            else ticketsMap.set(id, data);
+            else {
+              const populatedData = await TicketModel.findById(id).populate({
+                path: 'tourId',
+                populate: {
+                  path: 'touristRoute',
+                },
+              });
+              ticketsMap.set(id, populatedData);
+            }
 
             new SuccessResponse(
               'new ticket list',
