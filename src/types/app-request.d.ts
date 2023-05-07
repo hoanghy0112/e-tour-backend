@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { User } from '../database/model/User/User';
+import { IUser } from '../database/model/User/User';
 import Keystore from '../database/model/Keystore';
 import { Staff } from '../database/model/Company/Staff';
 
@@ -12,7 +12,7 @@ declare interface RoleRequest extends PublicRequest {
 }
 
 declare interface ProtectedUserRequest extends RoleRequest {
-  user: User;
+  user: IUser;
   accessToken: string;
   keystore: Keystore;
 }

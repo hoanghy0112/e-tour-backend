@@ -1,4 +1,4 @@
-import { User } from '../../../database/model/User/User';
+import { IUser } from '../../../database/model/User/User';
 import _ from 'lodash';
 
 export const enum AccessMode {
@@ -6,7 +6,7 @@ export const enum AccessMode {
   SIGNUP = 'SIGNUP',
 }
 
-export async function getUserData(user: User) {
+export async function getUserData(user: IUser) {
   const data = _.pick(user, ['_id', 'fullName', 'email']);
   return data;
 }

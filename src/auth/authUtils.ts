@@ -2,7 +2,7 @@ import { Tokens } from '@/types/app-request';
 import { AuthFailureError, InternalError } from '@core/ApiError';
 import JWT, { JwtPayload } from '@core/JWT';
 import { Types } from 'mongoose';
-import { User } from '@model/User/User';
+import { IUser } from '@model/User/User';
 import { tokenInfo } from '../config';
 import { Credential, CredentialModel } from '@model/Credential';
 

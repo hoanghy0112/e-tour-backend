@@ -1,9 +1,10 @@
 import { Model } from 'mongoose';
 import { Socket } from 'socket.io';
 import { v4 } from 'uuid';
+import Logger from '../../core/Logger';
 
-type FilterFunction = <T>(data: any) => boolean;
-type CallbackFunction = <T>(data: any, listenerId: string) => void;
+type FilterFunction = <T>(data: any, id: string) => boolean;
+type CallbackFunction = <T>(data: any, listenerId: string, id: string) => void;
 
 interface TableElement {
   filters: FilterFunction[];
@@ -82,14 +83,20 @@ export default class WatchTable {
     return WatchTable.table.size;
   }
 
-  static execute(model: Model<any>, data: any) {
+  static execute(model: Model<any>, data: any, documentId: string) {
     const normalizedCollectionName = model.modelName.toLowerCase();
 
-    WatchTable.table.forEach(({ filters, callbacks, modelName }, id) => {
-      if (modelName !== normalizedCollectionName) return;
-      if (filters?.every((func) => func(data))) {
-        callbacks.forEach((func) => func(data, id));
-      }
-    });
+    WatchTable.table.forEach(
+      ({ filters, callbacks, modelName }, listenerId) => {
+        if (modelName !== normalizedCollectionName) return;
+        try {
+          if (filters?.every((func) => func(data, documentId))) {
+            callbacks.forEach((func) => func(data, listenerId, documentId));
+          }
+        } catch (e: any) {
+          Logger.error(e);
+        }
+      },
+    );
   }
 }

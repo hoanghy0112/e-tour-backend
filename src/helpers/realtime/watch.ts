@@ -12,9 +12,7 @@ const watch =
     try {
       const document = await model.findOne({ _id: id });
 
-      if (document) {
-        WatchTable.execute(model, document);
-      }
+      WatchTable.execute(model, document, id);
     } catch (err) {}
   };
 

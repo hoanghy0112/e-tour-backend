@@ -17,32 +17,49 @@ import TourModel, { ITour } from '../../../database/model/Company/Tour';
 import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
 import { BadRequestError } from '../../../core/ApiError';
 import TicketModel, { ITicket } from '../../../database/model/User/Ticket';
+import { IUser } from '../../../database/model/User/User';
+import TicketRepo from '../../../database/repository/User/TicketRepo';
 
 export async function handleViewTicketList(socket: Socket) {
-  // socket.on(
-  //   SocketClientMessage.VIEW_TOUR,
-  //   socketAsyncHandler(
-  //     socket,
-  //     socketValidator(schema.viewTicketList),
-  //     async ({ num }: { num: number }) => {
-  //       WatchTable.register(TicketModel)
-  //         .filter((data: ITicket) => data._id.toString() === id)
-  //         .do((data) => {
-  //           new SuccessResponse('update tour', data).sendSocket(
-  //             socket,
-  //             SocketServerMessage.TOUR,
-  //           );
-  //         });
-  //       try {
-  //         const tour = await TourRepo.findById(id);
-  //         return new SuccessResponse(
-  //           'successfully retrieve tour',
-  //           tour,
-  //         ).sendSocket(socket, SocketServerMessage.TOUR);
-  //       } catch (e) {
-  //         throw new BadRequestError('Tour not found');
-  //       }
-  //     },
-  //   ),
-  // );
+  socket.on(
+    SocketClientMessage.ticket.VIEW_BOOKED_TICKET,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.viewBookedTicket),
+      async () => {
+        const client = socket.data.user as IUser;
+        if (!client._id) throw new BadRequestError('Client id not found');
+
+        const tickets = await TicketRepo.findAllTicketOfUser(client._id);
+
+        const ticketsMap = new Map();
+        tickets.forEach((ticket) =>
+          ticketsMap.set(ticket._id?.toString(), ticket),
+        );
+
+        const listener = WatchTable.register(TicketModel, socket)
+          .filter(
+            (data: ITicket | null, id: string) =>
+              data?.userId?.toString() === client._id?.toString() ||
+              Array.from(ticketsMap.keys()).includes(id),
+          )
+          .do((data, listenerId, id) => {
+            if (data == null) ticketsMap.delete(id);
+            else ticketsMap.set(id, data);
+
+            new SuccessResponse(
+              'new ticket list',
+              Array.from(ticketsMap.values()),
+              listenerId,
+            ).sendSocket(socket, SocketServerMessage.ticket.BOOKED_TICKET_LIST);
+          });
+
+        return new SuccessResponse(
+          'successfully retrieve ticket list',
+          tickets,
+          listener.getId(),
+        ).sendSocket(socket, SocketServerMessage.ticket.BOOKED_TICKET_LIST);
+      },
+    ),
+  );
 }

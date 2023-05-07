@@ -1,5 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
-import { User } from './User/User';
+import { IUser } from './User/User';
 import { CredentialModel } from './Credential';
 
 export const DOCUMENT_NAME = 'Keystore';

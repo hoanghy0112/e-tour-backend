@@ -1,4 +1,4 @@
-import UserModel, { User } from '@model/User/User';
+import UserModel, { IUser } from '@model/User/User';
 import TicketModel, { ITicket } from '../../model/User/Ticket';
 import { InternalError } from '../../../core/ApiError';
 import VoucherRepo from './VoucherRepo';
@@ -48,7 +48,22 @@ async function haveCustomerVisitRoute({
   );
 }
 
+async function findAllTicketOfUser(
+  userId: string | Types.ObjectId,
+): Promise<ITicket[]> {
+  const tickets = await TicketModel.find({ userId })
+    .sort({ createdAt: -1 })
+    .populate({
+      path: 'tourId',
+      populate: {
+        path: 'touristRoute',
+      },
+    });
+  return tickets;
+}
+
 export default {
   create,
   haveCustomerVisitRoute,
+  findAllTicketOfUser,
 };

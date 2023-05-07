@@ -4,7 +4,7 @@ import { RoleRequest } from '@/types/app-request';
 import crypto from 'crypto';
 import UserRepo from '../../../database/repository/User/UserRepo';
 import { BadRequestError } from '../../../core/ApiError';
-import { User } from '../../../database/model/User/User';
+import { IUser } from '../../../database/model/User/User';
 import { createTokens } from '../../../auth/authUtils';
 import validator from '../../../helpers/validator';
 import schema from './schema';
@@ -68,7 +68,7 @@ router.post(
       isPhoneVerified: req.body.isPhoneVerified,
       isEmailVerified: req.body.isEmailVerified,
       credential: createdCredential,
-    } as User);
+    } as IUser);
 
     new SuccessResponse('Signup Successful', {
       user: createdUser,

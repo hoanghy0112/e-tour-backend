@@ -17,7 +17,7 @@ import validator, { ValidationSource } from '@helpers/validator';
 import schema from './schema';
 import asyncHandler from '@helpers/asyncHandler';
 import StaffRepo from '../database/repository/Company/StaffRepo/StaffRepo';
-import { User } from '../database/model/User/User';
+import { IUser } from '../database/model/User/User';
 import { Staff } from '../database/model/Company/Staff';
 
 const userAuthenticationMiddleware = express.Router();
@@ -25,7 +25,7 @@ const staffAuthenticationMiddleware = express.Router();
 
 export async function authenticateUser(
   accessToken: string,
-): Promise<{ user: User | null; primaryKey: string }> {
+): Promise<{ user: IUser | null; primaryKey: string }> {
   const payload = await JWT.validate(accessToken);
   validateTokenData(payload);
 

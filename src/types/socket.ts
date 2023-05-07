@@ -2,52 +2,60 @@ export interface AuthenticationData {
   accessToken: string;
 }
 
-export enum SocketServerMessage {
-  RESPONSE = 'response',
-  ERROR = 'error',
-  CREATE_TOUR_RESULT = 'create-tour-result',
-  CREATE_ROUTE_RESULT = 'create-route-result',
-  EDIT_ROUTE_RESULT = 'edit-route-result',
-  RETRIEVE_TOURIST_ROUTES = 'retrieve-tourist-route',
-  LIST_TOUR = 'list-tour',
-  LIST_ROUTE = 'list-route',
-  NEW_ROUTE = 'new-route',
-  ROUTE = 'route',
-  TOUR = 'tour',
-  STAFF_INFO = 'staff-info',
-  COMPANY_INFO = 'company-info',
-  USER_PROFILE = 'user-profile',
+export const SocketServerMessage = {
+  RESPONSE: 'response',
+  ERROR: 'error',
+  CREATE_TOUR_RESULT: 'create-tour-result',
+  CREATE_ROUTE_RESULT: 'create-route-result',
+  EDIT_ROUTE_RESULT: 'edit-route-result',
+  RETRIEVE_TOURIST_ROUTES: 'retrieve-tourist-route',
+  LIST_TOUR: 'list-tour',
+  LIST_ROUTE: 'list-route',
+  NEW_ROUTE: 'new-route',
+  ROUTE: 'route',
+  TOUR: 'tour',
+  STAFF_INFO: 'staff-info',
+  COMPANY_INFO: 'company-info',
+  USER_PROFILE: 'user-profile',
 
-  BOOKED_TICKET = 'booked-ticket',
-  UPDATED_TICKET = 'updated-ticket',
+  BOOKED_TICKET: 'booked-ticket',
+  UPDATED_TICKET: 'updated-ticket',
 
-  CREATE_RATE_RESULT = 'create-rate-result',
-  UPDATED_RATE = 'updated-rate',
+  CREATE_RATE_RESULT: 'create-rate-result',
+  UPDATED_RATE: 'updated-rate',
 
-  RATE_ITEM = 'rate-item',
-  RATE_OF_ROUTE = 'rate-of-route',
-}
+  RATE_ITEM: 'rate-item',
+  RATE_OF_ROUTE: 'rate-of-route',
 
-export enum SocketClientMessage {
-  PING = 'ping',
-  REMOVE_LISTENER = 'remove-listener',
-  TEST_WATCHTABLE = 'test-watchtable',
+  ticket: {
+    BOOKED_TICKET_LIST: 'booked-ticket-list',
+  },
+};
 
-  CREATE_ROUTE = 'create-route',
-  CREATE_TOUR = 'create-tour',
-  EDIT_ROUTE = 'edit-route',
-  FILTER_ROUTE = 'filter-route',
-  FILTER_TOUR = 'filter-tour',
-  VIEW_ROUTE = 'view-route',
-  VIEW_TOUR = 'view-tour',
-  VIEW_STAFF_INFO = 'view-staff-info',
-  VIEW_COMPANY_INFO = 'view-company-info',
-  VIEW_USER_PROFILE = 'view-user-profile',
-  VIEW_RECOMMEND_ROUTE = 'view-recommend-route',
+export const SocketClientMessage = {
+  PING: 'ping',
+  REMOVE_LISTENER: 'remove-listener',
+  TEST_WATCHTABLE: 'test-watchtable',
 
-  BOOK_TICKET = 'book-ticket',
+  CREATE_ROUTE: 'create-route',
+  CREATE_TOUR: 'create-tour',
+  EDIT_ROUTE: 'edit-route',
+  FILTER_ROUTE: 'filter-route',
+  FILTER_TOUR: 'filter-tour',
+  VIEW_ROUTE: 'view-route',
+  VIEW_TOUR: 'view-tour',
+  VIEW_STAFF_INFO: 'view-staff-info',
+  VIEW_COMPANY_INFO: 'view-company-info',
+  VIEW_USER_PROFILE: 'view-user-profile',
+  VIEW_RECOMMEND_ROUTE: 'view-recommend-route',
 
-  CREATE_RATE = 'create-rate',
+  BOOK_TICKET: 'book-ticket',
 
-  VIEW_RATE_OF_ROUTE = 'view-rate-of-route',
-}
+  CREATE_RATE: 'create-rate',
+
+  VIEW_RATE_OF_ROUTE: 'view-rate-of-route',
+
+  ticket: {
+    VIEW_BOOKED_TICKET: 'view-booked-ticket',
+  },
+};
