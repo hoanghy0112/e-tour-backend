@@ -28,16 +28,26 @@ async function handleViewRateOfRoute(socket: Socket) {
         try {
           const rateList = await RateRepo.getDetailRatingOfRoute(id);
 
+          const rateMap = new Map();
+          rateList.forEach((rating: IRate) => {
+            rateMap.set(rating._id, rating);
+          });
+
           const listener = WatchTable.register(RateModel, socket)
             .filter(
-              (data: IRate) =>
-                data.touristsRouteId?._id?.toString() === id?.toString(),
+              (data: IRate, id) =>
+                rateMap.has(id) ||
+                data?.touristsRouteId?._id?.toString() === id?.toString(),
             )
-            .do((data, listenerId) => {
-              new SuccessResponse('Updated rate list', data, listenerId).sendSocket(
-                socket,
-                SocketServerMessage.RATE_OF_ROUTE,
-              );
+            .do((data: IRate, listenerId, id) => {
+              if (data == null) rateMap.delete(id);
+              else rateMap.set(data._id, data);
+
+              new SuccessResponse(
+                'Updated rate list',
+                rateMap.values(),
+                listenerId,
+              ).sendSocket(socket, SocketServerMessage.RATE_OF_ROUTE);
             });
 
           return new SuccessResponse(
