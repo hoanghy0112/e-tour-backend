@@ -76,10 +76,11 @@ async function handleViewTourByFilter(socket: Socket) {
           .filter((data: ITour) => (from ? data.from > from : true))
           .filter((data: ITour) => (to ? data.to < to : true))
           .do((data, listenerId) => {
-            new SuccessResponse('update tour filter', data, listenerId).sendSocket(
-              socket,
-              SocketServerMessage.TOUR,
-            );
+            new SuccessResponse(
+              'update tour filter',
+              data,
+              listenerId,
+            ).sendSocket(socket, SocketServerMessage.TOUR);
           });
         try {
           const tour = await TourRepo.filter({ touristRoute, from, to });
