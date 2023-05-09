@@ -34,23 +34,17 @@ async function findById(
   };
 }
 
-async function findRecommend(num = 1): Promise<TouristsRoute[] | null> {
-  const count = await TouristsRouteModel.count();
-  // const recommendedRoutes = (await Promise.all(
-  //   Array(Math.min(num, count))
-  //     .fill('')
-  //     .map(
-  //       async () =>
-  //         await TouristsRouteModel.findOne().skip(
-  //           Math.floor(Math.random() * Math.min(num, count)),
-  //         ),
-  //     ),
-  // )) as TouristsRoute[];
+async function findRecommend(num = 1) {
   const recommendedRoutes = await TouristsRouteModel.find({}, null, {
     sort: { createdAt: -1 },
   });
 
-  return recommendedRoutes;
+  return Promise.all(
+    recommendedRoutes.map(async (route) => ({
+      ...JSON.parse(JSON.stringify(route)),
+      ...(await RateRepo.getOverallRatingOfRoute(route._id)),
+    })),
+  );
 }
 
 async function edit(
@@ -90,10 +84,12 @@ async function filter({
     ],
   }).sort({ createdAt: -1 });
 
-  return touristRoutes.map(async (route) => ({
-    ...route,
-    ...(await RateRepo.getOverallRatingOfRoute(route._id)),
-  }));
+  return Promise.all(
+    touristRoutes.map(async (route) => ({
+      ...JSON.parse(JSON.stringify(route)),
+      ...(await RateRepo.getOverallRatingOfRoute(route._id)),
+    })),
+  );
 }
 
 export default {

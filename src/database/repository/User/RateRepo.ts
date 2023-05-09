@@ -30,10 +30,8 @@ async function getOverallRatingOfRoute(
 
   const totalStar = rateList.reduce((total, rate) => total + rate.star, 0);
 
-  if (!rateList.length) return 0;
-
   return {
-    rate: totalStar / rateList.length,
+    rate: rateList.length ? totalStar / rateList.length : 0,
     num: rateList.length,
   };
 }
