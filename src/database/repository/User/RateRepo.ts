@@ -2,8 +2,15 @@ import { Types } from 'mongoose';
 import RateModel, { IRate } from '../../model/User/Rate';
 import { RateError, RateErrorType } from '../../error/Rate';
 
-async function create(rateInfo: IRate): Promise<IRate> {
-  const createdRate = await RateModel.create(rateInfo);
+async function createRouteRate(rateInfo: IRate): Promise<IRate> {
+  const userId = rateInfo.userId;
+  const routeId = rateInfo.touristsRouteId;
+
+  const createdRate = await RateModel.findOneAndUpdate(
+    { touristsRouteId: routeId, userId },
+    rateInfo,
+    { upsert: true, new: true },
+  );
 
   return createdRate;
 }
@@ -18,14 +25,17 @@ async function findById(id: string | Types.ObjectId) {
 
 async function getOverallRatingOfRoute(
   touristsRouteId: string | Types.ObjectId,
-): Promise<number> {
+) {
   const rateList = (await RateModel.find({ touristsRouteId })) as IRate[];
 
   const totalStar = rateList.reduce((total, rate) => total + rate.star, 0);
 
   if (!rateList.length) return 0;
 
-  return totalStar / rateList.length;
+  return {
+    rate: totalStar / rateList.length,
+    num: rateList.length,
+  };
 }
 
 async function getDetailRatingOfRoute(
@@ -39,7 +49,7 @@ async function getDetailRatingOfRoute(
 }
 
 export default {
-  create,
+  createRouteRate,
   findById,
   getOverallRatingOfRoute,
   getDetailRatingOfRoute,

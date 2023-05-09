@@ -40,7 +40,7 @@ export async function handleCreateRate(socket: Socket) {
             throw new BadRequestError('User has not visit this route');
 
           rateInfo.userId = socket.data?.user._id;
-          const rate = await RateRepo.create(rateInfo);
+          const rate = await RateRepo.createRouteRate(rateInfo);
 
           const listener = WatchTable.register(RateModel, socket)
             .filter(
