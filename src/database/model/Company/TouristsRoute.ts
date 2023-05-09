@@ -12,6 +12,7 @@ export interface TouristsRoute {
   name: string;
   description: string;
   type: TouristsRouteType;
+  promotionRate: number;
   route: string[];
   images: string[];
   companyId: mongoose.Types.ObjectId;
@@ -37,6 +38,10 @@ const touristsRouteSchema = new mongoose.Schema<TouristsRoute>(
     type: {
       type: String,
       enum: Object.values(TouristsRouteType),
+    },
+    promotionRate: {
+      type: Number,
+      default: 0,
     },
     route: [
       {

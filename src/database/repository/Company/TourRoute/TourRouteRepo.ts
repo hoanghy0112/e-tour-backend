@@ -30,7 +30,7 @@ async function findById(
 
   return {
     ...JSON.parse(JSON.stringify(tourRoute)),
-    rate,
+    ...rate,
   };
 }
 
@@ -90,7 +90,10 @@ async function filter({
     ],
   }).sort({ createdAt: -1 });
 
-  return touristRoutes;
+  return touristRoutes.map(async (route) => ({
+    ...route,
+    ...(await RateRepo.getOverallRatingOfRoute(route._id)),
+  }));
 }
 
 export default {
