@@ -9,7 +9,15 @@ export default {
     byId: Joi.object().keys({
       id: Joi.string(),
     }),
+    byPopularity: Joi.object().keys({
+      num: Joi.number().optional().default(5),
+      skip: Joi.number().optional().default(0),
+    }),
   },
+  increasePoint: Joi.object().keys({
+    routeId: Joi.string().required(),
+    point: Joi.number().required(),
+  }),
   savedTouristRoute: {
     saveRoute: Joi.object().keys({
       routeId: Joi.string().required(),

@@ -5,6 +5,8 @@ import VoucherRepo from './VoucherRepo';
 import TourModel, { ITour } from '../../model/Company/Tour';
 import { Types } from 'mongoose';
 import TourRouteRepo from '../Company/TourRoute/TourRouteRepo';
+import TouristsRouteModel from '../../model/Company/TouristsRoute';
+import { touristRoutePoint } from '../../../constants/touristRoutePoint';
 
 export async function create({
   ticketInfo,
@@ -27,6 +29,13 @@ export async function create({
   const ticket = await TicketModel.create(ticketInfo);
 
   if (ticket) {
+    (async () => {
+      TourRouteRepo.increasePoint(
+        tour.touristRoute,
+        touristRoutePoint.BOOK_TICKET,
+      );
+    })();
+
     return ticket;
   }
 

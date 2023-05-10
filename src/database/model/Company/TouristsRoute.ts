@@ -17,6 +17,7 @@ export interface ITouristsRoute {
   images: string[];
   companyId: mongoose.Types.ObjectId;
   createdAt: Date;
+  point?: number;
 }
 
 const touristsRouteSchema = new mongoose.Schema<ITouristsRoute>(
@@ -56,11 +57,17 @@ const touristsRouteSchema = new mongoose.Schema<ITouristsRoute>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Company',
     },
+    point: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   },
 );
+
+touristsRouteSchema.index({ point: 1 });
 
 const TouristsRouteModel = mongoose.model('TouristsRoute', touristsRouteSchema);
 

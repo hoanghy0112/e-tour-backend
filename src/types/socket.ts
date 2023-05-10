@@ -27,6 +27,10 @@ export const SocketServerMessage = {
   RATE_ITEM: 'rate-item',
   RATE_OF_ROUTE: 'rate-of-route',
 
+  touristRoute: {
+    VIEW_POPULAR_ROUTE_RESULT: 'view-popular-route-result',
+  },
+
   savedTouristRoute: {
     SAVED_ROUTE: 'saved-route',
     SAVE_ROUTE_RESULT: 'save-route-result',
@@ -60,6 +64,11 @@ export const SocketClientMessage = {
   CREATE_RATE: 'create-rate',
 
   VIEW_RATE_OF_ROUTE: 'view-rate-of-route',
+
+  touristRoute: {
+    INCREASE_POINT: 'increase-point',
+    VIEW_POPULAR_ROUTE: 'view-popular-route',
+  },
 
   savedTouristRoute: {
     VIEW_SAVED_ROUTE: 'view-saved-route',

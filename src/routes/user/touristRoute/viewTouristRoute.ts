@@ -19,6 +19,8 @@ export async function handleViewTouristRoute(socket: Socket) {
   handleViewTouristRouteById(socket);
   handleViewTouristRouteByFilter(socket);
   handleViewSavedTouristRoute(socket);
+  handleIncreaseRoutePoint(socket);
+  handleViewPopularTouristRoute(socket);
 }
 
 async function handleViewRecommendTouristRoute(socket: Socket) {
@@ -132,6 +134,40 @@ async function handleViewSavedTouristRoute(socket: Socket) {
           touristRoutes,
           listener.getId(),
         ).sendSocket(socket, SocketServerMessage.savedTouristRoute.SAVED_ROUTE);
+      },
+    ),
+  );
+}
+
+async function handleIncreaseRoutePoint(socket: Socket) {
+  socket.on(
+    SocketClientMessage.touristRoute.INCREASE_POINT,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.increasePoint),
+      async ({ routeId, point }: { routeId: string; point: number }) => {
+        TourRouteRepo.increasePoint(routeId, point);
+      },
+    ),
+  );
+}
+
+async function handleViewPopularTouristRoute(socket: Socket) {
+  socket.on(
+    SocketClientMessage.touristRoute.VIEW_POPULAR_ROUTE,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.viewTouristRoute.byPopularity),
+      async ({ num, skip }: { num: number; skip: number }) => {
+        const routes = await TourRouteRepo.findPopular(num, skip);
+
+        return new SuccessResponse(
+          'Successfully retrieve popular tourist route',
+          routes,
+        ).sendSocket(
+          socket,
+          SocketServerMessage.touristRoute.VIEW_POPULAR_ROUTE_RESULT,
+        );
       },
     ),
   );

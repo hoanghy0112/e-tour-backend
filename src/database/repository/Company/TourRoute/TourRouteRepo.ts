@@ -142,14 +142,58 @@ async function removeFromSaved(
   });
 }
 
+async function increasePoint(routedId: Types.ObjectId | string, point: number) {
+  // Remove that point to make the route with more recent point become popular
+  setTimeout(() => {
+    TouristsRouteModel.findByIdAndUpdate(
+      routedId,
+      {
+        $inc: {
+          point: -point,
+        },
+      },
+      { new: true },
+    );
+  }, 604_800_000);
+
+  return await TouristsRouteModel.findByIdAndUpdate(
+    routedId,
+    {
+      $inc: {
+        point,
+      },
+    },
+    { new: true },
+  );
+}
+
+async function findPopular(
+  num: number,
+  skip = 0,
+): Promise<(ITouristsRoute & { rate: number; num: number })[]> {
+  const routes = await TouristsRouteModel.find({})
+    .sort({ point: -1 })
+    .limit(num)
+    .skip(skip);
+
+  return Promise.all(
+    routes.map(async (route) => ({
+      ...route.toObject(),
+      ...(await RateRepo.getOverallRatingOfRoute(route._id)),
+    })),
+  );
+}
+
 export default {
   create,
   list,
   filter,
   findById,
   findRecommend,
+  findPopular,
   edit,
   findSaved,
   addToSaved,
   removeFromSaved,
+  increasePoint,
 };
