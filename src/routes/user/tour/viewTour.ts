@@ -73,14 +73,14 @@ async function handleViewTourByFilter(socket: Socket) {
           .filter((data: ITour) =>
             touristRoute ? data.touristRoute.toString() == touristRoute : true,
           )
-          .filter((data: ITour) => (from ? data.from > from : true))
-          .filter((data: ITour) => (to ? data.to < to : true))
-          .do((data, listenerId) => {
-            new SuccessResponse(
-              'update tour filter',
-              data,
-              listenerId,
-            ).sendSocket(socket, SocketServerMessage.TOUR);
+          .do(async (data, listenerId) => {
+            const tours = await TourRepo.filter({ touristRoute, from, to });
+
+            return new SuccessResponse(
+              'successfully retrieve tour',
+              tours,
+              listener.getId(),
+            ).sendSocket(socket, SocketServerMessage.LIST_TOUR);
           });
         try {
           const tour = await TourRepo.filter({ touristRoute, from, to });
