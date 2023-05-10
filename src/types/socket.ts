@@ -28,7 +28,7 @@ export const SocketServerMessage = {
   RATE_OF_ROUTE: 'rate-of-route',
 
   savedTouristRoute: {
-    SAVED_ROUTE: 'save-route',
+    SAVED_ROUTE: 'saved-route',
     SAVE_ROUTE_RESULT: 'save-route-result',
     REMOVE_ROUTE_FROM_SAVED_RESULT: 'remove-route-from-saved-result',
   },
