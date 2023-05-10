@@ -114,7 +114,12 @@ async function findSaved(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 
-  return routes;
+  return Promise.all(
+    routes.map(async (route) => ({
+      ...JSON.parse(JSON.stringify(route)),
+      ...(await RateRepo.getOverallRatingOfRoute(route._id)),
+    })),
+  );
 }
 
 async function addToSaved(
