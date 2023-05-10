@@ -110,6 +110,12 @@ async function handleViewSavedTouristRoute(socket: Socket) {
         const user = socket.data.user as IUser;
         const userId = user._id?.toString();
 
+        WatchTable.register(UserModel, socket).do((data) => {
+          console.log(data._id.toString());
+          console.log(userId);
+          console.log(data._id.toString() == userId);
+        });
+
         const listener = WatchTable.register(UserModel, socket)
           .filter((data: IUser) => data._id?.toString() === userId)
           .do(async (data: IUser, listenerId) => {
@@ -119,7 +125,10 @@ async function handleViewSavedTouristRoute(socket: Socket) {
               'update saved route',
               touristRoutes,
               listenerId,
-            ).sendSocket(socket, SocketServerMessage.savedTouristRoute.SAVED_ROUTE);
+            ).sendSocket(
+              socket,
+              SocketServerMessage.savedTouristRoute.SAVED_ROUTE,
+            );
           });
 
         const touristRoutes = await TourRouteRepo.findSaved(userId);

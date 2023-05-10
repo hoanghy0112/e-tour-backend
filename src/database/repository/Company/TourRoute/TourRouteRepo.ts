@@ -121,28 +121,22 @@ async function addToSaved(
   routeId: string | Types.ObjectId,
   userId: string | Types.ObjectId,
 ): Promise<void> {
-  await UserModel.findOneAndUpdate(
-    { userId },
-    {
-      $addToSet: {
-        savedRoutes: routeId,
-      },
+  await UserModel.findByIdAndUpdate(userId, {
+    $addToSet: {
+      savedRoutes: routeId,
     },
-  );
+  });
 }
 
 async function removeFromSaved(
   routeId: string | Types.ObjectId,
   userId: string | Types.ObjectId,
 ): Promise<void> {
-  await UserModel.findOneAndUpdate(
-    { userId },
-    {
-      $pull: {
-        savedRoutes: routeId,
-      },
+  await UserModel.findByIdAndUpdate(userId, {
+    $pull: {
+      savedRoutes: routeId,
     },
-  );
+  });
 }
 
 export default {
