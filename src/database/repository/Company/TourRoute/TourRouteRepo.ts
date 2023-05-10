@@ -101,11 +101,9 @@ async function findSaved(
 ): Promise<ITouristsRoute[]> {
   if (!userId) throw new BadRequestError('userId not found');
 
-  const user = await UserModel.findOne({ userId }, { savedRoutes: 1 }).populate(
-    {
-      path: 'savedRoutes',
-    },
-  );
+  const user = await UserModel.findById(userId, { savedRoutes: 1 }).populate({
+    path: 'savedRoutes',
+  });
 
   const routes = user?.toObject().savedRoutes;
   if (!routes) return [];
