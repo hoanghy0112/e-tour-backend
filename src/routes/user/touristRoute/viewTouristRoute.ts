@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
-import Logger from '../../../core/Logger';
 import TouristsRouteModel, {
-  TouristsRoute,
+  ITouristsRoute,
 } from '../../../database/model/Company/TouristsRoute';
+import UserModel, { IUser } from '../../../database/model/User/User';
 import TourRouteRepo from '../../../database/repository/Company/TourRoute/TourRouteRepo';
 import WatchTable from '../../../helpers/realtime/WatchTable';
 import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
@@ -18,6 +18,7 @@ export async function handleViewTouristRoute(socket: Socket) {
   handleViewRecommendTouristRoute(socket);
   handleViewTouristRouteById(socket);
   handleViewTouristRouteByFilter(socket);
+  handleViewSavedTouristRoute(socket);
 }
 
 async function handleViewRecommendTouristRoute(socket: Socket) {
@@ -39,10 +40,10 @@ async function handleViewTouristRouteById(socket: Socket) {
     SocketClientMessage.VIEW_ROUTE,
     socketAsyncHandler(
       socket,
-      socketValidator(schema.viewTour.byId),
+      socketValidator(schema.viewTouristRoute.byId),
       async ({ id }: { id: string }) => {
         const listener = WatchTable.register(TouristsRouteModel, socket)
-          .filter((data: TouristsRoute) => data._id.toString() === id)
+          .filter((data: ITouristsRoute) => data._id.toString() === id)
           .do((data, listenerId) => {
             new SuccessResponse('update route', data, listenerId).sendSocket(
               socket,
@@ -73,16 +74,15 @@ async function handleViewTouristRouteByFilter(socket: Socket) {
     SocketClientMessage.FILTER_ROUTE,
     socketAsyncHandler(
       socket,
-      socketValidator(schema.viewTour.byFilter),
+      socketValidator(schema.viewTouristRoute.byFilter),
       async ({ route, keyword }: { route: string[]; keyword: string }) => {
         const listener = WatchTable.register(TouristsRouteModel, socket)
           .filter(
-            (data: TouristsRoute) =>
+            (data: ITouristsRoute) =>
               route.every((place) => data.route.includes(place)) &&
               data.name.search(keyword) !== -1,
           )
           .do((data, listenerId) => {
-            Logger.debug('new route');
             new SuccessResponse('new route', data, listenerId).sendSocket(
               socket,
               SocketServerMessage.NEW_ROUTE,
@@ -95,6 +95,40 @@ async function handleViewTouristRouteByFilter(socket: Socket) {
           touristRoutes,
           listener.getId(),
         ).sendSocket(socket, SocketServerMessage.RETRIEVE_TOURIST_ROUTES);
+      },
+    ),
+  );
+}
+
+async function handleViewSavedTouristRoute(socket: Socket) {
+  socket.on(
+    SocketClientMessage.savedTouristRoute.VIEW_SAVED_ROUTE,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.savedTouristRoute.viewSavedTouristRoute),
+      async () => {
+        const user = socket.data.user as IUser;
+        const userId = user._id?.toString();
+
+        const listener = WatchTable.register(UserModel, socket)
+          .filter((data: IUser) => data._id?.toString() === userId)
+          .do(async (data: IUser, listenerId) => {
+            const touristRoutes = await TourRouteRepo.findSaved(userId);
+
+            new SuccessResponse(
+              'update saved route',
+              touristRoutes,
+              listenerId,
+            ).sendSocket(socket, SocketServerMessage.savedTouristRoute.SAVED_ROUTE);
+          });
+
+        const touristRoutes = await TourRouteRepo.findSaved(userId);
+
+        return new SuccessResponse(
+          'Successfully retrieve saved tourist route',
+          touristRoutes,
+          listener.getId(),
+        ).sendSocket(socket, SocketServerMessage.savedTouristRoute.SAVED_ROUTE);
       },
     ),
   );

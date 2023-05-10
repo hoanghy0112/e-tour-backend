@@ -1,27 +1,31 @@
 import { Types } from 'mongoose';
 import TouristsRouteModel, {
-  TouristsRoute,
+  ITouristsRoute,
 } from '../../../model/Company/TouristsRoute';
 import { RouteError, RouteErrorType } from '../../../error/TouristRoute';
 import RateRepo from '../../User/RateRepo';
 import TourModel, { ITour } from '../../../model/Company/Tour';
 import TourRepo from '../TourRepo/TourRepo';
+import UserModel from '../../../model/User/User';
+import { BadRequestError } from '../../../../core/ApiError';
 
-async function create(tourRoute: TouristsRoute): Promise<TouristsRoute | null> {
+async function create(
+  tourRoute: ITouristsRoute,
+): Promise<ITouristsRoute | null> {
   const createdTourRoute = await TouristsRouteModel.create(tourRoute);
   return createdTourRoute;
 }
 
 async function list(
   companyId: string | Types.ObjectId,
-): Promise<TouristsRoute[] | null> {
+): Promise<ITouristsRoute[] | null> {
   const tourRoutes = await TouristsRouteModel.find({ companyId });
   return tourRoutes;
 }
 
 async function findById(
   id: string | Types.ObjectId,
-): Promise<TouristsRoute & { rate: number }> {
+): Promise<ITouristsRoute & { rate: number }> {
   const tourRoute = await TouristsRouteModel.findById(id);
 
   if (!tourRoute) throw new RouteError(RouteErrorType.ROUTE_NOT_FOUND);
@@ -49,8 +53,8 @@ async function findRecommend(num = 1) {
 
 async function edit(
   id: string | Types.ObjectId,
-  data: TouristsRoute,
-): Promise<TouristsRoute | null> {
+  data: ITouristsRoute,
+): Promise<ITouristsRoute | null> {
   const tourRoute = await TouristsRouteModel.findByIdAndUpdate(id, data, {
     new: true,
   });
@@ -92,6 +96,55 @@ async function filter({
   );
 }
 
+async function findSaved(
+  userId: string | Types.ObjectId | undefined,
+): Promise<ITouristsRoute[]> {
+  if (!userId) throw new BadRequestError('userId not found');
+
+  const user = await UserModel.findOne({ userId }, { savedRoutes: 1 }).populate(
+    {
+      path: 'savedRoutes',
+    },
+  );
+
+  const routes = user?.toObject().savedRoutes;
+  if (!routes) return [];
+
+  routes?.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
+
+  return routes;
+}
+
+async function addToSaved(
+  routeId: string | Types.ObjectId,
+  userId: string | Types.ObjectId,
+): Promise<void> {
+  await UserModel.findOneAndUpdate(
+    { userId },
+    {
+      $addToSet: {
+        savedRoutes: routeId,
+      },
+    },
+  );
+}
+
+async function removeFromSaved(
+  routeId: string | Types.ObjectId,
+  userId: string | Types.ObjectId,
+): Promise<void> {
+  await UserModel.findOneAndUpdate(
+    { userId },
+    {
+      $pull: {
+        savedRoutes: routeId,
+      },
+    },
+  );
+}
+
 export default {
   create,
   list,
@@ -99,4 +152,7 @@ export default {
   findById,
   findRecommend,
   edit,
+  findSaved,
+  addToSaved,
+  removeFromSaved,
 };

@@ -10,7 +10,7 @@ import schema from './schema';
 import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
 import WatchTable from '../../../helpers/realtime/WatchTable';
 import TouristsRouteModel, {
-  TouristsRoute,
+  ITouristsRoute,
 } from '../../../database/model/Company/TouristsRoute';
 import Logger from '../../../core/Logger';
 import TourModel, { ITour } from '../../../database/model/Company/Tour';

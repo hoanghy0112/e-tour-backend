@@ -17,6 +17,7 @@ import { handleCreateRate } from './user/rating/createRate';
 import { handleViewRate } from './user/rating/viewRate';
 import { handleRemoveListener } from './socketManager/removeListener';
 import { handleTestWatchTable } from './socketManager/testWatchTable';
+import handleManageSavedTouristRoute from './user/touristRoute/saveTouristRoute';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
@@ -35,6 +36,8 @@ export default function socketRouter(socket: Socket) {
 
   handleRemoveListener(socket);
   handleTestWatchTable(socket);
+
+  handleManageSavedTouristRoute(socket);
 
   socket.on(
     SocketClientMessage.PING,

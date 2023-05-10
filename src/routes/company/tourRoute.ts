@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { TouristsRoute } from '../../database/model/Company/TouristsRoute';
+import { ITouristsRoute } from '../../database/model/Company/TouristsRoute';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
@@ -23,13 +23,13 @@ async function handleChangeTourRoute(socket: Socket) {
       socket,
       socketValidator(schema.editTourRoute),
       socketAuthorization([StaffPermission.EDIT_ROUTE]),
-      async (tourRoute: TouristsRoute) => {
+      async (tourRoute: ITouristsRoute) => {
         const { _id, ...data } = tourRoute;
 
         try {
           const touristRoute = await TourRouteRepo.edit(
             _id,
-            data as TouristsRoute,
+            data as ITouristsRoute,
           );
 
           return new SuccessResponse(
@@ -54,7 +54,7 @@ async function handleCreateTourRoute(socket: Socket) {
       socket,
       socketValidator(schema.createTourRoute),
       socketAuthorization([StaffPermission.EDIT_ROUTE]),
-      async (tourRoute: TouristsRoute) => {
+      async (tourRoute: ITouristsRoute) => {
         const companyId = socket.data.staff.companyId;
         const data = { ...tourRoute, companyId };
         const listRoute = await TourRouteRepo.list(companyId);

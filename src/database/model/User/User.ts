@@ -1,6 +1,7 @@
 import { Schema, model, Types } from 'mongoose';
 import { Credential } from '../Credential';
 import watch from '../../../helpers/realtime/watch';
+import { ITouristsRoute } from '../Company/TouristsRoute';
 
 export interface IUser {
   _id?: Types.ObjectId;
@@ -15,6 +16,7 @@ export interface IUser {
   isPhoneVerified?: boolean;
   isEmailVerified?: boolean;
   credential: Credential;
+  savedRoutes?: ITouristsRoute[];
 }
 
 const schema = new Schema<IUser>(
@@ -60,6 +62,12 @@ const schema = new Schema<IUser>(
       type: Schema.Types.ObjectId,
       ref: 'Credential',
     },
+    savedRoutes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'TouristsRoute',
+      },
+    ],
   },
   {
     timestamps: true,
