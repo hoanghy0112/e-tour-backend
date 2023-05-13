@@ -1,19 +1,22 @@
 import { Socket } from 'socket.io-client';
-import VoucherModel, {
-  VoucherType,
-} from '../../../../../src/database/model/User/Voucher';
-import socketRequest from '../../../../../src/helpers/socketRequest';
-import {
-  SocketClientMessage,
-  SocketServerMessage,
-} from '../../../../../src/types/socket';
 import {
   cleanUpSocketServer,
   getSocketInstance,
   setupTestedSocketServer,
 } from '../../../utils';
+import { readFileSync } from 'fs';
+import {
+  SocketClientMessage,
+  SocketServerMessage,
+} from '../../../../../src/types/socket';
+import VoucherModel, {
+  IVoucher,
+  VoucherType,
+} from '../../../../../src/database/model/User/Voucher';
+import socketRequest from '../../../../../src/helpers/socketRequest';
+import path from 'path';
 
-describe('View voucher by id', () => {
+describe('View new voucher', () => {
   let clientSocket: Socket;
   let companyId: any;
   let voucher: any;
@@ -44,12 +47,12 @@ describe('View voucher by id', () => {
   });
 
   test('Test with valid voucher', async () => {
-    clientSocket.emit(SocketClientMessage.voucher.VIEW_BY_VOUCHER_ID, {
-      id: voucher._id.toString(),
+    clientSocket.emit(SocketClientMessage.voucher.VIEW_NEW_VOUCHER, {
+      num: 3,
     });
 
     const response = await socketRequest((resolve, reject) => {
-      clientSocket.on(SocketServerMessage.voucher.VOUCHER, (d) => {
+      clientSocket.on(SocketServerMessage.voucher.NEW_VOUCHER_LIST, (d) => {
         resolve(d);
       });
       clientSocket.on(SocketServerMessage.ERROR, (e) => {
@@ -58,23 +61,6 @@ describe('View voucher by id', () => {
     });
 
     expect(response.status).toBe(200);
-    expect(response.data.value).toBe(0.3);
-  }, 15000);
-
-  test('Test with invalid voucher', async () => {
-    clientSocket.emit(SocketClientMessage.voucher.VIEW_BY_VOUCHER_ID, {
-      id: 'An invalid id',
-    });
-
-    const response = await socketRequest((resolve, reject) => {
-      clientSocket.on(SocketServerMessage.voucher.VOUCHER, (d) => {
-        resolve(d);
-      });
-      clientSocket.on(SocketServerMessage.ERROR, (e) => {
-        resolve(e);
-      });
-    });
-
-    expect(response.status).toBe(400);
+    expect(response.data.length).toBe(1);
   }, 15000);
 });
