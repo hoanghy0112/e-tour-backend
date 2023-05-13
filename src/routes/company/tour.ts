@@ -23,27 +23,6 @@ export function handleCreateTour(socket: Socket) {
       socketValidator(schema.createTour),
       socketAuthorization([StaffPermission.EDIT_TOUR]),
       async (tour: ITour) => {
-        let newTour;
-        try {
-          newTour = await TourRepo.findById(tour.touristRoute);
-
-          if (newTour)
-            return new BadRequestResponse('Tour has been existed').sendSocket(
-              socket,
-              SocketServerMessage.ERROR,
-            );
-        } catch (e: any) {
-          if (
-            e instanceof TourError &&
-            e.type == TourErrorType.TOUR_NOT_FOUND
-          ) {
-          } else if (e.name == 'CastError') {
-            throw new BadRequestError('Tourist route is invalid');
-          } else {
-            throw e;
-          }
-        }
-
         const createdTour = await TourRepo.create(tour);
 
         return new SuccessResponse(

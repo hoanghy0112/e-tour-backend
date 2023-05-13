@@ -56,6 +56,7 @@ export async function getSocketInstance(type: 'client' | 'staff'): Promise<{
         .field('email', 'congty@gmail.com')
         .field('username', username)
         .field('password', password);
+      id = response.body.data.createdAdmin.companyId;
       token = response.body.data.tokens.accessToken;
       break;
   }

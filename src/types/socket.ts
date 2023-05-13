@@ -40,6 +40,12 @@ export const SocketServerMessage = {
   ticket: {
     BOOKED_TICKET_LIST: 'booked-ticket-list',
   },
+
+  voucher: {
+    VOUCHER: 'voucher',
+    NEW_VOUCHER_LIST: 'new-voucher-list',
+    CREATE_VOUCHER_RESULT: 'create-voucher-result'
+  }
 };
 
 export const SocketClientMessage = {
@@ -78,5 +84,11 @@ export const SocketClientMessage = {
 
   ticket: {
     VIEW_BOOKED_TICKET: 'view-booked-ticket',
+  },
+
+  voucher: {
+    VIEW_BY_VOUCHER_ID: 'view-voucher-by-id',
+    VIEW_NEW_VOUCHER: 'view-new-voucher',
+    CREATE_VOUCHER: 'create-voucher'
   },
 };

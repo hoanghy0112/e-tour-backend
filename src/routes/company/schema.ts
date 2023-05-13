@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { TouristsRouteType } from '../../database/model/Company/TouristsRoute';
 import { TourType } from '../../database/model/Company/Tour';
+import { VoucherType } from '../../database/model/User/Voucher';
 
 export default {
   credential: Joi.object().keys({
@@ -49,4 +50,18 @@ export default {
     image: Joi.string(),
     touristRoute: Joi.string().required(),
   }),
+  voucher: {
+    createVoucher: Joi.object().keys({
+      companyId: Joi.string().required(),
+      expiredAt: Joi.date().required(),
+      type: Joi.string()
+        .allow(...Object.values(VoucherType))
+        .optional()
+        .default(VoucherType.NORMAL),
+      description: Joi.string().optional().allow(''),
+      image: Joi.any().optional(),
+      usingCondition: Joi.string().optional().allow(''),
+      value: Joi.number().optional().default(0),
+    }),
+  },
 };

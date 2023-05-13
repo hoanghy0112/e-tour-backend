@@ -8,11 +8,12 @@ export enum VoucherType {
 }
 
 export interface IVoucher {
+  _id?: Types.ObjectId;
   companyId: Types.ObjectId;
   expiredAt: Date;
   type: VoucherType;
   description: string;
-  image?: string;
+  image?: string | Buffer;
   usingCondition: string;
   value: number;
 }
@@ -57,4 +58,4 @@ const VoucherModel = model('Voucher', voucherSchema);
 
 VoucherModel.watch().on('change', watch<IVoucher>(VoucherModel));
 
-export default VoucherModel
+export default VoucherModel;

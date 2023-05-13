@@ -1,19 +1,23 @@
 import { Model } from 'mongoose';
-import WatchTable from './WatchTable';
+import WatchTable, { IOperationType } from './WatchTable';
 import { InternalError } from '../../core/ApiError';
-import Logger from '../../core/Logger';
 
 const watch =
   <T>(model: Model<any>) =>
   async (data: any) => {
+    console.log({ data });
     const id = data.documentKey._id.toString();
+    const operationType = data.operationType as IOperationType;
     if (!id) throw new InternalError('id not found');
 
-    try {
-      const document = await model.findOne({ _id: id });
+    let document = null;
+    if (operationType == IOperationType.INSERT) {
+      document = data.fullDocument;
+    } else if (operationType == IOperationType.UPDATE) {
+      document = await model.findOne({ _id: id });
+    }
 
-      WatchTable.execute(model, document, id);
-    } catch (err) {}
+    WatchTable.execute(model, document, id, operationType);
   };
 
 export default watch;

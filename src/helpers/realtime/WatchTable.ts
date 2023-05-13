@@ -3,12 +3,27 @@ import { Socket } from 'socket.io';
 import { v4 } from 'uuid';
 import Logger from '../../core/Logger';
 
-type FilterFunction = <T>(data: any, id: string) => boolean;
-type CallbackFunction = <T>(data: any, listenerId: string, id: string) => void;
+type FilterFunction = <T>(
+  data: any,
+  id: string,
+  operationType: IOperationType,
+) => boolean;
+type CallbackFunction = <T>(
+  data: any,
+  listenerId: string,
+  id: string,
+  operationType: IOperationType,
+) => void;
 
 interface TableElement {
   filters: FilterFunction[];
   callbacks: CallbackFunction[];
+}
+
+export enum IOperationType {
+  UPDATE = 'update',
+  INSERT = 'insert',
+  DELETE = 'delete',
 }
 
 export class RegistedCommand {
@@ -83,15 +98,22 @@ export default class WatchTable {
     return WatchTable.table.size;
   }
 
-  static execute(model: Model<any>, data: any, documentId: string) {
+  static execute(
+    model: Model<any>,
+    data: any,
+    documentId: string,
+    operationType: IOperationType,
+  ) {
     const normalizedCollectionName = model.modelName.toLowerCase();
 
     WatchTable.table.forEach(
       ({ filters, callbacks, modelName }, listenerId) => {
         if (modelName !== normalizedCollectionName) return;
         try {
-          if (filters?.every((func) => func(data, documentId))) {
-            callbacks.forEach((func) => func(data, listenerId, documentId));
+          if (filters?.every((func) => func(data, documentId, operationType))) {
+            callbacks.forEach((func) =>
+              func(data, listenerId, documentId, operationType),
+            );
           }
         } catch (e: any) {
           Logger.error(e);
