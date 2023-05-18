@@ -2,10 +2,15 @@ import { Types } from 'mongoose';
 import TourModel, { ITour } from '../../../model/Company/Tour';
 import { TourError, TourErrorType } from '../../../error/Tour';
 import RateRepo from '../../User/RateRepo';
+import { BadRequestError } from '../../../../core/ApiError';
 
 async function create(tour: ITour): Promise<ITour | null> {
-  const createdTour = await TourModel.create(tour);
-  return createdTour;
+  try {
+    const createdTour = await TourModel.create(tour);
+    return createdTour;
+  } catch (error) {
+    throw new BadRequestError('Invalid id');
+  }
 }
 
 async function findById(id: Types.ObjectId | string): Promise<ITour> {

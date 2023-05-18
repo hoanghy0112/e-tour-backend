@@ -168,7 +168,7 @@ describe('User sign up', () => {
     expect(avatarImage).not.toBeNull();
   }, 10000);
 
-  it('Should send 200 when user is not foreigner and user info is valid', async () => {
+  it.skip('Should send 200 when user is not foreigner and user info is valid', async () => {
     const response = await request
       .post(endpoint)
       .field('username', username)

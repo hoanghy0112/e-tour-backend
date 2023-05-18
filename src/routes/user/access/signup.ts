@@ -82,7 +82,7 @@ router.post(
 router.post(
   '/google',
   upload.single('image'),
-  validator(schema.signup),
+  validator(schema.googleSignup),
   asyncHandler(async (req: RoleRequest, res) => {
     const accessToken = req.body.accessToken;
 
