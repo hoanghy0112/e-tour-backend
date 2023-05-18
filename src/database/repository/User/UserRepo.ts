@@ -45,9 +45,23 @@ export async function create(user: IUser): Promise<IUser> {
   return createdUser;
 }
 
+export async function findByUID(
+  uid: string | Types.ObjectId,
+): Promise<IUser | null> {
+  const credential = await CredentialModel.findOne({ uid });
+
+  if (!credential) return null;
+
+  return await UserModel.findOne({ credential: credential._id.toString() })
+    .populate('credential')
+    .lean()
+    .exec();
+}
+
 export default {
   findById,
   findByUsername,
   findByCredentialId,
+  findByUID,
   create,
 };

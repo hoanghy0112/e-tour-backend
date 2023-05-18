@@ -12,13 +12,14 @@ export enum UserType {
 }
 
 export interface Credential {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
   authenticationType: AuthenticationType;
   userType: UserType;
   username?: string;
   password?: string;
   accessToken?: string;
   refreshToken?: string;
+  uid?: string;
 }
 
 const schema = new Schema<Credential>({
@@ -34,6 +35,10 @@ const schema = new Schema<Credential>({
   password: String,
   accessToken: String,
   refreshToken: String,
+  uid: {
+    type: String,
+    default: '',
+  },
 });
 
 export const CredentialModel = model<Credential>('Credential', schema);

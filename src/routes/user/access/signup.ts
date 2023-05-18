@@ -20,6 +20,8 @@ import {
 import CredentialRepo from '../../../database/repository/CredentialRepo';
 import multer from 'multer';
 import { uploadImageToS3 } from '../../../database/s3';
+import { getAuth } from 'firebase-admin/auth';
+import firebaseApp from '../../../services/firebase';
 
 const router = express.Router();
 
@@ -71,6 +73,63 @@ router.post(
     } as IUser);
 
     new SuccessResponse('Signup Successful', {
+      user: createdUser,
+      tokens: tokens,
+    }).send(res);
+  }),
+);
+
+router.post(
+  '/google',
+  upload.single('image'),
+  validator(schema.signup),
+  asyncHandler(async (req: RoleRequest, res) => {
+    const accessToken = req.body.accessToken;
+
+    const decodedIdToken = await getAuth(firebaseApp).verifyIdToken(
+      accessToken,
+    );
+
+    const uid = decodedIdToken.uid;
+
+    const user = await UserRepo.findByUID(uid);
+    const userProfile = await getAuth(firebaseApp).getUser(uid);
+
+    if (user) throw new BadRequestError('User already registered');
+
+    if (req.body.isForeigner === 'true' && !req.body.identityExpiredAt)
+      throw new BadRequestError('identityExpiredAt is empty');
+    if (
+      req.body.isForeigner === 'false' &&
+      !req.body.address &&
+      !req.body.phoneNumber
+    )
+      throw new BadRequestError('address or phoneNumber is empty');
+
+    const credential = {
+      authenticationType: AuthenticationType.GOOGLE,
+      userType: UserType.CLIENT,
+      uid,
+    } as Credential;
+    const createdCredential = await CredentialRepo.create(credential);
+
+    const tokens = await KeystoreRepo.create(createdCredential);
+
+    const createdUser = await UserRepo.create({
+      fullName: req.body.fullName || userProfile.displayName,
+      identity: req.body.identity,
+      isForeigner: req.body.isForeigner === 'true',
+      email: req.body.email || userProfile.email,
+      address: req.body.address,
+      image: userProfile.photoURL,
+      phoneNumber: req.body.phoneNumber || userProfile.phoneNumber,
+      identityExpiredAt: req.body.identityExpiredAt,
+      isPhoneVerified: req.body.isPhoneVerified,
+      isEmailVerified: req.body.isEmailVerified || userProfile.emailVerified,
+      credential: createdCredential,
+    } as IUser);
+
+    new SuccessResponse('Signup successful', {
       user: createdUser,
       tokens: tokens,
     }).send(res);

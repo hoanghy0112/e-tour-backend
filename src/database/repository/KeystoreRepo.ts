@@ -42,7 +42,6 @@ async function create(credential: Credential): Promise<Tokens> {
   const accessTokenKey = crypto.randomBytes(64).toString('hex');
   const refreshTokenKey = crypto.randomBytes(64).toString('hex');
   const creadentialId = credential?._id || credential;
-  // if (creadentialId == undefined) Logger.debug({ credential });
 
   const keystore = await KeystoreModel.create({
     client: creadentialId.toString(),

@@ -1,5 +1,6 @@
 import express from 'express';
-import { SuccessResponse } from '../../../core/ApiResponse';
+import { getAuth, DecodedIdToken } from 'firebase-admin/auth';
+import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
 import crypto from 'crypto';
 import UserRepo from '../../../database/repository/User/UserRepo';
 import { BadRequestError, AuthFailureError } from '../../../core/ApiError';
@@ -11,6 +12,13 @@ import asyncHandler from '../../../helpers/asyncHandler';
 import bcrypt from 'bcrypt';
 import { getUserData } from './utils';
 import { PublicRequest } from '../../../types/app-request';
+import firebaseApp from '../../../services/firebase';
+import {
+  AuthenticationType,
+  CredentialModel,
+  UserType,
+} from '../../../database/model/Credential';
+import CredentialRepo from '../../../database/repository/CredentialRepo';
 
 const router = express.Router();
 
@@ -31,12 +39,41 @@ router.post(
     if (!match) throw new AuthFailureError('Authentication failure');
 
     const tokens = await KeystoreRepo.create(user.credential);
-    const userData = await getUserData(user);
 
     new SuccessResponse('Login Success', {
-      user: userData,
+      user: user,
       tokens: tokens,
     }).send(res);
+  }),
+);
+
+router.post(
+  '/google',
+  validator(schema.googleCredential),
+  asyncHandler(async (req: PublicRequest, res) => {
+    const accessToken = req.body.accessToken;
+
+    const decodedIdToken = await getAuth(firebaseApp).verifyIdToken(
+      accessToken,
+    );
+
+    const uid = decodedIdToken.uid;
+
+    if (!uid) throw new BadRequestError('accessToken is wrong');
+
+    const user = await UserRepo.findByUID(uid);
+    const userProfile = await getAuth(firebaseApp).getUser(uid);
+
+    if (user) {
+      const tokens = await KeystoreRepo.create(user.credential);
+
+      return new SuccessResponse('Login Success', {
+        user: user,
+        tokens: tokens,
+      }).send(res);
+    } else {
+      return new BadRequestResponse('User not found');
+    }
   }),
 );
 

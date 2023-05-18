@@ -6,6 +6,9 @@ export default {
     username: Joi.string().required(),
     password: Joi.string().required().min(6),
   }),
+  googleCredential: Joi.object().keys({
+    accessToken: Joi.string().required(),
+  }),
   refreshToken: Joi.object().keys({
     refreshToken: Joi.string().required().min(1),
   }),
@@ -27,5 +30,17 @@ export default {
     identityExpiredAt: Joi.string().optional(),
     isPhoneVerified: Joi.string().optional(),
     isEmailVerified: Joi.string().optional(),
+  }),
+  googleSignup: Joi.object().keys({
+    accessToken: Joi.string().required(),
+    isForeigner: Joi.boolean().required(),
+    fullName: Joi.string().required().min(3),
+    identity: Joi.string().required(),
+    email: Joi.string().required().email(),
+    address: Joi.string().optional(),
+    phoneNumber: Joi.string().optional(),
+    identityExpiredAt: Joi.string().optional(),
+    isPhoneVerified: Joi.string().optional().default(false),
+    isEmailVerified: Joi.string().optional().default(false),
   }),
 };
