@@ -39,7 +39,7 @@ describe('User login by username and password', () => {
     } as Credential;
 
     const createdCredential = await CredentialRepo.create(credential);
-    credentialId = createdCredential._id.toString();
+    credentialId = createdCredential._id?.toString() || '';
 
     const tokens = await KeystoreRepo.create(createdCredential);
 
