@@ -33,7 +33,7 @@ export async function handleViewTicketList(socket: Socket) {
         const tickets = await TicketRepo.findAllTicketOfUser(client._id);
 
         const ticketsMap = new Map();
-        tickets.forEach((ticket) =>
+        tickets.forEach((ticket: any) =>
           ticketsMap.set(ticket._id?.toString(), ticket),
         );
 
