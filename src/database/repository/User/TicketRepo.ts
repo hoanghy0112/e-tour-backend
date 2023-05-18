@@ -7,6 +7,8 @@ import { Types } from 'mongoose';
 import TourRouteRepo from '../Company/TourRoute/TourRouteRepo';
 import TouristsRouteModel from '../../model/Company/TouristsRoute';
 import { touristRoutePoint } from '../../../constants/touristRoutePoint';
+import RateModel, { IRate } from '../../model/User/Rate';
+import RateRepo from './RateRepo';
 
 export async function create({
   ticketInfo,
@@ -59,7 +61,7 @@ async function haveCustomerVisitRoute({
 
 async function findAllTicketOfUser(
   userId: string | Types.ObjectId,
-): Promise<ITicket[]> {
+): Promise<any> {
   const tickets = await TicketModel.find({ userId })
     .sort({ createdAt: -1 })
     .populate({
@@ -68,7 +70,35 @@ async function findAllTicketOfUser(
         path: 'touristRoute',
       },
     });
-  return tickets;
+
+  const ticketsWithRating = await Promise.all(
+    tickets.map(async (ticket: ITicket) => {
+      const rating = (await RateModel.findOne({
+        userId,
+        touristsRouteId: (ticket.tourId as ITour).touristRoute,
+      })) as IRate;
+
+      const overallRating = await RateRepo.getOverallRatingOfRoute(
+        (ticket.tourId as ITour).touristRoute,
+      );
+
+      const ratingComment = await RateRepo.getDetailRatingOfRoute(
+        (ticket.tourId as ITour).touristRoute,
+      );
+
+      return {
+        ...JSON.parse(JSON.stringify(ticket)),
+        userRating: {
+          rate: rating.star,
+          comment: rating.description,
+        },
+        totalRating: overallRating,
+        ratingComment,
+      };
+    }),
+  );
+
+  return ticketsWithRating;
 }
 
 export default {

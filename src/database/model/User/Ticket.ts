@@ -1,5 +1,7 @@
 import mongoose, { Schema, model, Types } from 'mongoose';
 import watch from '../../../helpers/realtime/watch';
+import { ITouristsRoute } from '../Company/TouristsRoute';
+import { ITour } from '../Company/Tour';
 
 export enum PaymentStatus {
   PENDING = 'pending',
@@ -17,7 +19,7 @@ export interface ITicketVisitor {
 export interface ITicket {
   _id?: Types.ObjectId | string;
   userId: Types.ObjectId | string;
-  tourId: Types.ObjectId | string;
+  tourId: Types.ObjectId | string | ITour;
   status: PaymentStatus;
   fullName: string;
   phoneNumber: string;
