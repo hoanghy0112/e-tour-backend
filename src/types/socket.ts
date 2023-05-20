@@ -29,6 +29,7 @@ export const SocketServerMessage = {
 
   touristRoute: {
     VIEW_POPULAR_ROUTE_RESULT: 'view-popular-route-result',
+    FOLLOW_TOURIST_ROUTE_RESULT: 'follow-tourist-route-result',
   },
 
   savedTouristRoute: {
@@ -45,6 +46,10 @@ export const SocketServerMessage = {
     VOUCHER: 'voucher',
     NEW_VOUCHER_LIST: 'new-voucher-list',
     CREATE_VOUCHER_RESULT: 'create-voucher-result',
+  },
+
+  contactCompany: {
+    FOLLOW_COMPANY_RESULT: 'follow-company-result',
   },
 };
 
@@ -74,6 +79,7 @@ export const SocketClientMessage = {
   touristRoute: {
     INCREASE_POINT: 'increase-point',
     VIEW_POPULAR_ROUTE: 'view-popular-route',
+    FOLLOW_TOURIST_ROUTE: 'follow-tourist-route',
   },
 
   savedTouristRoute: {

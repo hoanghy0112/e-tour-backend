@@ -8,32 +8,29 @@ import {
   SocketServerMessage,
 } from '../../../types/socket';
 import schema from './schema';
+import TouristsRouteModel from '../../../database/model/Company/TouristsRoute';
 
-export default function handleContactCompany(socket: Socket) {
-  handleFollowCompany(socket);
-}
-
-function handleFollowCompany(socket: Socket) {
+export function handleFollowTouristRoute(socket: Socket) {
   socket.on(
-    SocketClientMessage.contactCompany.FOLLOW_COMPANY,
+    SocketClientMessage.touristRoute.FOLLOW_TOURIST_ROUTE,
     socketAsyncHandler(
       socket,
-      socketValidator(schema.followCompany),
-      async ({ companyId }: { companyId: string }) => {
+      socketValidator(schema.followTouristRoute),
+      async ({ routeId }: { routeId: string }) => {
         const userId = socket.data.user;
 
-        await CompanyModel.findByIdAndUpdate(companyId, {
+        await TouristsRouteModel.findByIdAndUpdate(routeId, {
           $addToSet: {
             followers: userId,
           },
         });
 
         return new SuccessResponse(
-          'successfully follow company',
+          'successfully follow tourist route',
           {},
         ).sendSocket(
           socket,
-          SocketServerMessage.contactCompany.FOLLOW_COMPANY_RESULT,
+          SocketServerMessage.touristRoute.FOLLOW_TOURIST_ROUTE_RESULT,
         );
       },
     ),

@@ -27,4 +27,7 @@ export default {
     }),
     viewSavedTouristRoute: Joi.object().keys({}),
   },
+  followTouristRoute: Joi.object().keys({
+    routeId: Joi.string().required(),
+  }),
 };
