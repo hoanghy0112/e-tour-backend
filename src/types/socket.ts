@@ -44,8 +44,8 @@ export const SocketServerMessage = {
   voucher: {
     VOUCHER: 'voucher',
     NEW_VOUCHER_LIST: 'new-voucher-list',
-    CREATE_VOUCHER_RESULT: 'create-voucher-result'
-  }
+    CREATE_VOUCHER_RESULT: 'create-voucher-result',
+  },
 };
 
 export const SocketClientMessage = {
@@ -89,6 +89,10 @@ export const SocketClientMessage = {
   voucher: {
     VIEW_BY_VOUCHER_ID: 'view-voucher-by-id',
     VIEW_NEW_VOUCHER: 'view-new-voucher',
-    CREATE_VOUCHER: 'create-voucher'
+    CREATE_VOUCHER: 'create-voucher',
+  },
+
+  contactCompany: {
+    FOLLOW_COMPANY: 'follow-company',
   },
 };

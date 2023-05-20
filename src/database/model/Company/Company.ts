@@ -1,4 +1,11 @@
 import { Schema, model, Types } from 'mongoose';
+import { IUser } from '../User/User';
+
+export enum NotificationType {
+  ALL = 'all',
+  ONLY_SPECIAL = 'only-special',
+  NORMAL = 'normal',
+}
 
 export interface Company {
   _id?: Types.ObjectId;
@@ -10,6 +17,7 @@ export interface Company {
   previewImages?: string[];
   address: string;
   phone: string;
+  followers: (IUser | string | Types.ObjectId)[];
 }
 
 const schema = new Schema<Company>(
@@ -39,6 +47,16 @@ const schema = new Schema<Company>(
     email: {
       type: String,
     },
+    followers: [
+      {
+        user: { type: Schema.Types.ObjectId, ref: 'User', default: [] },
+        notificationType: {
+          type: String,
+          enum: Object.values(NotificationType),
+          default: NotificationType.ONLY_SPECIAL,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
