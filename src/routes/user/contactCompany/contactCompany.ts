@@ -13,6 +13,7 @@ import {
   SocketServerMessage,
 } from '../../../types/socket';
 import schema from './schema';
+import CompanyModel from '../../../database/model/Company/Company';
 
 export default function handleContactCompany(socket: Socket) {
   handleFollowCompany(socket);
@@ -25,43 +26,18 @@ function handleFollowCompany(socket: Socket) {
       socket,
       socketValidator(schema.followCompany),
       async ({ companyId }: { companyId: string }) => {
-        try {
-          const rateList = await RateRepo.getDetailRatingOfRoute(id);
+        const userId = socket.data.user;
 
-          const rateMap = new Map();
-          rateList.forEach((rating: IRate) => {
-            rateMap.set(rating._id, rating);
-          });
+        await CompanyModel.findByIdAndUpdate(companyId, {
+          $addToSet: {
+            followers: userId,
+          },
+        });
 
-          const listener = WatchTable.register(RateModel, socket)
-            .filter(
-              (data: IRate, id) =>
-                rateMap.has(id) ||
-                data?.touristsRouteId?._id?.toString() === id?.toString(),
-            )
-            .do((data: IRate, listenerId, id) => {
-              if (data == null) rateMap.delete(id);
-              else rateMap.set(data._id, data);
-
-              new SuccessResponse(
-                'Updated rate list',
-                rateMap.values(),
-                listenerId,
-              ).sendSocket(socket, SocketServerMessage.RATE_OF_ROUTE);
-            });
-
-          return new SuccessResponse(
-            'successfully retrieve rate of route',
-            rateList,
-            listener.getId(),
-          ).sendSocket(socket, SocketServerMessage.RATE_OF_ROUTE);
-        } catch (e: any) {
-          if (e instanceof RateError) {
-            if (e.type == RateErrorType.RATE_NOT_FOUND)
-              throw new BadRequestError('Rate not found');
-          } else if (e instanceof BadRequestError) throw e;
-          else throw new InternalError(`${e?.message} - ${e?.stack}`);
-        }
+        return new SuccessResponse(
+          'successfully follow company',
+          {},
+        ).sendSocket(socket, SocketServerMessage.RATE_OF_ROUTE);
       },
     ),
   );

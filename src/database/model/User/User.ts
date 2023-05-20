@@ -3,6 +3,15 @@ import { Credential } from '../Credential';
 import watch from '../../../helpers/realtime/watch';
 import { ITouristsRoute } from '../Company/TouristsRoute';
 
+export enum NotificationType {}
+
+export interface INotification {
+  title: string;
+  content: string;
+  link: string;
+  image: string;
+}
+
 export interface IUser {
   _id?: Types.ObjectId;
   fullName: string;
@@ -17,6 +26,7 @@ export interface IUser {
   isEmailVerified?: boolean;
   credential: Credential;
   savedRoutes?: ITouristsRoute[];
+  notifications?: INotification[];
 }
 
 const schema = new Schema<IUser>(
@@ -66,6 +76,14 @@ const schema = new Schema<IUser>(
       {
         type: Schema.Types.ObjectId,
         ref: 'TouristsRoute',
+      },
+    ],
+    notifications: [
+      {
+        title: String,
+        content: String,
+        link: String,
+        image: String,
       },
     ],
   },

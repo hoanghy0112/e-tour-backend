@@ -17,7 +17,7 @@ export interface Company {
   previewImages?: string[];
   address: string;
   phone: string;
-  followers: (IUser | string | Types.ObjectId)[];
+  followers?: (IUser | string | Types.ObjectId)[];
 }
 
 const schema = new Schema<Company>(
