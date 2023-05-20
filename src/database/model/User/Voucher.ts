@@ -17,6 +17,7 @@ export interface IVoucher {
   image?: string | Buffer;
   usingCondition: string;
   value: number;
+  num: number;
 }
 
 const voucherSchema = new Schema<IVoucher>(
@@ -44,13 +45,16 @@ const voucherSchema = new Schema<IVoucher>(
     },
     value: {
       type: Number,
+      default: 0,
     },
-    companyId: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Company',
-      },
-    ],
+    companyId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Company',
+    },
+    num: {
+      type: Number,
+      default: 10,
+    },
   },
   {
     timestamps: true,

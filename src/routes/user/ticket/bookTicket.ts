@@ -33,8 +33,6 @@ export async function handleBookTicket(socket: Socket) {
           const userId = socket.data?.user._id;
           ticketInfo.userId = userId;
 
-          
-
           const createdTicket = await TicketRepo.create({
             ticketInfo,
             voucherIds,
@@ -46,10 +44,11 @@ export async function handleBookTicket(socket: Socket) {
                 ticket._id?.toString() === createdTicket?._id,
             )
             .do((data, listenerId) => {
-              new SuccessResponse('Updated ticket', data, listenerId).sendSocket(
-                socket,
-                SocketServerMessage.UPDATED_RATE,
-              );
+              new SuccessResponse(
+                'Updated ticket',
+                data,
+                listenerId,
+              ).sendSocket(socket, SocketServerMessage.UPDATED_RATE);
             });
 
           return new SuccessResponse(

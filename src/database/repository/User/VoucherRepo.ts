@@ -2,12 +2,12 @@ import { BadRequestError } from '../../../core/ApiError';
 import { VoucherError, VoucherErrorType } from '../../error/Voucher';
 import VoucherModel, { IVoucher } from '../../model/User/Voucher';
 
-async function getDiscountValue(voucherId: string): Promise<number> {
+async function getDiscountValue(voucherId: string): Promise<IVoucher> {
   const voucher = await VoucherModel.findById(voucherId);
 
   if (voucher) {
-    if (voucher.expiredAt < new Date()) {
-      return voucher.value;
+    if (voucher.expiredAt > new Date()) {
+      return voucher;
     }
     throw new VoucherError(
       VoucherErrorType.EXPIRED_VOUCHER,
@@ -32,7 +32,7 @@ async function viewById(id: string): Promise<IVoucher> {
 }
 
 async function viewNewest(num: number): Promise<IVoucher[]> {
-  const vouchers = await VoucherModel.find({}, '_id createdAt')
+  const vouchers = await VoucherModel.find({})
     .sort({ createdAt: -1 })
     .limit(num);
 

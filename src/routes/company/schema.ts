@@ -63,6 +63,7 @@ export default {
       image: Joi.any().optional(),
       usingCondition: Joi.string().optional().allow(''),
       value: Joi.number().optional().default(0),
+      num: Joi.number().optional().default(10),
     }),
   },
 };

@@ -1,6 +1,6 @@
 import UserModel, { IUser } from '@model/User/User';
 import TicketModel, { ITicket } from '../../model/User/Ticket';
-import { InternalError } from '../../../core/ApiError';
+import { BadRequestError, InternalError } from '../../../core/ApiError';
 import VoucherRepo from './VoucherRepo';
 import TourModel, { ITour } from '../../model/Company/Tour';
 import { Types } from 'mongoose';
@@ -9,6 +9,7 @@ import TouristsRouteModel from '../../model/Company/TouristsRoute';
 import { touristRoutePoint } from '../../../constants/touristRoutePoint';
 import RateModel, { IRate } from '../../model/User/Rate';
 import RateRepo from './RateRepo';
+import VoucherModel from '../../model/User/Voucher';
 
 export async function create({
   ticketInfo,
@@ -24,7 +25,23 @@ export async function create({
     voucherIds.map((voucherId) => VoucherRepo.getDiscountValue(voucherId)),
   );
 
-  voucherValues.forEach((value) => (finalPrice = finalPrice * value));
+  if (voucherValues.some((voucher) => voucher.num == 0))
+    throw new BadRequestError(`voucher is out of stock`);
+
+  await VoucherModel.updateMany(
+    {
+      _id: {
+        $in: voucherIds,
+      },
+    },
+    {
+      $inc: {
+        num: -1,
+      },
+    },
+  );
+
+  voucherValues.forEach((voucher) => (finalPrice = finalPrice * voucher.value));
 
   ticketInfo.price = finalPrice;
 

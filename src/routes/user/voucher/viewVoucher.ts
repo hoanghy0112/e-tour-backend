@@ -59,11 +59,11 @@ async function handleViewNewVoucher(socket: Socket) {
         const vouchers = await VoucherRepo.viewNewest(num);
 
         const listener = WatchTable.register(VoucherModel, socket)
-          .filter(
-            (data: IVoucher, id, operationType) =>
-              operationType == IOperationType.INSERT ||
-              operationType == IOperationType.DELETE,
-          )
+          // .filter(
+          //   (data: IVoucher, id, operationType) =>
+          //     operationType == IOperationType.INSERT ||
+          //     operationType == IOperationType.DELETE,
+          // )
           .do(async (data, listenerId) => {
             const vouchers = await VoucherRepo.viewNewest(num);
 
@@ -75,7 +75,7 @@ async function handleViewNewVoucher(socket: Socket) {
           });
 
         return new SuccessResponse(
-          'successfully retrieve tour',
+          'successfully retrieve vouchers',
           vouchers,
           listener.getId(),
         ).sendSocket(socket, SocketServerMessage.voucher.NEW_VOUCHER_LIST);
