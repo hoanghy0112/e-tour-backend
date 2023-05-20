@@ -12,7 +12,7 @@ export interface IFollower {
   notificationType: NotificationType;
 }
 
-export interface Company {
+export interface ICompany {
   _id?: Types.ObjectId;
   isApproveToActive: boolean;
   name: string;
@@ -25,7 +25,7 @@ export interface Company {
   followers?: IFollower[];
 }
 
-const schema = new Schema<Company>(
+const schema = new Schema<ICompany>(
   {
     isApproveToActive: {
       type: Boolean,

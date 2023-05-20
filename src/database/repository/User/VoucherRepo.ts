@@ -1,5 +1,11 @@
 import { BadRequestError } from '../../../core/ApiError';
 import { VoucherError, VoucherErrorType } from '../../error/Voucher';
+import CompanyModel, {
+  ICompany,
+  IFollower,
+  NotificationType,
+} from '../../model/Company/Company';
+import UserModel from '../../model/User/User';
 import VoucherModel, { IVoucher } from '../../model/User/Voucher';
 
 async function getDiscountValue(voucherId: string): Promise<IVoucher> {
@@ -41,6 +47,40 @@ async function viewNewest(num: number): Promise<IVoucher[]> {
 
 async function create(voucher: IVoucher): Promise<IVoucher> {
   const voucherDoc = await VoucherModel.create(voucher);
+
+  (async () => {
+    const companyId = voucher.companyId.toString();
+    const company = (await CompanyModel.findById(companyId).populate(
+      'followers',
+    )) as ICompany;
+
+    company.followers?.forEach(async (follower: IFollower) => {
+      const notificationType = follower.notificationType;
+      const user = follower.user;
+
+      const notification = {
+        title: `New voucher from ${company.name}`,
+        content: `Voucher ${voucher.name} has been created, click to view detail`,
+        link: `tour-${voucherDoc._id.toString()}/new`,
+        image: voucherDoc.image,
+      };
+
+      if (notificationType == NotificationType.ALL) {
+        await UserModel.findByIdAndUpdate(user._id, {
+          $addToSet: {
+            notifications: notification,
+          },
+        });
+      } else if (notificationType == NotificationType.ONLY_SPECIAL) {
+        if (Math.floor(Math.random() * 2) == 0)
+          await UserModel.findByIdAndUpdate(user._id, {
+            $addToSet: {
+              notifications: notification,
+            },
+          });
+      }
+    });
+  })();
 
   return voucherDoc;
 }

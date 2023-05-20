@@ -8,11 +8,53 @@ import TourModel, { ITour } from '../../../model/Company/Tour';
 import TourRepo from '../TourRepo/TourRepo';
 import UserModel from '../../../model/User/User';
 import { BadRequestError } from '../../../../core/ApiError';
+import CompanyModel, {
+  ICompany,
+  IFollower,
+  NotificationType,
+} from '../../../model/Company/Company';
 
 async function create(
   tourRoute: ITouristsRoute,
 ): Promise<ITouristsRoute | null> {
-  const createdTourRoute = await TouristsRouteModel.create(tourRoute);
+  const createdTourRoute = (await TouristsRouteModel.create(
+    tourRoute,
+  )) as ITouristsRoute;
+
+  (async () => {
+    const companyId = tourRoute.companyId.toString();
+    const company = (await CompanyModel.findById(companyId).populate(
+      'followers',
+    )) as ICompany;
+
+    company.followers?.forEach(async (follower: IFollower) => {
+      const notificationType = follower.notificationType;
+      const user = follower.user;
+
+      const notification = {
+        title: `New tourist route for you`,
+        content: `${company.name} has created a new tourist route for you.`,
+        link: `tour-${tourRoute._id.toString()}/new`,
+        image: createdTourRoute.images?.[0],
+      };
+
+      if (notificationType == NotificationType.ALL) {
+        await UserModel.findByIdAndUpdate(user._id, {
+          $addToSet: {
+            notifications: notification,
+          },
+        });
+      } else if (notificationType == NotificationType.ONLY_SPECIAL) {
+        if (Math.floor(Math.random() * 2) == 0)
+          await UserModel.findByIdAndUpdate(user._id, {
+            $addToSet: {
+              notifications: notification,
+            },
+          });
+      }
+    });
+  })();
+
   return createdTourRoute;
 }
 

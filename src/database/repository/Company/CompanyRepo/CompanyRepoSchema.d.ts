@@ -1,9 +1,9 @@
-import { Company } from '@model/Company/Company';
+import { ICompany } from '@model/Company/Company';
 import { Staff } from '@model/Company/Staff';
 import { Types } from 'mongoose';
 
 declare interface createParameter {
-  company: Company;
+  company: ICompany;
   username: string;
   password: string;
 }
@@ -13,6 +13,6 @@ declare interface findByIdParameter {
 }
 
 declare interface createReturn {
-  createdCompany: Company;
+  createdCompany: ICompany;
   createdAdmin: Staff;
 }

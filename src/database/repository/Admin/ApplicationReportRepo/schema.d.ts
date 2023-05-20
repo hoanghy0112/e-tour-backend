@@ -1,4 +1,4 @@
-import { Company } from '@model/Company/Company';
+import { ICompany } from '@model/Company/Company';
 import { Staff } from '@model/Company/Staff';
 import { ApplicationReportInterface } from '@model/Admin/ApplicationReport';
 

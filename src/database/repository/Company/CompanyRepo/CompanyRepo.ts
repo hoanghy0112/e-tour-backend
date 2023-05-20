@@ -1,4 +1,4 @@
-import CompanyModel, { Company } from '@model/Company/Company';
+import CompanyModel, { ICompany } from '@model/Company/Company';
 import {
   Staff,
   AdminPermission,
@@ -44,7 +44,7 @@ export async function findById({
   id,
 }: {
   id: Types.ObjectId | string;
-}): Promise<Company | null> {
+}): Promise<ICompany | null> {
   const company = await CompanyModel.findById(id);
 
   return company;
