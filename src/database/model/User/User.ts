@@ -3,8 +3,6 @@ import { Credential } from '../Credential';
 import watch from '../../../helpers/realtime/watch';
 import { ITouristsRoute } from '../Company/TouristsRoute';
 
-export enum NotificationType {}
-
 export interface INotification {
   title: string;
   content: string;

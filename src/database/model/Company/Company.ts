@@ -1,10 +1,15 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import { IUser } from '../User/User';
 
 export enum NotificationType {
   ALL = 'all',
   ONLY_SPECIAL = 'only-special',
-  NORMAL = 'normal',
+  NONE = 'none',
+}
+
+export interface IFollower {
+  user: IUser;
+  notificationType: NotificationType;
 }
 
 export interface Company {
@@ -17,7 +22,7 @@ export interface Company {
   previewImages?: string[];
   address: string;
   phone: string;
-  followers?: (IUser | string | Types.ObjectId)[];
+  followers?: IFollower[];
 }
 
 const schema = new Schema<Company>(
