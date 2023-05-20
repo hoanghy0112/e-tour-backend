@@ -21,7 +21,10 @@ import handleManageSavedTouristRoute from './user/touristRoute/saveTouristRoute'
 import { handleViewVoucher } from './user/voucher/viewVoucher';
 import handleVoucherSocket from './company/voucher';
 import handleContactCompany from './user/contactCompany/contactCompany';
-import { handleFollowTouristRoute } from './user/touristRoute/followTouristRoute';
+import {
+  handleFollowTouristRoute,
+  handleUnFollowTouristRoute,
+} from './user/touristRoute/followTouristRoute';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
@@ -42,6 +45,7 @@ export default function socketRouter(socket: Socket) {
   handleVoucherSocket(socket);
   handleContactCompany(socket);
   handleFollowTouristRoute(socket);
+  handleUnFollowTouristRoute(socket);
 
   socket.on(
     SocketClientMessage.PING,

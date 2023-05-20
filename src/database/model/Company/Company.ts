@@ -54,7 +54,7 @@ const schema = new Schema<Company>(
     },
     followers: [
       {
-        user: { type: Schema.Types.ObjectId, ref: 'User', default: [] },
+        user: { type: Schema.Types.ObjectId, ref: 'User' },
         notificationType: {
           type: String,
           enum: Object.values(NotificationType),

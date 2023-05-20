@@ -30,6 +30,7 @@ export const SocketServerMessage = {
   touristRoute: {
     VIEW_POPULAR_ROUTE_RESULT: 'view-popular-route-result',
     FOLLOW_TOURIST_ROUTE_RESULT: 'follow-tourist-route-result',
+    UNFOLLOW_TOURIST_ROUTE_RESULT: 'unfollow-tourist-route-result',
   },
 
   savedTouristRoute: {
@@ -50,6 +51,7 @@ export const SocketServerMessage = {
 
   contactCompany: {
     FOLLOW_COMPANY_RESULT: 'follow-company-result',
+    UNFOLLOW_COMPANY_RESULT: 'unfollow-company-result',
   },
 };
 
@@ -80,6 +82,7 @@ export const SocketClientMessage = {
     INCREASE_POINT: 'increase-point',
     VIEW_POPULAR_ROUTE: 'view-popular-route',
     FOLLOW_TOURIST_ROUTE: 'follow-tourist-route',
+    UNFOLLOW_TOURIST_ROUTE: 'unfollow-tourist-route',
   },
 
   savedTouristRoute: {
@@ -100,5 +103,6 @@ export const SocketClientMessage = {
 
   contactCompany: {
     FOLLOW_COMPANY: 'follow-company',
+    UNFOLLOW_COMPANY: 'unfollow-company',
   },
 };

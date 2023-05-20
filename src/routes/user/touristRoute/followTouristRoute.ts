@@ -30,11 +30,16 @@ export function handleFollowTouristRoute(socket: Socket) {
         const userId = socket.data.user._id;
 
         await TouristsRouteModel.findByIdAndUpdate(routeId, {
-          $push: {
-            followers: {
-              user: userId,
-              notificationType,
-            } as IFollower,
+          $cond: {
+            if: { 'followers.user': { $in: [userId] } },
+            then: {
+              $push: {
+                followers: {
+                  user: userId,
+                  notificationType,
+                } as IFollower,
+              },
+            },
           },
         });
 
@@ -44,6 +49,35 @@ export function handleFollowTouristRoute(socket: Socket) {
         ).sendSocket(
           socket,
           SocketServerMessage.touristRoute.FOLLOW_TOURIST_ROUTE_RESULT,
+        );
+      },
+    ),
+  );
+}
+
+export function handleUnFollowTouristRoute(socket: Socket) {
+  socket.on(
+    SocketClientMessage.touristRoute.UNFOLLOW_TOURIST_ROUTE,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.unfollowTouristRoute),
+      async ({ routeId }: { routeId: string }) => {
+        const userId = socket.data.user._id;
+
+        await TouristsRouteModel.findByIdAndUpdate(routeId, {
+          $pull: {
+            followers: {
+              user: userId,
+            },
+          },
+        });
+
+        return new SuccessResponse(
+          'successfully unfollow tourist route',
+          {},
+        ).sendSocket(
+          socket,
+          SocketServerMessage.touristRoute.UNFOLLOW_TOURIST_ROUTE_RESULT,
         );
       },
     ),

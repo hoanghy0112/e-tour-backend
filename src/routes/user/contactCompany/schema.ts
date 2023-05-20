@@ -9,4 +9,7 @@ export default {
       .optional()
       .default(NotificationType.ALL),
   }),
+  unfollowCompany: Joi.object().keys({
+    companyId: Joi.string().required(),
+  }),
 };

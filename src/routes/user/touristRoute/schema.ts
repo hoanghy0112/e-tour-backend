@@ -35,4 +35,7 @@ export default {
       .optional()
       .default(NotificationType.ALL),
   }),
+  unfollowTouristRoute: Joi.object().keys({
+    routeId: Joi.string().required(),
+  }),
 };
