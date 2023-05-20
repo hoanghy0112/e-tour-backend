@@ -53,6 +53,7 @@ export default {
   voucher: {
     createVoucher: Joi.object().keys({
       companyId: Joi.string().required(),
+      name: Joi.string().required(),
       expiredAt: Joi.date().required(),
       type: Joi.string()
         .allow(...Object.values(VoucherType))

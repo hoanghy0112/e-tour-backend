@@ -9,6 +9,7 @@ export enum VoucherType {
 
 export interface IVoucher {
   _id?: Types.ObjectId;
+  name: string;
   companyId: Types.ObjectId;
   expiredAt: Date;
   type: VoucherType;
@@ -23,6 +24,10 @@ const voucherSchema = new Schema<IVoucher>(
     expiredAt: {
       type: Date,
       default: Date.now(),
+    },
+    name: {
+      type: String,
+      default: '',
     },
     type: {
       type: String,
