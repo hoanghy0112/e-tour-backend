@@ -27,14 +27,15 @@ export async function handleViewCompanyInformation(socket: Socket) {
             (data: Staff) => data._id.toString() == company._id?.toString(),
           )
           .do((data, listenerId) => {
-            new SuccessResponse('update staff information', data, listenerId).sendSocket(
-              socket,
-              SocketServerMessage.COMPANY_INFO,
-            );
+            new SuccessResponse(
+              'update staff information',
+              data,
+              listenerId,
+            ).sendSocket(socket, SocketServerMessage.COMPANY_INFO);
           });
 
         return new SuccessResponse(
-          'successfully retrieve tour',
+          'successfully retrieve company information',
           company,
           listener.getId(),
         ).sendSocket(socket, SocketServerMessage.COMPANY_INFO);
