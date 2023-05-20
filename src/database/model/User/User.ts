@@ -8,6 +8,7 @@ export interface INotification {
   content: string;
   link: string;
   image: string;
+  isRead: boolean;
 }
 
 export interface IUser {
@@ -82,6 +83,10 @@ const schema = new Schema<IUser>(
         content: String,
         link: String,
         image: String,
+        isRead: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
   },

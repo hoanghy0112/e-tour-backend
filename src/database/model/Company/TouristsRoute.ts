@@ -1,6 +1,6 @@
 import mongoose, { Types } from 'mongoose';
 import watch from '../../../helpers/realtime/watch';
-import { IFollower } from './Company';
+import { IFollower, NotificationType } from './Company';
 
 export enum TouristsRouteType {
   COUNTRY = 'country',
@@ -61,6 +61,19 @@ const touristsRouteSchema = new mongoose.Schema<ITouristsRoute>(
     point: {
       type: Number,
       default: 0,
+    },
+    followers: {
+      type: [
+        {
+          user: { type: Types.ObjectId, ref: 'User' },
+          notificationType: {
+            type: String,
+            enum: Object.values(NotificationType),
+            default: NotificationType.ONLY_SPECIAL,
+          },
+        },
+      ],
+      default: [],
     },
   },
   {

@@ -1,6 +1,9 @@
 import { Socket } from 'socket.io';
 import { SuccessResponse } from '../../../core/ApiResponse';
-import CompanyModel from '../../../database/model/Company/Company';
+import CompanyModel, {
+  IFollower,
+  NotificationType,
+} from '../../../database/model/Company/Company';
 import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
 import socketValidator from '../../../helpers/socketValidator';
 import {
@@ -9,6 +12,7 @@ import {
 } from '../../../types/socket';
 import schema from './schema';
 import TouristsRouteModel from '../../../database/model/Company/TouristsRoute';
+import { INotification } from '../../../database/model/User/User';
 
 export function handleFollowTouristRoute(socket: Socket) {
   socket.on(
@@ -16,12 +20,21 @@ export function handleFollowTouristRoute(socket: Socket) {
     socketAsyncHandler(
       socket,
       socketValidator(schema.followTouristRoute),
-      async ({ routeId }: { routeId: string }) => {
-        const userId = socket.data.user;
+      async ({
+        routeId,
+        notificationType = NotificationType.ALL,
+      }: {
+        routeId: string;
+        notificationType: string;
+      }) => {
+        const userId = socket.data.user._id;
 
         await TouristsRouteModel.findByIdAndUpdate(routeId, {
-          $addToSet: {
-            followers: userId,
+          $push: {
+            followers: {
+              user: userId,
+              notificationType,
+            } as IFollower,
           },
         });
 

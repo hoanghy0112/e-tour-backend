@@ -10,6 +10,7 @@ import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
 import { BadRequestError, InternalError } from '../../core/ApiError';
 import { TourError, TourErrorType } from '../../database/error/Tour';
+import { uploadImageToS3 } from '../../database/s3';
 
 export default function handleTourSocket(socket: Socket) {
   handleCreateTour(socket);
@@ -23,6 +24,12 @@ export function handleCreateTour(socket: Socket) {
       socketValidator(schema.createTour),
       socketAuthorization([StaffPermission.EDIT_TOUR]),
       async (tour: ITour) => {
+        if (tour.image) {
+          const tourImageName = await uploadImageToS3(
+            tour.image as any,
+          );
+          tour.image = tourImageName || '';
+        }
         const createdTour = await TourRepo.create(tour);
 
         return new SuccessResponse(

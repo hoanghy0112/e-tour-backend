@@ -1,6 +1,9 @@
 import { Socket } from 'socket.io';
 import { SuccessResponse } from '../../../core/ApiResponse';
-import CompanyModel from '../../../database/model/Company/Company';
+import CompanyModel, {
+  IFollower,
+  NotificationType,
+} from '../../../database/model/Company/Company';
 import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
 import socketValidator from '../../../helpers/socketValidator';
 import {
@@ -19,12 +22,21 @@ function handleFollowCompany(socket: Socket) {
     socketAsyncHandler(
       socket,
       socketValidator(schema.followCompany),
-      async ({ companyId }: { companyId: string }) => {
+      async ({
+        companyId,
+        notificationType = NotificationType.ALL,
+      }: {
+        companyId: string;
+        notificationType: string;
+      }) => {
         const userId = socket.data.user;
 
         await CompanyModel.findByIdAndUpdate(companyId, {
           $addToSet: {
-            followers: userId,
+            followers: {
+              user: userId,
+              notificationType,
+            } as IFollower,
           },
         });
 

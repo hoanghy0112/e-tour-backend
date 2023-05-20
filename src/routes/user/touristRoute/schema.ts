@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { NotificationType } from '../../../database/model/Company/Company';
 
 export default {
   viewTouristRoute: {
@@ -29,5 +30,9 @@ export default {
   },
   followTouristRoute: Joi.object().keys({
     routeId: Joi.string().required(),
+    notificationType: Joi.string()
+      .allow(...Object.values(NotificationType))
+      .optional()
+      .default(NotificationType.ALL),
   }),
 };

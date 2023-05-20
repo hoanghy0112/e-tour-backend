@@ -47,7 +47,7 @@ export default {
     type: Joi.string()
       .valid(...Object.values(TourType))
       .default(TourType.NORMAL),
-    image: Joi.string(),
+    image: Joi.any(),
     touristRoute: Joi.string().required(),
   }),
   voucher: {
