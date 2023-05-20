@@ -43,6 +43,7 @@ describe('Create voucher', () => {
       originalname: 'voucher.jpg',
     };
     clientSocket.emit(SocketClientMessage.voucher.CREATE_VOUCHER, {
+      name: 'new voucher',
       image,
       companyId,
       expiredAt: new Date(),
