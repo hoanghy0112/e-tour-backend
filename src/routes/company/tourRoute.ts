@@ -10,6 +10,7 @@ import { StaffPermission } from '../../database/model/Company/Staff';
 import TourRouteRepo from '../../database/repository/Company/TourRoute/TourRouteRepo';
 import { BadRequestError } from '../../core/ApiError';
 import Logger from '../../core/Logger';
+import { uploadImageToS3 } from '../../database/s3';
 
 export default function handleTourRouteSocket(socket: Socket) {
   handleChangeTourRoute(socket);
@@ -55,6 +56,13 @@ async function handleCreateTourRoute(socket: Socket) {
       socketValidator(schema.createTourRoute),
       socketAuthorization([StaffPermission.EDIT_ROUTE]),
       async (tourRoute: ITouristsRoute) => {
+        tourRoute.images =
+          (await Promise.all(
+            (tourRoute.images || []).map(
+              async (image) => (await uploadImageToS3(image as any)) || '',
+            ),
+          )) || [];
+
         const companyId = socket.data.staff.companyId;
         const data = { ...tourRoute, companyId };
         const listRoute = await TourRouteRepo.list(companyId);

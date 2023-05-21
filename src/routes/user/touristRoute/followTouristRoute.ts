@@ -29,19 +29,17 @@ export function handleFollowTouristRoute(socket: Socket) {
       }) => {
         const userId = socket.data.user._id;
 
-        await TouristsRouteModel.findByIdAndUpdate(routeId, {
-          $cond: {
-            if: { 'followers.user': { $in: [userId] } },
-            then: {
-              $push: {
-                followers: {
-                  user: userId,
-                  notificationType,
-                } as IFollower,
+        await TouristsRouteModel.updateMany(
+          { _id: routeId, 'followers.user': { $ne: userId } },
+          {
+            $push: {
+              followers: {
+                user: userId,
+                notificationType,
               },
             },
           },
-        });
+        );
 
         return new SuccessResponse(
           'successfully follow tourist route',

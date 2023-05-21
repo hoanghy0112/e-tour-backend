@@ -53,6 +53,11 @@ export const SocketServerMessage = {
     FOLLOW_COMPANY_RESULT: 'follow-company-result',
     UNFOLLOW_COMPANY_RESULT: 'unfollow-company-result',
   },
+
+  notification: {
+    NEW_NOTIFICATION_LIST: 'new-notification-list',
+    READ_NOTIFICATION_RESULT: 'read-notification-result',
+  },
 };
 
 export const SocketClientMessage = {
@@ -104,5 +109,10 @@ export const SocketClientMessage = {
   contactCompany: {
     FOLLOW_COMPANY: 'follow-company',
     UNFOLLOW_COMPANY: 'unfollow-company',
+  },
+
+  notification: {
+    VIEW_NEW_NOTIFICATION: 'view-new-notification',
+    READ_NOTIFICATION: 'read-notification',
   },
 };

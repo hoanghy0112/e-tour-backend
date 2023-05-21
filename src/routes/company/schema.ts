@@ -25,7 +25,7 @@ export default {
       .valid(...Object.values(TouristsRouteType))
       .default(TouristsRouteType.COUNTRY),
     route: Joi.array().items(Joi.string()),
-    images: Joi.array().items(Joi.string()),
+    images: Joi.array().items(Joi.any()).default([]),
   }),
   editTourRoute: Joi.object().keys({
     _id: Joi.string().required(),

@@ -27,6 +27,7 @@ async function create(
       'followers',
     )) as ICompany;
 
+    console.log({ followers: company.followers, company });
     company.followers?.forEach(async (follower: IFollower) => {
       const notificationType = follower.notificationType;
       const user = follower.user;
@@ -34,20 +35,21 @@ async function create(
       const notification = {
         title: `New tourist route for you`,
         content: `${company.name} has created a new tourist route for you.`,
-        link: `tour-${tourRoute._id.toString()}/new`,
+        link: `route-${createdTourRoute._id.toString()}/new`,
         image: createdTourRoute.images?.[0],
       };
 
       if (notificationType == NotificationType.ALL) {
-        await UserModel.findByIdAndUpdate(user._id, {
-          $addToSet: {
+        console.log('addddddddddddd');
+        await UserModel.findByIdAndUpdate(user, {
+          $push: {
             notifications: notification,
           },
         });
       } else if (notificationType == NotificationType.ONLY_SPECIAL) {
         if (Math.floor(Math.random() * 2) == 0)
-          await UserModel.findByIdAndUpdate(user._id, {
-            $addToSet: {
+          await UserModel.findByIdAndUpdate(user, {
+            $push: {
               notifications: notification,
             },
           });

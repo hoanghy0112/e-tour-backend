@@ -26,19 +26,19 @@ async function create(tour: ITour): Promise<ITour | null> {
         const notification = {
           title: `New tour for you`,
           content: `${route.name} has created a new tour for you.`,
-          link: `tour-${tour._id.toString()}/new`,
+          link: `tour-${createdTour._id.toString()}/new`,
           image: createdTour.image,
         };
 
         if (notificationType == NotificationType.ALL) {
-          await UserModel.findByIdAndUpdate(user._id, {
+          await UserModel.findByIdAndUpdate(user, {
             $addToSet: {
               notifications: notification,
             },
           });
         } else if (notificationType == NotificationType.ONLY_SPECIAL) {
           if (Math.floor(Math.random() * 2) == 0)
-            await UserModel.findByIdAndUpdate(user._id, {
+            await UserModel.findByIdAndUpdate(user, {
               $addToSet: {
                 notifications: notification,
               },

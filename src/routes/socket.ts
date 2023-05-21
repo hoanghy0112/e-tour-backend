@@ -25,6 +25,7 @@ import {
   handleFollowTouristRoute,
   handleUnFollowTouristRoute,
 } from './user/touristRoute/followTouristRoute';
+import handleNotification from './user/notification/notification';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
@@ -46,6 +47,7 @@ export default function socketRouter(socket: Socket) {
   handleContactCompany(socket);
   handleFollowTouristRoute(socket);
   handleUnFollowTouristRoute(socket);
+  handleNotification(socket);
 
   socket.on(
     SocketClientMessage.PING,

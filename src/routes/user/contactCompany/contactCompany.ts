@@ -32,19 +32,17 @@ function handleFollowCompany(socket: Socket) {
       }) => {
         const userId = socket.data.user._id;
 
-        await CompanyModel.findByIdAndUpdate(companyId, {
-          $cond: {
-            if: { 'followers.user': { $in: [userId] } },
-            then: {
-              $push: {
-                followers: {
-                  user: userId,
-                  notificationType,
-                } as IFollower,
+        await CompanyModel.updateMany(
+          { _id: companyId, 'followers.user': { $ne: userId } },
+          {
+            $push: {
+              followers: {
+                user: userId,
+                notificationType,
               },
             },
           },
-        });
+        );
 
         return new SuccessResponse(
           'successfully follow company',
