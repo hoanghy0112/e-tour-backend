@@ -28,6 +28,7 @@ async function create(tour: ITour): Promise<ITour | null> {
           content: `${route.name} has created a new tour for you.`,
           link: `tour-${createdTour._id.toString()}/new`,
           image: createdTour.image,
+          createdAt: new Date(),
         };
 
         if (notificationType == NotificationType.ALL) {

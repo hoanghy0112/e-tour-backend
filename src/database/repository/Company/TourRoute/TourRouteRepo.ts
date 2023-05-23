@@ -27,7 +27,6 @@ async function create(
       'followers',
     )) as ICompany;
 
-    console.log({ followers: company.followers, company });
     company.followers?.forEach(async (follower: IFollower) => {
       const notificationType = follower.notificationType;
       const user = follower.user;
@@ -37,6 +36,7 @@ async function create(
         content: `${company.name} has created a new tourist route for you.`,
         link: `route-${createdTourRoute._id.toString()}/new`,
         image: createdTourRoute.images?.[0],
+        createdAt: new Date(),
       };
 
       if (notificationType == NotificationType.ALL) {
