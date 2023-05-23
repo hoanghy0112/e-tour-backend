@@ -10,7 +10,7 @@ async function createRouteRate(rateInfo: IRate): Promise<IRate> {
     { touristsRouteId: routeId, userId },
     rateInfo,
     { upsert: true, new: true },
-  );
+  ).populate('userId');
 
   return createdRate;
 }
