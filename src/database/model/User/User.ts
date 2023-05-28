@@ -100,17 +100,20 @@ const schema = new Schema<IUser>(
         createdAt: Date,
       },
     ],
-    cards: [
-      {
-        cardNumber: {
-          type: String,
-          unique: true,
+    cards: {
+      type: [
+        {
+          cardNumber: {
+            type: String,
+            unique: true,
+          },
+          name: String,
+          expiredDate: Date,
+          cvv: String,
         },
-        name: String,
-        expiredDate: Date,
-        cvv: String,
-      },
-    ],
+      ],
+      default: [],
+    },
     defaultCard: Types.ObjectId,
   },
   {
