@@ -5,16 +5,16 @@ import CardRepo from '../../../database/repository/User/CardRepo';
 import asyncHandler from '../../../helpers/asyncHandler';
 import { ProtectedUserRequest } from '../../../types/app-request';
 
-export const createNewCard = asyncHandler(
+export const updateCard = asyncHandler(
   async (req: ProtectedUserRequest, res) => {
     const userId = req.user?._id;
+    const cardId = req.params.cardId;
     const cardInfo = req.body as ICard;
     if (!userId) throw new BadRequestError('userId not found');
 
-    const newCard = await CardRepo.create(userId, cardInfo);
+    const card = await CardRepo.modify(userId, cardId, cardInfo);
+    if (!card) throw new BadRequestError('card not found');
 
-    if (!newCard) throw new BadRequestError('card is already exists');
-
-    return new SuccessResponse('success', newCard).send(res);
+    return new SuccessResponse('success', card).send(res);
   },
 );

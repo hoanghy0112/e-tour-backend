@@ -13,6 +13,7 @@ export interface INotification {
 }
 
 export interface ICard {
+  _id: string;
   cardNumber: string;
   expiredDate: Date;
   cvv: string;

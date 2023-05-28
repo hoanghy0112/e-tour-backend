@@ -7,4 +7,13 @@ export default {
     expiredDate: Joi.date().required(),
     cvv: Joi.string().required(),
   }),
+  updateCard: Joi.object().keys({
+    name: Joi.string().optional(),
+    cardNumber: Joi.string().optional(),
+    expiredDate: Joi.date().optional(),
+    cvv: Joi.string().optional(),
+  }),
+  updateDefaultCard: Joi.object().keys({
+    cardId: Joi.string().required(),
+  }),
 };
