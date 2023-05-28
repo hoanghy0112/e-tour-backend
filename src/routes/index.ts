@@ -6,6 +6,7 @@ import userLogin from './user/access/login';
 import profileRouter from './user/access/profile';
 import imageRouter from './imageStorage/image';
 import demoRouter from './demo';
+import cardRouter from './user/card';
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.use('/user/signup', userSignup);
 router.use('/user/login', userLogin);
 router.use('/user/profile', profileRouter);
 router.use('/images', imageRouter);
+router.use('/user/card', cardRouter);
 
 router.use('/demo', demoRouter);
 

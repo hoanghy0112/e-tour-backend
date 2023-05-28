@@ -12,6 +12,13 @@ export interface INotification {
   createdAt: Date;
 }
 
+export interface ICard {
+  cardNumber: string;
+  expiredDate: Date;
+  cvv: string;
+  name: string;
+}
+
 export interface IUser {
   _id?: Types.ObjectId;
   fullName: string;
@@ -27,6 +34,8 @@ export interface IUser {
   credential: Credential;
   savedRoutes?: ITouristsRoute[];
   notifications?: INotification[];
+  cards: ICard[];
+  defaultCard: string;
 }
 
 const schema = new Schema<IUser>(
@@ -91,6 +100,18 @@ const schema = new Schema<IUser>(
         createdAt: Date,
       },
     ],
+    cards: [
+      {
+        cardNumber: {
+          type: String,
+          unique: true,
+        },
+        name: String,
+        expiredDate: Date,
+        cvv: String,
+      },
+    ],
+    defaultCard: Types.ObjectId,
   },
   {
     timestamps: true,
