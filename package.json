@@ -37,6 +37,7 @@
     "newrelic": "^9.7.2",
     "qs": "^6.11.0",
     "redis": "^4.5.1",
+    "sloc": "^0.2.1",
     "socket.io": "^4.6.1",
     "socket.io-client": "^4.6.1",
     "tsc-alias": "^1.8.2",

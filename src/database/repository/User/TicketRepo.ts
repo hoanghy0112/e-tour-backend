@@ -105,10 +105,10 @@ async function findAllTicketOfUser(
 
       return {
         ...JSON.parse(JSON.stringify(ticket)),
-        userRating: {
+        userRating: rating ? {
           rate: rating.star,
           comment: rating.description,
-        },
+        } : null,
         totalRating: overallRating,
         ratingComment,
       };
