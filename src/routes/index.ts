@@ -8,6 +8,7 @@ import userLogin from './user/access/login';
 import profileRouter from './user/access/profile';
 import userSignup from './user/access/signup';
 import cardRouter from './user/card';
+import reportRouter from './report';
 
 const router = express.Router();
 
@@ -18,6 +19,7 @@ router.use('/user/login', userLogin);
 router.use('/user/profile', profileRouter);
 router.use('/images', imageRouter);
 router.use('/user/card', authentication.userAuthentication, cardRouter);
+router.use('/report', reportRouter);
 
 router.use('/demo', demoRouter);
 
