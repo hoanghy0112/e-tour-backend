@@ -13,7 +13,7 @@ import CompanyModel, {
   IFollower,
   NotificationType,
 } from '../../../model/Company/Company';
-import NotificationRepo from '../../../model/NotificationRepo';
+import NotificationRepo from '../../NotificationRepo';
 
 async function create(
   tourRoute: ITouristsRoute,

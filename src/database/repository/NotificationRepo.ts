@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { NotificationType } from './Company/Company';
-import UserModel, { INotification, IUser } from './User/User';
+import { NotificationType } from '../model/Company/Company';
+import UserModel, { INotification, IUser } from '../model/User/User';
 import Logger from '../../core/Logger';
 
 async function create(

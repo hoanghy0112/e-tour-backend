@@ -8,7 +8,7 @@ import TouristsRouteModel, {
 } from '../../../model/Company/TouristsRoute';
 import UserModel, { INotification, IUser } from '../../../model/User/User';
 import { IFollower, NotificationType } from '../../../model/Company/Company';
-import NotificationRepo from '../../../model/NotificationRepo';
+import NotificationRepo from '../../NotificationRepo';
 
 async function create(tour: ITour): Promise<ITour | null> {
   try {
