@@ -27,6 +27,7 @@ import {
 } from './user/touristRoute/followTouristRoute';
 import handleNotification from './user/notification/notification';
 import handleTicket from './user/ticket';
+import handleChat from './user/chat';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
@@ -49,6 +50,7 @@ export default function socketRouter(socket: Socket) {
   handleNotification(socket);
 
   handleTicket(socket);
+  handleChat(socket);
 
   socket.on(
     SocketClientMessage.PING,

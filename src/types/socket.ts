@@ -59,6 +59,13 @@ export const SocketServerMessage = {
     NEW_NOTIFICATION_LIST: 'new-notification-list',
     READ_NOTIFICATION_RESULT: 'read-notification-result',
   },
+  chat: {
+    NEW_CHAT_MESSAGE: 'new-chat-message',
+    CHAT_MESSAGE_LIST: 'chat-message-list',
+    CHAT_ROOM_LIST: 'chat-room-list',
+    CREATE_CHAT_RESULT: 'create-chat-result',
+    CREATE_CHAT_MESSAGE_RESULT: 'create-chat-message-result',
+  },
 };
 
 export const SocketClientMessage = {
@@ -117,5 +124,11 @@ export const SocketClientMessage = {
   notification: {
     VIEW_NEW_NOTIFICATION: 'view-new-notification',
     READ_NOTIFICATION: 'read-notification',
+  },
+  chat: {
+    VIEW_CHAT_ROOM_LIST: 'view-chat-room-list',
+    VIEW_CHAT_MESSAGE: 'view-chat-message',
+    CREATE_CHAT: 'create-chat',
+    CREATE_CHAT_MESSAGE: 'create-chat-message',
   },
 };
