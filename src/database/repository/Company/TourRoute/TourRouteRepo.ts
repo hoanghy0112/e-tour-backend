@@ -6,13 +6,14 @@ import { RouteError, RouteErrorType } from '../../../error/TouristRoute';
 import RateRepo from '../../User/RateRepo';
 import TourModel, { ITour } from '../../../model/Company/Tour';
 import TourRepo from '../TourRepo/TourRepo';
-import UserModel from '../../../model/User/User';
+import UserModel, { INotification } from '../../../model/User/User';
 import { BadRequestError } from '../../../../core/ApiError';
 import CompanyModel, {
   ICompany,
   IFollower,
   NotificationType,
 } from '../../../model/Company/Company';
+import NotificationRepo from '../../../model/NotificationRepo';
 
 async function create(
   tourRoute: ITouristsRoute,
@@ -32,28 +33,14 @@ async function create(
       const user = follower.user;
 
       const notification = {
-        title: `New tourist route for you`,
+        title: `E-Tour notification`,
         content: `${company.name} has created a new tourist route for you.`,
         link: `route-${createdTourRoute._id.toString()}/new`,
         image: createdTourRoute.images?.[0],
         createdAt: new Date(),
-      };
+      } as INotification;
 
-      if (notificationType == NotificationType.ALL) {
-        console.log('addddddddddddd');
-        await UserModel.findByIdAndUpdate(user, {
-          $push: {
-            notifications: notification,
-          },
-        });
-      } else if (notificationType == NotificationType.ONLY_SPECIAL) {
-        if (Math.floor(Math.random() * 2) == 0)
-          await UserModel.findByIdAndUpdate(user, {
-            $push: {
-              notifications: notification,
-            },
-          });
-      }
+      await NotificationRepo.create(user, notificationType, notification);
     });
   })();
 

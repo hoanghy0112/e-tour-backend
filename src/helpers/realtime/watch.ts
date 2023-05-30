@@ -5,7 +5,6 @@ import { InternalError } from '../../core/ApiError';
 const watch =
   <T>(model: Model<any>) =>
   async (data: any) => {
-    console.log({ data });
     const id = data.documentKey._id.toString();
     const operationType = data.operationType as IOperationType;
     if (!id) throw new InternalError('id not found');

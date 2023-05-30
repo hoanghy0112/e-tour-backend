@@ -8,6 +8,7 @@ import TouristsRouteModel, {
 } from '../../../model/Company/TouristsRoute';
 import UserModel, { INotification, IUser } from '../../../model/User/User';
 import { IFollower, NotificationType } from '../../../model/Company/Company';
+import NotificationRepo from '../../../model/NotificationRepo';
 
 async function create(tour: ITour): Promise<ITour | null> {
   try {
@@ -24,27 +25,15 @@ async function create(tour: ITour): Promise<ITour | null> {
         const user = follower.user;
 
         const notification = {
-          title: `New tour for you`,
+          title: `E-Tour notification`,
           content: `${route.name} has created a new tour for you.`,
           link: `tour-${createdTour._id.toString()}/new`,
           image: createdTour.image,
+          isRead: false,
           createdAt: new Date(),
-        };
+        } as INotification;
 
-        if (notificationType == NotificationType.ALL) {
-          await UserModel.findByIdAndUpdate(user, {
-            $addToSet: {
-              notifications: notification,
-            },
-          });
-        } else if (notificationType == NotificationType.ONLY_SPECIAL) {
-          if (Math.floor(Math.random() * 2) == 0)
-            await UserModel.findByIdAndUpdate(user, {
-              $addToSet: {
-                notifications: notification,
-              },
-            });
-        }
+        await NotificationRepo.create(user, notificationType, notification);
       });
     })();
 
