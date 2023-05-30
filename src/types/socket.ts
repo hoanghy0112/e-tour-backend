@@ -41,6 +41,7 @@ export const SocketServerMessage = {
 
   ticket: {
     BOOKED_TICKET_LIST: 'booked-ticket-list',
+    UPDATE_TICKET_RESULT: 'update-ticket-result',
   },
 
   voucher: {
@@ -98,6 +99,8 @@ export const SocketClientMessage = {
 
   ticket: {
     VIEW_BOOKED_TICKET: 'view-booked-ticket',
+    UPDATE_TICKET: 'update-ticket',
+    VIEW_DETAIL_TICKET: 'view-detail-ticket',
   },
 
   voucher: {

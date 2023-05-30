@@ -61,6 +61,24 @@ export async function create({
   throw new InternalError('Something went wrong when create ticket');
 }
 
+export async function update(
+  id: string,
+  userId: string,
+  ticketInfo: ITicket,
+): Promise<ITicket> {
+  const ticket = await TicketModel.findOneAndUpdate(
+    {
+      _id: id,
+      userId,
+    },
+    ticketInfo,
+  );
+
+  if (!ticket) throw new BadRequestError('Can not find ticket');
+
+  return ticket;
+}
+
 async function haveCustomerVisitRoute({
   userId,
   routeId,
@@ -105,10 +123,12 @@ async function findAllTicketOfUser(
 
       return {
         ...JSON.parse(JSON.stringify(ticket)),
-        userRating: rating ? {
-          rate: rating.star,
-          comment: rating.description,
-        } : null,
+        userRating: rating
+          ? {
+              rate: rating.star,
+              comment: rating.description,
+            }
+          : null,
         totalRating: overallRating,
         ratingComment,
       };
@@ -120,6 +140,7 @@ async function findAllTicketOfUser(
 
 export default {
   create,
+  update,
   haveCustomerVisitRoute,
   findAllTicketOfUser,
 };

@@ -1,28 +1,21 @@
 import { Socket } from 'socket.io';
+import { BadRequestError } from '../../../core/ApiError';
+import { SuccessResponse } from '../../../core/ApiResponse';
+import TicketModel, { ITicket } from '../../../database/model/User/Ticket';
+import { IUser } from '../../../database/model/User/User';
+import TicketRepo from '../../../database/repository/User/TicketRepo';
+import WatchTable from '../../../helpers/realtime/WatchTable';
+import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
+import socketValidator from '../../../helpers/socketValidator';
 import {
   SocketClientMessage,
   SocketServerMessage,
 } from '../../../types/socket';
-import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
-import socketValidator from '../../../helpers/socketValidator';
-import TourRouteRepo from '../../../database/repository/Company/TourRoute/TourRouteRepo';
 import schema from './schema';
-import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
-import WatchTable from '../../../helpers/realtime/WatchTable';
-import TouristsRouteModel, {
-  ITouristsRoute,
-} from '../../../database/model/Company/TouristsRoute';
-import Logger from '../../../core/Logger';
-import TourModel, { ITour } from '../../../database/model/Company/Tour';
-import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
-import { BadRequestError } from '../../../core/ApiError';
-import TicketModel, { ITicket } from '../../../database/model/User/Ticket';
-import { IUser } from '../../../database/model/User/User';
-import TicketRepo from '../../../database/repository/User/TicketRepo';
 
-export async function handleViewTicketList(socket: Socket) {
+export async function handleViewDetailTicket(socket: Socket) {
   socket.on(
-    SocketClientMessage.ticket.VIEW_BOOKED_TICKET,
+    SocketClientMessage.ticket.VIEW_DETAIL_TICKET,
     socketAsyncHandler(
       socket,
       socketValidator(schema.viewBookedTicket),

@@ -12,7 +12,7 @@ import { handleViewStaffInformation } from './company/staffInformation';
 import { handleViewCompanyInformation } from './company/viewCompanyInformation';
 import { handleViewUserProfile } from './user/access/profile';
 import { handleBookTicket } from './user/ticket/bookTicket';
-import { handleViewTicketList } from './user/ticket/viewTicket';
+import { handleViewTicketList } from './user/ticket/viewTicketList';
 import { handleCreateRate } from './user/rating/createRate';
 import { handleViewRate } from './user/rating/viewRate';
 import { handleRemoveListener } from './socketManager/removeListener';
@@ -26,6 +26,7 @@ import {
   handleUnFollowTouristRoute,
 } from './user/touristRoute/followTouristRoute';
 import handleNotification from './user/notification/notification';
+import handleTicket from './user/ticket';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
@@ -35,8 +36,6 @@ export default function socketRouter(socket: Socket) {
   handleViewStaffInformation(socket);
   handleViewCompanyInformation(socket);
   handleViewUserProfile(socket);
-  handleBookTicket(socket);
-  handleViewTicketList(socket);
   handleCreateRate(socket);
   handleViewRate(socket);
   handleRemoveListener(socket);
@@ -48,6 +47,8 @@ export default function socketRouter(socket: Socket) {
   handleFollowTouristRoute(socket);
   handleUnFollowTouristRoute(socket);
   handleNotification(socket);
+
+  handleTicket(socket);
 
   socket.on(
     SocketClientMessage.PING,
