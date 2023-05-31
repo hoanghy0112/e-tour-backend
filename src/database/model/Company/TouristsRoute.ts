@@ -41,6 +41,7 @@ const touristsRouteSchema = new mongoose.Schema<ITouristsRoute>(
     type: {
       type: String,
       enum: Object.values(TouristsRouteType),
+      default: TouristsRouteType.COUNTRY,
     },
     promotionRate: {
       type: Number,
