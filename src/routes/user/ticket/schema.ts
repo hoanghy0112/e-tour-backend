@@ -32,7 +32,7 @@ export default {
   updateTicket: Joi.object().keys({
     ticketId: Joi.string().required(),
     ticketInfo: Joi.object().keys({
-      tourId: Joi.string().optional(),
+      _id: Joi.string().optional(),
       fullName: Joi.string().optional(),
       email: Joi.string().optional().allow('').default(''),
       phoneNumber: Joi.string().optional(),
