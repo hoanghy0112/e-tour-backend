@@ -114,7 +114,7 @@ const schema = new Schema<IUser>(
           cvv: String,
           type: {
             type: String,
-          }
+          },
         },
       ],
       default: [],
@@ -128,7 +128,18 @@ const schema = new Schema<IUser>(
 
 schema.index({ email: 1 });
 
-const UserModel = model('User', schema);
+schema
+  .path('cards')
+  .schema.virtual('isDefault')
+  .get(function () {
+    return (
+      this._id?.toString() ==
+      (this.$parent() as IUser | undefined)?.defaultCard?.toString()
+    );
+  });
+
+const 
+UserModel = model('User', schema);
 
 UserModel.watch().on('change', watch<IUser>(UserModel));
 

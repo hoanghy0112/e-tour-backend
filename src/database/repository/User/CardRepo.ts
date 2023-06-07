@@ -83,13 +83,17 @@ async function findById(
   userId: string | Types.ObjectId,
   cardId: string,
 ): Promise<any> {
-  const user = (await UserModel.findById(userId, 'cards')) as IUser;
+  const user = (await UserModel.findById(userId))?.toObject({
+    virtuals: true,
+  }) as IUser;
   const cards = user?.cards || [];
   return cards.find((card) => card._id.toString() === cardId);
 }
 
 async function findDefaultCard(userId: string | Types.ObjectId): Promise<any> {
-  const user = (await UserModel.findById(userId, 'cards defaultCard')) as IUser;
+  const user = (await UserModel.findById(userId))?.toObject({
+    virtuals: true,
+  }) as IUser;
   const cards = user?.cards || [];
   const defaultCardId = user?.defaultCard.toString();
 
