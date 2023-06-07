@@ -15,8 +15,8 @@ export async function handleCreateChat(socket: Socket) {
     socketAsyncHandler(
       socket,
       socketValidator(schema.createChat),
-      async ({ staffId, userId }: { staffId: string; userId: string }) => {
-        const chatRoom = await ChatRepo.createChat(staffId, userId);
+      async ({ routeId, userId }: { routeId: string; userId: string }) => {
+        const chatRoom = await ChatRepo.createChat(routeId, userId);
 
         return new SuccessResponse('success', chatRoom).sendSocket(
           socket,

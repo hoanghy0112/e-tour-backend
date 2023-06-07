@@ -1,6 +1,18 @@
 import { ChatModel } from '../model/Chat';
+import CompanyModel, { ICompany } from '../model/Company/Company';
+import { Staff, StaffModel } from '../model/Company/Staff';
+import TouristsRouteModel, {
+  ITouristsRoute,
+} from '../model/Company/TouristsRoute';
 
-async function createChat(staffId: string, userId: string) {
+async function createChat(routeId: string, userId: string) {
+  const route = (
+    await TouristsRouteModel.findById(routeId)
+  )?.toObject() as ITouristsRoute;
+  const staffList = (await StaffModel.find({
+    companyId: route.companyId,
+  })) as Staff[];
+  const staffId = staffList[Math.floor(Math.random() * staffList.length)]._id;
   const chatRoom = await ChatModel.create({ staffId, userId });
   return chatRoom;
 }

@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 export default {
   createChat: Joi.object().keys({
-    staffId: Joi.string().required(),
+    routeId: Joi.string().required(),
     userId: Joi.string().required(),
   }),
   createChatMessage: Joi.object().keys({
