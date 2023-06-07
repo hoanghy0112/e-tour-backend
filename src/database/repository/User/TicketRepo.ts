@@ -72,6 +72,7 @@ export async function update(
       userId,
     },
     ticketInfo,
+    { new: true },
   );
 
   if (!ticket) throw new BadRequestError('Can not find ticket');
