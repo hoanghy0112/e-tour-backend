@@ -18,6 +18,7 @@ export interface ICard {
   expiredDate: Date;
   cvv: string;
   name: string;
+  type: string;
 }
 
 export interface IUser {
