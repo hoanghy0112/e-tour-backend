@@ -112,6 +112,9 @@ const schema = new Schema<IUser>(
           name: String,
           expiredDate: Date,
           cvv: String,
+          type: {
+            type: String,
+          }
         },
       ],
       default: [],

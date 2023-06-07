@@ -36,6 +36,7 @@ async function modify(
           'cards.$.cvv': cardInfo.cvv,
           'cards.$.expiredDate': cardInfo.expiredDate,
           'cards.$.name': cardInfo.name,
+          'cards.$.type': cardInfo.type,
         },
       },
       {
