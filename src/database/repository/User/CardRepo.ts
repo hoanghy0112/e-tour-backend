@@ -74,7 +74,9 @@ async function changeDefaultCard(
 }
 
 async function findAll(userId: string | Types.ObjectId): Promise<any> {
-  const user = (await UserModel.findById(userId)) as IUser;
+  const user = (await UserModel.findById(userId))?.toObject({
+    virtuals: true,
+  }) as IUser;
 
   return user?.cards || [];
 }

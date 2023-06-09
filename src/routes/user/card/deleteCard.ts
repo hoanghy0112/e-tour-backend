@@ -12,6 +12,6 @@ export const deleteCard = asyncHandler(
 
     const cardList = await CardRepo.deleteCard(userId, cardId);
 
-    return new SuccessResponse('success', {}).send(res);
+    return new SuccessResponse('success', { cardId }).send(res);
   },
 );
