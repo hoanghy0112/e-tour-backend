@@ -1,5 +1,6 @@
 import Joi from 'joi';
-import { NotificationType } from '../../../database/model/Company/Company';
+import { NotificationType } from '../../database/model/Company/Company';
+import { TouristsRouteType } from '../../database/model/Company/TouristsRoute';
 
 export default {
   viewTouristRoute: {
@@ -37,5 +38,29 @@ export default {
   }),
   unfollowTouristRoute: Joi.object().keys({
     routeId: Joi.string().required(),
+  }),
+  createTourRoute: Joi.object().keys({
+    reservationFee: Joi.number().optional().default(0),
+    name: Joi.string().required().min(10),
+    description: Joi.string().required().min(10),
+    type: Joi.string()
+      .valid(...Object.values(TouristsRouteType))
+      .default(TouristsRouteType.COUNTRY),
+    route: Joi.array().items(Joi.string()),
+    images: Joi.array().items(Joi.any()).default([]),
+  }),
+  editTourRoute: Joi.object().keys({
+    _id: Joi.string().required(),
+    reservationFee: Joi.number().optional().default(0),
+    name: Joi.string().optional().min(1),
+    description: Joi.string().optional().min(1),
+    type: Joi.string()
+      .valid(...Object.values(TouristsRouteType))
+      .default(TouristsRouteType.COUNTRY),
+    route: Joi.array().items(Joi.string()),
+    image: Joi.any(),
+  }),
+  filter: Joi.object().keys({
+    companyId: Joi.string(),
   }),
 };

@@ -1,17 +1,14 @@
 import { Socket } from 'socket.io';
-import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
+import { BadRequestResponse, SuccessResponse } from '../../core/ApiResponse';
 import TouristsRouteModel, {
   ITouristsRoute,
-} from '../../../database/model/Company/TouristsRoute';
-import UserModel, { IUser } from '../../../database/model/User/User';
-import TourRouteRepo from '../../../database/repository/Company/TourRoute/TourRouteRepo';
-import WatchTable from '../../../helpers/realtime/WatchTable';
-import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
-import socketValidator from '../../../helpers/socketValidator';
-import {
-  SocketClientMessage,
-  SocketServerMessage,
-} from '../../../types/socket';
+} from '../../database/model/Company/TouristsRoute';
+import UserModel, { IUser } from '../../database/model/User/User';
+import TourRouteRepo from '../../database/repository/Company/TourRoute/TourRouteRepo';
+import WatchTable from '../../helpers/realtime/WatchTable';
+import socketAsyncHandler from '../../helpers/socketAsyncHandler';
+import socketValidator from '../../helpers/socketValidator';
+import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
 
 export async function handleViewTouristRoute(socket: Socket) {

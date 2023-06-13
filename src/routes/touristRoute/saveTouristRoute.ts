@@ -1,14 +1,11 @@
 import { Socket } from 'socket.io';
-import { BadRequestError } from '../../../core/ApiError';
-import { SuccessResponse } from '../../../core/ApiResponse';
-import { IUser } from '../../../database/model/User/User';
-import TourRouteRepo from '../../../database/repository/Company/TourRoute/TourRouteRepo';
-import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
-import socketValidator from '../../../helpers/socketValidator';
-import {
-  SocketClientMessage,
-  SocketServerMessage,
-} from '../../../types/socket';
+import { BadRequestError } from '../../core/ApiError';
+import { SuccessResponse } from '../../core/ApiResponse';
+import { IUser } from '../../database/model/User/User';
+import TourRouteRepo from '../../database/repository/Company/TourRoute/TourRouteRepo';
+import socketAsyncHandler from '../../helpers/socketAsyncHandler';
+import socketValidator from '../../helpers/socketValidator';
+import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
 
 export default function handleManageSavedTouristRoute(socket: Socket) {

@@ -1,18 +1,15 @@
 import { Socket } from 'socket.io';
-import { SuccessResponse } from '../../../core/ApiResponse';
+import { SuccessResponse } from '../../core/ApiResponse';
 import CompanyModel, {
   IFollower,
   NotificationType,
-} from '../../../database/model/Company/Company';
-import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
-import socketValidator from '../../../helpers/socketValidator';
-import {
-  SocketClientMessage,
-  SocketServerMessage,
-} from '../../../types/socket';
+} from '../../database/model/Company/Company';
+import socketAsyncHandler from '../../helpers/socketAsyncHandler';
+import socketValidator from '../../helpers/socketValidator';
+import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
-import TouristsRouteModel from '../../../database/model/Company/TouristsRoute';
-import { INotification } from '../../../database/model/User/User';
+import TouristsRouteModel from '../../database/model/Company/TouristsRoute';
+import { INotification } from '../../database/model/User/User';
 
 export function handleFollowTouristRoute(socket: Socket) {
   socket.on(

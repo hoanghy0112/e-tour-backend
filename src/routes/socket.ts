@@ -2,38 +2,32 @@ import { Socket } from 'socket.io';
 import { BadRequestError } from '../core/ApiError';
 import { SuccessResponse } from '../core/ApiResponse';
 import socketAsyncHandler from '../helpers/socketAsyncHandler';
-import Logger from '../core/Logger';
-import { SocketClientMessage, SocketServerMessage } from '../types/socket';
-import handleTourRouteSocket from './company/tourRoute';
-import { handleViewTouristRoute } from './user/touristRoute/viewTouristRoute';
-import handleTourSocket from './company/tour';
-import { handleViewTour } from './user/tour/viewTour';
+import { SocketClientMessage } from '../types/socket';
 import { handleViewStaffInformation } from './company/staffInformation';
+import handleTourSocket from './company/tour';
 import { handleViewCompanyInformation } from './company/viewCompanyInformation';
-import { handleViewUserProfile } from './user/access/profile';
-import { handleBookTicket } from './user/ticket/bookTicket';
-import { handleViewTicketList } from './user/ticket/viewTicketList';
-import { handleCreateRate } from './user/rating/createRate';
-import { handleViewRate } from './user/rating/viewRate';
 import { handleRemoveListener } from './socketManager/removeListener';
 import { handleTestWatchTable } from './socketManager/testWatchTable';
-import handleManageSavedTouristRoute from './user/touristRoute/saveTouristRoute';
-import { handleViewVoucher } from './voucher/viewVoucher';
-import handleContactCompany from './user/contactCompany/contactCompany';
+import { handleTouristRoute } from './touristRoute';
 import {
   handleFollowTouristRoute,
   handleUnFollowTouristRoute,
-} from './user/touristRoute/followTouristRoute';
-import handleNotification from './user/notification/notification';
-import handleTicket from './user/ticket';
+} from './touristRoute/followTouristRoute';
+import handleManageSavedTouristRoute from './touristRoute/saveTouristRoute';
+import { handleViewTouristRoute } from './touristRoute/viewTouristRoute';
+import { handleViewUserProfile } from './user/access/profile';
 import handleChat from './user/chat';
+import handleContactCompany from './user/contactCompany/contactCompany';
+import handleNotification from './user/notification/notification';
+import { handleCreateRate } from './user/rating/createRate';
+import { handleViewRate } from './user/rating/viewRate';
+import handleTicket from './user/ticket';
+import { handleViewTour } from './user/tour/viewTour';
 import { handleVoucher } from './voucher';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
   handleViewTour(socket);
-  handleTourRouteSocket(socket);
-  handleViewTouristRoute(socket);
   handleViewStaffInformation(socket);
   handleViewCompanyInformation(socket);
   handleViewUserProfile(socket);
@@ -43,10 +37,9 @@ export default function socketRouter(socket: Socket) {
   handleTestWatchTable(socket);
   handleManageSavedTouristRoute(socket);
   handleContactCompany(socket);
-  handleFollowTouristRoute(socket);
-  handleUnFollowTouristRoute(socket);
   handleNotification(socket);
 
+  handleTouristRoute(socket);
   handleVoucher(socket);
   handleTicket(socket);
   handleChat(socket);
