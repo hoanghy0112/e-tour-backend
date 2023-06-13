@@ -7,8 +7,12 @@ import TouristsRouteModel, {
 } from '../model/Company/TouristsRoute';
 
 async function createChat(routeId: string, userId: string) {
-  if (await ChatModel.find({ routeId })) {
-    throw new BadRequestError('tourist route exists');
+  let chatRoom;
+  chatRoom = await ChatModel.findOne({ routeId });
+  console.log({ chatRoom });
+  if (chatRoom) {
+    return chatRoom;
+    // throw new BadRequestError('tourist route exists');
   }
   const route = (
     await TouristsRouteModel.findById(routeId)
@@ -17,7 +21,7 @@ async function createChat(routeId: string, userId: string) {
     companyId: route.companyId,
   })) as Staff[];
   const staffId = staffList[Math.floor(Math.random() * staffList.length)]._id;
-  const chatRoom = await ChatModel.create({ staffId, userId, routeId });
+  chatRoom = await ChatModel.create({ staffId, userId, routeId });
   return chatRoom;
 }
 
