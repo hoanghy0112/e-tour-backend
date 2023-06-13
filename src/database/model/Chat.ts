@@ -13,6 +13,7 @@ export interface IChat {
   _id: Types.ObjectId;
   userId: Types.ObjectId;
   staffId: Types.ObjectId;
+  routeId: Types.ObjectId;
   chats: IChatItem[];
 }
 
@@ -27,6 +28,11 @@ const schema = new Schema<IChat>(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'Staff',
+    },
+    routeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'TouristsRoute',
     },
     chats: [
       {
