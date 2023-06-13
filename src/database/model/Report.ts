@@ -8,6 +8,7 @@ export enum ReportType {
   ROUTE = 'route',
   COMPANY = 'company',
   STAFF = 'staff',
+  APPLICATION = 'application',
 }
 
 export default interface IReport {
