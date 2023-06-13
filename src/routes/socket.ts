@@ -18,8 +18,7 @@ import { handleViewRate } from './user/rating/viewRate';
 import { handleRemoveListener } from './socketManager/removeListener';
 import { handleTestWatchTable } from './socketManager/testWatchTable';
 import handleManageSavedTouristRoute from './user/touristRoute/saveTouristRoute';
-import { handleViewVoucher } from './user/voucher/viewVoucher';
-import handleVoucherSocket from './company/voucher';
+import { handleViewVoucher } from './voucher/viewVoucher';
 import handleContactCompany from './user/contactCompany/contactCompany';
 import {
   handleFollowTouristRoute,
@@ -28,6 +27,7 @@ import {
 import handleNotification from './user/notification/notification';
 import handleTicket from './user/ticket';
 import handleChat from './user/chat';
+import { handleVoucher } from './voucher';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
@@ -42,13 +42,12 @@ export default function socketRouter(socket: Socket) {
   handleRemoveListener(socket);
   handleTestWatchTable(socket);
   handleManageSavedTouristRoute(socket);
-  handleViewVoucher(socket);
-  handleVoucherSocket(socket);
   handleContactCompany(socket);
   handleFollowTouristRoute(socket);
   handleUnFollowTouristRoute(socket);
   handleNotification(socket);
 
+  handleVoucher(socket);
   handleTicket(socket);
   handleChat(socket);
 

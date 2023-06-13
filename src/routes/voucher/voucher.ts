@@ -8,13 +8,9 @@ import { uploadImageToS3 } from '../../database/s3';
 import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
-import schema from './schema';
+import schema from '../company/schema';
 
-export default function handleVoucherSocket(socket: Socket) {
-  handleCreateVoucher(socket);
-}
-
-function handleCreateVoucher(socket: Socket) {
+export function handleCreateVoucher(socket: Socket) {
   socket.on(
     SocketClientMessage.voucher.CREATE_VOUCHER,
     socketAsyncHandler(

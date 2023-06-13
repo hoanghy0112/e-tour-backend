@@ -1,20 +1,12 @@
 import { Socket } from 'socket.io';
-import { BadRequestError } from '../../../core/ApiError';
-import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
-import TourModel, { ITour } from '../../../database/model/Company/Tour';
-import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
-import WatchTable, {
-  IOperationType,
-} from '../../../helpers/realtime/WatchTable';
-import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
-import socketValidator from '../../../helpers/socketValidator';
-import {
-  SocketClientMessage,
-  SocketServerMessage,
-} from '../../../types/socket';
+import { SuccessResponse } from '../../core/ApiResponse';
+import VoucherModel, { IVoucher } from '../../database/model/User/Voucher';
+import VoucherRepo from '../../database/repository/User/VoucherRepo';
+import WatchTable from '../../helpers/realtime/WatchTable';
+import socketAsyncHandler from '../../helpers/socketAsyncHandler';
+import socketValidator from '../../helpers/socketValidator';
+import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
-import VoucherRepo from '../../../database/repository/User/VoucherRepo';
-import VoucherModel, { IVoucher } from '../../../database/model/User/Voucher';
 
 export async function handleViewVoucher(socket: Socket) {
   handleViewVoucherById(socket);
