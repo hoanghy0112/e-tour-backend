@@ -72,7 +72,7 @@ router.post(
         tokens: tokens,
       }).send(res);
     } else {
-      return new BadRequestResponse('User not found');
+      return new BadRequestResponse('User not found').send(res);
     }
   }),
 );
