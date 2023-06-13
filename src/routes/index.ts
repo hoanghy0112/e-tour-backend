@@ -10,6 +10,7 @@ import userSignup from './user/access/signup';
 import cardRouter from './user/card';
 import reportRouter from './report';
 import { ticketRouter } from './user/ticket';
+import { voucherRouter } from './voucher';
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.use('/images', imageRouter);
 router.use('/user/card', authentication.userAuthentication, cardRouter);
 router.use('/report', reportRouter);
 router.use('/ticket', authentication.userAuthentication, ticketRouter);
+router.use('/voucher', voucherRouter);
 
 router.use('/demo', demoRouter);
 

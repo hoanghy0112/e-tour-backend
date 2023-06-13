@@ -2,6 +2,7 @@ import { Schema, model, Types } from 'mongoose';
 import { Credential } from '../Credential';
 import watch from '../../../helpers/realtime/watch';
 import { ITouristsRoute } from '../Company/TouristsRoute';
+import { IVoucher } from './Voucher';
 
 export interface INotification {
   title: string;
@@ -34,6 +35,7 @@ export interface IUser {
   isPhoneVerified?: boolean;
   isEmailVerified?: boolean;
   credential: Credential;
+  savedVouchers?: IVoucher[];
   savedRoutes?: ITouristsRoute[];
   notifications?: INotification[];
   cards: ICard[];
@@ -89,6 +91,12 @@ const schema = new Schema<IUser>(
         ref: 'TouristsRoute',
       },
     ],
+    savedVouchers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Voucher',
+      },
+    ],
     notifications: [
       {
         title: String,
@@ -138,8 +146,7 @@ schema
     );
   });
 
-const 
-UserModel = model('User', schema);
+const UserModel = model('User', schema);
 
 UserModel.watch().on('change', watch<IUser>(UserModel));
 

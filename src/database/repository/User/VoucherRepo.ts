@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { BadRequestError } from '../../../core/ApiError';
 import { VoucherError, VoucherErrorType } from '../../error/Voucher';
 import CompanyModel, {
@@ -5,7 +6,7 @@ import CompanyModel, {
   IFollower,
   NotificationType,
 } from '../../model/Company/Company';
-import UserModel from '../../model/User/User';
+import UserModel, { IUser } from '../../model/User/User';
 import VoucherModel, { IVoucher } from '../../model/User/Voucher';
 
 async function getDiscountValue(voucherId: string): Promise<IVoucher> {
@@ -85,9 +86,43 @@ async function create(voucher: IVoucher): Promise<IVoucher> {
   return voucherDoc;
 }
 
+async function addToSaved(
+  userId: string | Types.ObjectId | undefined,
+  voucherId: string | Types.ObjectId,
+) {
+  const updatedUser = (await UserModel.findByIdAndUpdate(
+    userId,
+    {
+      $addToSet: {
+        savedVouchers: voucherId,
+      },
+    },
+    { new: true },
+  )) as IUser;
+  return updatedUser.savedVouchers || [];
+}
+
+async function removeFromSaved(
+  userId: string | Types.ObjectId | undefined,
+  voucherId: string | Types.ObjectId,
+) {
+  const updatedUser = (await UserModel.findByIdAndUpdate(
+    userId,
+    {
+      $pull: {
+        savedVouchers: voucherId,
+      },
+    },
+    { new: true },
+  )) as IUser;
+  return updatedUser.savedVouchers || [];
+}
+
 export default {
   getDiscountValue,
   viewById,
   viewNewest,
   create,
+  addToSaved,
+  removeFromSaved,
 };

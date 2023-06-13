@@ -9,4 +9,7 @@ export default {
       num: Joi.number().optional().default(5),
     }),
   },
+  saveVoucher: Joi.object().keys({
+    voucherId: Joi.string().required(),
+  }),
 };
