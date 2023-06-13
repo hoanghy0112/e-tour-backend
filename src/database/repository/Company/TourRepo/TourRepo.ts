@@ -1,13 +1,12 @@
 import { Types } from 'mongoose';
-import TourModel, { ITour } from '../../../model/Company/Tour';
-import { TourError, TourErrorType } from '../../../error/Tour';
-import RateRepo from '../../User/RateRepo';
 import { BadRequestError } from '../../../../core/ApiError';
+import { TourError, TourErrorType } from '../../../error/Tour';
+import { IFollower } from '../../../model/Company/Company';
+import TourModel, { ITour } from '../../../model/Company/Tour';
 import TouristsRouteModel, {
   ITouristsRoute,
 } from '../../../model/Company/TouristsRoute';
-import UserModel, { INotification, IUser } from '../../../model/User/User';
-import { IFollower, NotificationType } from '../../../model/Company/Company';
+import { INotification } from '../../../model/User/User';
 import NotificationRepo from '../../NotificationRepo';
 
 async function create(tour: ITour): Promise<ITour | null> {
@@ -27,7 +26,7 @@ async function create(tour: ITour): Promise<ITour | null> {
         const notification = {
           title: `E-Tour notification`,
           content: `${route.name} has created a new tour for you.`,
-          link: `tour-${createdTour._id.toString()}/new`,
+          link: `route-${createdTour.touristRoute.toString()}/newTour`,
           image: createdTour.image,
           isRead: false,
           createdAt: new Date(),
