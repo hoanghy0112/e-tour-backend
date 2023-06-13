@@ -139,9 +139,15 @@ async function findAllTicketOfUser(
   return ticketsWithRating;
 }
 
+async function deleteTicket(ticketId: string | Types.ObjectId) {
+  await TicketModel.deleteOne({ _id: ticketId });
+  return ticketId;
+}
+
 export default {
   create,
   update,
   haveCustomerVisitRoute,
   findAllTicketOfUser,
+  deleteTicket,
 };

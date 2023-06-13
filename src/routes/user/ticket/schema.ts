@@ -58,4 +58,7 @@ export default {
   viewBookedTicket: Joi.object().keys({
     num: Joi.number().optional().default(5),
   }),
+  discardTicket: Joi.object().keys({
+    ticketId: Joi.string().required(),
+  }),
 };
