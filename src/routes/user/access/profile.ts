@@ -11,6 +11,9 @@ import {
   SocketClientMessage,
   SocketServerMessage,
 } from '../../../types/socket';
+import { ProtectedUserRequest } from '../../../types/app-request';
+import validator from '../../../helpers/validator';
+import schema from './schema';
 
 const profileRouter = express.Router();
 
@@ -19,7 +22,23 @@ profileRouter.get(
   authentication.userAuthentication,
   asyncHandler(async (req: Request, res) => {
     //
-    return new SuccessResponse('Success', {});
+    return new SuccessResponse('Success', {}).send(res);
+  }),
+);
+
+profileRouter.put(
+  '/',
+  validator(schema.updateUserProfile),
+  authentication.userAuthentication,
+  asyncHandler(async (req: ProtectedUserRequest, res) => {
+    const userId = req.user?._id;
+    const userInfo = req.body;
+    const updatedUserInfo = await UserModel.findByIdAndUpdate(
+      userId,
+      userInfo,
+      { new: true },
+    );
+    return new SuccessResponse('Success', updatedUserInfo).send(res);
   }),
 );
 

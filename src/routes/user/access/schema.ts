@@ -43,4 +43,14 @@ export default {
     isPhoneVerified: Joi.string().optional().default(false),
     isEmailVerified: Joi.string().optional().default(false),
   }),
+  updateUserProfile: Joi.object().keys({
+    fullName: Joi.string().min(3),
+    identity: Joi.string(),
+    isForeigner: Joi.boolean(),
+    email: Joi.string().email(),
+    image: Joi.string().optional().uri(),
+    address: Joi.string().optional(),
+    phoneNumber: Joi.string().optional(),
+    identityExpiredAt: Joi.string().optional(),
+  }),
 };
