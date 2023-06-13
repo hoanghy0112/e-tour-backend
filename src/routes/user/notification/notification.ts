@@ -13,6 +13,7 @@ import {
 import schema from './schema';
 import UserModel from '../../../database/model/User/User';
 import WatchTable from '../../../helpers/realtime/WatchTable';
+import { Types } from 'mongoose';
 
 export default function handleNotification(socket: Socket) {
   handleViewNewNotification(socket);
@@ -72,11 +73,20 @@ function handleReadNotification(socket: Socket) {
         const userId = socket.data.user._id;
 
         await UserModel.updateMany(
-          { _id: userId, 'notifications._id': { $in: notificationIDs } },
+          { _id: userId },
           {
             $set: {
-              'notifications.$.isRead': true,
+              'notifications.$[element].isRead': true,
             },
+          },
+          {
+            arrayFilters: [
+              {
+                'element._id': {
+                  $in: notificationIDs.map((d) => new Types.ObjectId(d)),
+                },
+              },
+            ],
           },
         );
 
