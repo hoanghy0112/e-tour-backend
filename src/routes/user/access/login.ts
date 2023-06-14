@@ -1,24 +1,15 @@
-import express from 'express';
-import { getAuth, DecodedIdToken } from 'firebase-admin/auth';
-import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
-import crypto from 'crypto';
-import UserRepo from '../../../database/repository/User/UserRepo';
-import { BadRequestError, AuthFailureError } from '../../../core/ApiError';
-import KeystoreRepo from '../../../database/repository/KeystoreRepo';
-import { createTokens } from '../../../auth/authUtils';
-import validator from '../../../helpers/validator';
-import schema from './schema';
-import asyncHandler from '../../../helpers/asyncHandler';
 import bcrypt from 'bcrypt';
-import { getUserData } from './utils';
-import { PublicRequest } from '../../../types/app-request';
+import express from 'express';
+import { getAuth } from 'firebase-admin/auth';
+import { AuthFailureError, BadRequestError } from '../../../core/ApiError';
+import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
+import KeystoreRepo from '../../../database/repository/KeystoreRepo';
+import UserRepo from '../../../database/repository/User/UserRepo';
+import asyncHandler from '../../../helpers/asyncHandler';
+import validator from '../../../helpers/validator';
 import firebaseApp from '../../../services/firebase';
-import {
-  AuthenticationType,
-  CredentialModel,
-  UserType,
-} from '../../../database/model/Credential';
-import CredentialRepo from '../../../database/repository/CredentialRepo';
+import { PublicRequest } from '../../../types/app-request';
+import schema from './schema';
 
 const router = express.Router();
 
