@@ -63,4 +63,7 @@ export default {
   filter: Joi.object().keys({
     companyId: Joi.string(),
   }),
+  savedList: Joi.object().keys({
+    routeId: Joi.string(),
+  }),
 };

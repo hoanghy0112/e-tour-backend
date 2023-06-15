@@ -154,23 +154,41 @@ async function findSaved(
 async function addToSaved(
   routeId: string | Types.ObjectId,
   userId: string | Types.ObjectId,
-): Promise<void> {
-  await UserModel.findByIdAndUpdate(userId, {
-    $addToSet: {
-      savedRoutes: routeId,
+): Promise<ITouristsRoute[]> {
+  const user = await UserModel.findByIdAndUpdate(
+    userId,
+    {
+      $addToSet: {
+        savedRoutes: routeId,
+      },
     },
-  });
+    { new: true },
+  );
+
+  return user?.savedRoutes || [];
 }
 
 async function removeFromSaved(
   routeId: string | Types.ObjectId,
   userId: string | Types.ObjectId,
-): Promise<void> {
-  await UserModel.findByIdAndUpdate(userId, {
-    $pull: {
-      savedRoutes: routeId,
+): Promise<ITouristsRoute[]> {
+  console.log({ routeId });
+  const user = await UserModel.findByIdAndUpdate(
+    userId,
+    {
+      $pull: {
+        savedRoutes: routeId,
+      },
     },
-  });
+    { new: true },
+  );
+
+  return user?.savedRoutes || [];
+}
+
+async function viewSaved(userId: string | Types.ObjectId) {
+  const user = await UserModel.findById(userId);
+  return user?.savedRoutes || [];
 }
 
 async function increasePoint(routedId: Types.ObjectId | string, point: number) {
@@ -227,4 +245,5 @@ export default {
   addToSaved,
   removeFromSaved,
   increasePoint,
+  viewSaved,
 };
