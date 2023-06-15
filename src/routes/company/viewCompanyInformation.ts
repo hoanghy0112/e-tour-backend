@@ -8,6 +8,8 @@ import StaffRepo from '../../database/repository/Company/StaffRepo/StaffRepo';
 import WatchTable from '../../helpers/realtime/WatchTable';
 import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
+import asyncHandler from '../../helpers/asyncHandler';
+import { PublicRequest } from '../../types/app-request';
 
 export async function handleViewCompanyInformation(socket: Socket) {
   socket.on(
@@ -19,6 +21,7 @@ export async function handleViewCompanyInformation(socket: Socket) {
         const company = await CompanyRepo.findById({
           id: staff?.companyId || '',
         });
+
         if (!company)
           throw new InternalError('Staff does not belong to any company');
 
@@ -45,3 +48,13 @@ export async function handleViewCompanyInformation(socket: Socket) {
     }),
   );
 }
+
+export const viewCompanyInformation = asyncHandler(
+  async (req: PublicRequest, res) => {
+    const { companyId } = req.params;
+
+    const company = await CompanyRepo.findById({ id: companyId });
+
+    return new SuccessResponse('Success', company).send(res);
+  },
+);
