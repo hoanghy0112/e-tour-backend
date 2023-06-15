@@ -77,19 +77,22 @@ async function handleViewTouristRouteByFilter(socket: Socket) {
       socket,
       socketValidator(schema.viewTouristRoute.byFilter),
       async ({ route, keyword }: { route: string[]; keyword: string }) => {
+        let touristRoutes = await TourRouteRepo.filter({ route, keyword });
         const listener = WatchTable.register(TouristsRouteModel, socket)
           .filter(
-            (data: ITouristsRoute) =>
-              route.every((place) => data.route.includes(place)) &&
-              data.name.search(keyword) !== -1,
+            (data: ITouristsRoute, documentId) =>
+              (route.every((place) => data.route.includes(place)) &&
+                data.name.search(keyword) !== -1) ||
+              touristRoutes.some((route) => route._id == documentId),
           )
-          .do((data, listenerId) => {
-            new SuccessResponse('new route', data, listenerId).sendSocket(
-              socket,
-              SocketServerMessage.NEW_ROUTE,
-            );
+          .do(async (data, listenerId) => {
+            touristRoutes = await TourRouteRepo.filter({ route, keyword });
+            new SuccessResponse(
+              'new route',
+              touristRoutes,
+              listenerId,
+            ).sendSocket(socket, SocketServerMessage.RETRIEVE_TOURIST_ROUTES);
           });
-        const touristRoutes = await TourRouteRepo.filter({ route, keyword });
 
         return new SuccessResponse(
           'successfully retrieve tourist route',
