@@ -58,7 +58,7 @@ export default {
       .valid(...Object.values(TouristsRouteType))
       .default(TouristsRouteType.COUNTRY),
     route: Joi.array().items(Joi.string()),
-    image: Joi.any(),
+    images: Joi.any(),
   }),
   filter: Joi.object().keys({
     companyId: Joi.string(),

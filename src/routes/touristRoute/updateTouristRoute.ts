@@ -37,8 +37,8 @@ export async function handleChangeTourRoute(socket: Socket) {
             (images || []).map(async (image) =>
               typeof image != 'string'
                 ? await uploadImageToS3(image as any)
-                : isValidHttpUrl(image)
-                ? await uploadImageToS3FromURL(image)
+                : isValidHttpUrl(decodeURIComponent(image))
+                ? await uploadImageToS3FromURL(decodeURIComponent(image))
                 : image,
             ),
           )) || [];

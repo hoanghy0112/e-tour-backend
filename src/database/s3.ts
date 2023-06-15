@@ -66,8 +66,6 @@ export async function uploadImageToS3(
 ): Promise<string | null> {
   const uid = uuidv4();
 
-  if (typeof image === 'string') return image.toString();
-
   const ext = image.originalname.split('.').at(-1);
   const imageFileName = `${uid}.${ext}`;
 
