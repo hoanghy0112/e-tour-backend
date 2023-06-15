@@ -8,6 +8,7 @@ import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
+import { uploadImageToS3 } from '../../database/s3';
 
 export async function handleChangeTourRoute(socket: Socket) {
   socket.on(
@@ -17,13 +18,22 @@ export async function handleChangeTourRoute(socket: Socket) {
       socketValidator(schema.editTourRoute),
       socketAuthorization([StaffPermission.EDIT_ROUTE]),
       async (tourRoute: ITouristsRoute) => {
-        const { _id, ...data } = tourRoute;
+        const { _id, images, ...data } = tourRoute;
+
+        const updatedImages =
+          (await Promise.all(
+            (images || []).map(async (image) =>
+              typeof image != 'string'
+                ? await uploadImageToS3(image as any)
+                : image,
+            ),
+          )) || [];
 
         try {
-          const touristRoute = await TourRouteRepo.edit(
-            _id,
-            data as ITouristsRoute,
-          );
+          const touristRoute = await TourRouteRepo.edit(_id, {
+            ...(images ? { images: updatedImages } : {}),
+            ...data,
+          } as ITouristsRoute);
 
           return new SuccessResponse(
             'Update tourist route successfully',
