@@ -1,15 +1,13 @@
-import UserModel, { IUser } from '@model/User/User';
-import TicketModel, { ITicket } from '../../model/User/Ticket';
-import { BadRequestError, InternalError } from '../../../core/ApiError';
-import VoucherRepo from './VoucherRepo';
-import TourModel, { ITour } from '../../model/Company/Tour';
 import { Types } from 'mongoose';
-import TourRouteRepo from '../Company/TourRoute/TourRouteRepo';
-import TouristsRouteModel from '../../model/Company/TouristsRoute';
 import { touristRoutePoint } from '../../../constants/touristRoutePoint';
+import { BadRequestError, InternalError } from '../../../core/ApiError';
+import TourModel, { ITour } from '../../model/Company/Tour';
 import RateModel, { IRate } from '../../model/User/Rate';
-import RateRepo from './RateRepo';
+import TicketModel, { ITicket } from '../../model/User/Ticket';
 import VoucherModel from '../../model/User/Voucher';
+import TourRouteRepo from '../Company/TourRoute/TourRouteRepo';
+import RateRepo from './RateRepo';
+import VoucherRepo from './VoucherRepo';
 
 export async function create({
   ticketInfo,
@@ -41,7 +39,9 @@ export async function create({
     },
   );
 
-  voucherValues.forEach((voucher) => (finalPrice = finalPrice * voucher.value));
+  let voucherValue = 0;
+  voucherValues.forEach((voucher) => (voucherValue += voucher.value));
+  finalPrice = finalPrice * Math.max(1 - voucherValue, 0);
 
   ticketInfo.price = finalPrice;
 
