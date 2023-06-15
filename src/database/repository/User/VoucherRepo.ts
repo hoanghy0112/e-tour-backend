@@ -30,7 +30,7 @@ async function getDiscountValue(voucherId: string): Promise<IVoucher> {
 
 async function viewById(id: string): Promise<IVoucher> {
   try {
-    const voucher = await VoucherModel.findById(id);
+    const voucher = await VoucherModel.findById(id).populate('companyId');
     if (!voucher) throw new BadRequestError('id not found');
     return voucher;
   } catch (e: any) {
@@ -40,6 +40,7 @@ async function viewById(id: string): Promise<IVoucher> {
 
 async function viewNewest(num: number): Promise<IVoucher[]> {
   const vouchers = await VoucherModel.find({})
+    .populate('companyId')
     .sort({ createdAt: -1 })
     .limit(num);
 
