@@ -79,12 +79,13 @@ async function handleViewTouristRouteByFilter(socket: Socket) {
       async ({ route, keyword }: { route: string[]; keyword: string }) => {
         let touristRoutes = await TourRouteRepo.filter({ route, keyword });
         const listener = WatchTable.register(TouristsRouteModel, socket)
-          .filter(
-            (data: ITouristsRoute, documentId) =>
+          .filter((data: ITouristsRoute, documentId) => {
+            return (
+              touristRoutes.some((route) => route._id == documentId) ||
               (route.every((place) => data.route.includes(place)) &&
-                data.name.search(keyword) !== -1) ||
-              touristRoutes.some((route) => route._id == documentId),
-          )
+                data.name.search(keyword) !== -1)
+            );
+          })
           .do(async (data, listenerId) => {
             touristRoutes = await TourRouteRepo.filter({ route, keyword });
             new SuccessResponse(
