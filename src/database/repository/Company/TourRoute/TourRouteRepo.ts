@@ -233,6 +233,13 @@ async function findPopular(
   );
 }
 
+async function deleteRoute(
+  routeId: string | Types.ObjectId,
+): Promise<ITouristsRoute | null> {
+  const tourRoute = await TouristsRouteModel.findByIdAndRemove(routeId);
+  return tourRoute;
+}
+
 export default {
   create,
   list,
@@ -246,4 +253,5 @@ export default {
   removeFromSaved,
   increasePoint,
   viewSaved,
+  deleteRoute,
 };

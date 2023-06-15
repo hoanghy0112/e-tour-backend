@@ -16,6 +16,7 @@ import { viewTouristRouteByFilter } from './viewTouristRouteByFilter';
 import validator, { ValidationSource } from '../../helpers/validator';
 import schema from './schema';
 import authentication from '../../auth/authentication';
+import { deleteTouristRoute } from './deleteTouristRoute';
 
 export const touristRouteRouter = express.Router();
 
@@ -41,6 +42,11 @@ touristRouteRouter.get(
   '/saved',
   authentication.userAuthentication,
   viewSavedTouristRoute,
+);
+touristRouteRouter.delete(
+  '/:routeId',
+  authentication.staffAuthentication,
+  deleteTouristRoute,
 );
 
 export function handleTouristRoute(socket: Socket) {
