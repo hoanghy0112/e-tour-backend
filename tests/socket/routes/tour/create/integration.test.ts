@@ -56,7 +56,7 @@ describe('Company create tour', () => {
       from: FROM,
       to: TO,
       type: TYPE,
-      image: IMAGE,
+      image: encodeURIComponent(IMAGE),
       touristRoute: 'fasf',
     });
 
