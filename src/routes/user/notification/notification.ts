@@ -31,14 +31,14 @@ function handleViewNewNotification(socket: Socket) {
 
         const notifications =
           (await UserModel.findById(userId).populate('notifications'))
-            ?.notifications || [];
+            ?.notifications?.reverse() || [];
 
         const listener = WatchTable.register(UserModel, socket)
           .filter((data, id) => id.toString() === userId.toString())
           .do(async (data, listenerId) => {
             const notifications =
               (await UserModel.findById(userId).populate('notifications'))
-                ?.notifications || [];
+                ?.notifications?.reverse() || [];
 
             return new SuccessResponse(
               'Successfully retrieve notifications',
