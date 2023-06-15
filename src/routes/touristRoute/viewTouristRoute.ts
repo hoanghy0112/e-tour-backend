@@ -43,11 +43,13 @@ async function handleViewTouristRouteById(socket: Socket) {
       async ({ id }: { id: string }) => {
         const listener = WatchTable.register(TouristsRouteModel, socket)
           .filter((data: ITouristsRoute) => data._id.toString() === id)
-          .do((data, listenerId) => {
-            new SuccessResponse('update route', data, listenerId).sendSocket(
-              socket,
-              SocketServerMessage.ROUTE,
-            );
+          .do(async (data, listenerId) => {
+            const touristRoute = await TourRouteRepo.findById(id);
+            new SuccessResponse(
+              'update route',
+              touristRoute,
+              listenerId,
+            ).sendSocket(socket, SocketServerMessage.ROUTE);
           });
         try {
           const touristRoute = await TourRouteRepo.findById(id);
