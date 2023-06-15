@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import express from 'express';
-import { handleViewVoucher } from './viewVoucher';
+import { handleViewVoucher, viewSavedVoucher } from './viewVoucher';
 import { handleCreateVoucher } from './createVoucher';
 import validator from '../../helpers/validator';
 import schema from './schema';
@@ -22,6 +22,8 @@ voucherRouter.delete(
   validator(schema.saveVoucher),
   removeVoucher,
 );
+
+voucherRouter.get('/save', authentication.userAuthentication, viewSavedVoucher);
 
 export function handleVoucher(socket: Socket) {
   handleViewVoucher(socket);

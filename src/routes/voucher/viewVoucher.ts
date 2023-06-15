@@ -7,6 +7,9 @@ import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
+import asyncHandler from '../../helpers/asyncHandler';
+import { ProtectedUserRequest } from '../../types/app-request';
+import { BadRequestError } from '../../core/ApiError';
 
 export async function handleViewVoucher(socket: Socket) {
   handleViewVoucherById(socket);
@@ -71,3 +74,15 @@ async function handleViewNewVoucher(socket: Socket) {
     ),
   );
 }
+
+export const viewSavedVoucher = asyncHandler(
+  async (req: ProtectedUserRequest, res) => {
+    const userId = req.user._id;
+
+    if (!userId) throw new BadRequestError('userId not found');
+
+    const savedVouchers = await VoucherRepo.viewSaved(userId);
+
+    return new SuccessResponse('Success', savedVouchers).send(res);
+  },
+);

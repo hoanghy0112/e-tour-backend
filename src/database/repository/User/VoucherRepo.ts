@@ -118,6 +118,11 @@ async function removeFromSaved(
   return updatedUser.savedVouchers || [];
 }
 
+async function viewSaved(userId: string | Types.ObjectId | undefined) {
+  const updatedUser = (await UserModel.findById(userId)) as IUser;
+  return updatedUser.savedVouchers || [];
+}
+
 export default {
   getDiscountValue,
   viewById,
@@ -125,4 +130,5 @@ export default {
   create,
   addToSaved,
   removeFromSaved,
+  viewSaved,
 };
