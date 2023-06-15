@@ -8,7 +8,19 @@ import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
-import { uploadImageToS3 } from '../../database/s3';
+import { uploadImageToS3, uploadImageToS3FromURL } from '../../database/s3';
+
+function isValidHttpUrl(s: string) {
+  let url;
+
+  try {
+    url = new URL(s);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === 'http:' || url.protocol === 'https:';
+}
 
 export async function handleChangeTourRoute(socket: Socket) {
   socket.on(
@@ -25,6 +37,8 @@ export async function handleChangeTourRoute(socket: Socket) {
             (images || []).map(async (image) =>
               typeof image != 'string'
                 ? await uploadImageToS3(image as any)
+                : isValidHttpUrl(image)
+                ? await uploadImageToS3FromURL(image)
                 : image,
             ),
           )) || [];
