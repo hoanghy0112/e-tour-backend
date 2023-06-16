@@ -37,7 +37,5 @@ export default {
     image: Joi.any(),
     touristRoute: Joi.string().optional(),
   }),
-  deleteTour: Joi.object().keys({
-    id: Joi.string().required(),
-  }),
+  deleteTour: Joi.array().items(Joi.string()),
 };

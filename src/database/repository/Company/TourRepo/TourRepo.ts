@@ -98,8 +98,13 @@ async function filter({
   return tour || [];
 }
 
-async function remove(id: string | Types.ObjectId) {
-  return TourModel.findByIdAndDelete(id);
+async function remove(ids: string[] | Types.ObjectId[]) {
+  return TourModel.deleteMany({
+    _id: {
+      $in: ids,
+    },
+  });
+  // return TourModel.findByIdAndDelete(id);
 }
 
 async function update(

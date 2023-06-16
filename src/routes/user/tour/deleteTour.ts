@@ -16,11 +16,11 @@ export async function handleDeleteTour(socket: Socket) {
     socketAsyncHandler(
       socket,
       socketValidator(schema.deleteTour),
-      async ({ id }: { id: string }) => {
-        const tour = await TourRepo.remove(id);
-        if (!tour) throw new BadRequestError('tour not found');
+      async (ids: string[]) => {
+        await TourRepo.remove(ids);
+        // if (!tour) throw new BadRequestError('tour not found');
 
-        return new SuccessResponse('Success', tour).sendSocket(
+        return new SuccessResponse('Success', ids).sendSocket(
           socket,
           SocketServerMessage.TOUR_EVENTS.DELETE_TOUR_RESULT,
         );
