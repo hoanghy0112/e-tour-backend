@@ -17,18 +17,6 @@ export default {
     username: Joi.string().required().min(1),
     password: Joi.string().required().min(6),
   }),
-  createTour: Joi.object().keys({
-    name: Joi.string().optional().default(''),
-    description: Joi.string().optional().default(''),
-    from: Joi.date().required(),
-    to: Joi.date().required(),
-    price: Joi.number().optional().default(0),
-    type: Joi.string()
-      .valid(...Object.values(TourType))
-      .default(TourType.NORMAL),
-    image: Joi.any(),
-    touristRoute: Joi.string().required(),
-  }),
   voucher: {
     createVoucher: Joi.object().keys({
       companyId: Joi.string().required(),

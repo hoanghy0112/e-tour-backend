@@ -1,9 +1,7 @@
 import { Socket } from 'socket.io';
 import { BadRequestError } from '../../../core/ApiError';
-import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
-import TourModel, { ITour } from '../../../database/model/Company/Tour';
+import { SuccessResponse } from '../../../core/ApiResponse';
 import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
-import WatchTable from '../../../helpers/realtime/WatchTable';
 import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
 import socketValidator from '../../../helpers/socketValidator';
 import {

@@ -27,7 +27,6 @@ import { handleVoucher } from './voucher';
 import handleTour from './user/tour';
 
 export default function socketRouter(socket: Socket) {
-  handleTourSocket(socket);
   handleViewStaffInformation(socket);
   handleViewCompanyInformation(socket);
   handleViewUserProfile(socket);
