@@ -99,11 +99,14 @@ async function filter({
 }
 
 async function remove(ids: string[] | Types.ObjectId[]) {
-  return TourModel.deleteMany({
-    _id: {
-      $in: ids,
-    },
-  });
+  return await Promise.all(
+    ids.map(async (id) => await TourModel.findByIdAndDelete(id)),
+  );
+  // return TourModel.deleteMany({
+  //   _id: {
+  //     $in: ids,
+  //   },
+  // });
   // return TourModel.findByIdAndDelete(id);
 }
 
