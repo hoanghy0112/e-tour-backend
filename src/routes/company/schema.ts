@@ -1,6 +1,4 @@
 import Joi from 'joi';
-import { TouristsRouteType } from '../../database/model/Company/TouristsRoute';
-import { TourType } from '../../database/model/Company/Tour';
 import { VoucherType } from '../../database/model/User/Voucher';
 
 export default {
