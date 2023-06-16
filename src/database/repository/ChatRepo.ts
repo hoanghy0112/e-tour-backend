@@ -54,19 +54,16 @@ async function createChatMessage(
 }
 
 async function viewChatRoomList(uid: string) {
-  const chatRooms = await ChatModel.find(
-    {
-      $or: [
-        {
-          userId: uid,
-        },
-        {
-          staffId: uid,
-        },
-      ],
-    },
-    '_id userId staffId',
-  );
+  const chatRooms = await ChatModel.find({
+    $or: [
+      {
+        userId: uid,
+      },
+      {
+        staffId: uid,
+      },
+    ],
+  });
   return chatRooms;
 }
 
