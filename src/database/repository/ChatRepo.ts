@@ -8,7 +8,7 @@ import TouristsRouteModel, {
 
 async function createChat(routeId: string, userId: string) {
   let chatRoom;
-  chatRoom = await ChatModel.findOne({ routeId });
+  chatRoom = await ChatModel.findOne({ routeId, userId });
   console.log({ chatRoom });
   if (chatRoom) {
     return chatRoom;
