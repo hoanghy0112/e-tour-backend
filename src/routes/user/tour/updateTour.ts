@@ -10,6 +10,7 @@ import {
 } from '../../../types/socket';
 import schema from './schema';
 import { ITour } from '../../../database/model/Company/Tour';
+import { uploadImageToS3 } from '../../../database/s3';
 
 export async function handleUpdateTour(socket: Socket) {
   socket.on(
@@ -18,9 +19,18 @@ export async function handleUpdateTour(socket: Socket) {
       socket,
       socketValidator(schema.updateTour),
       async (newTour: ITour) => {
-        const { _id: id, ...newTourData } = newTour;
+        const { _id: id, image, ...newTourData } = newTour;
+        let imageName;
+        // @ts-ignore
+        if (image?.originalname) {
+          // @ts-ignore
+          imageName = await uploadImageToS3(image);
+        }
 
-        const tour = await TourRepo.update(id, newTourData);
+        const tour = await TourRepo.update(id, {
+          ...newTourData,
+          ...(image ? { image: imageName } : {}),
+        });
         if (!tour) throw new BadRequestError('tour not found');
 
         return new SuccessResponse('Success', tour).sendSocket(

@@ -27,7 +27,7 @@ export default {
   updateTour: Joi.object().keys({
     _id: Joi.string().required(),
     name: Joi.string().optional().default(''),
-    description: Joi.string().optional().default(''),
+    description: Joi.string().optional().allow('').default(''),
     from: Joi.date().optional(),
     to: Joi.date().optional(),
     price: Joi.number().optional().default(0),

@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { NotificationType } from '../model/Company/Company';
 import UserModel, { INotification, IUser } from '../model/User/User';
+import { Types } from 'mongoose';
+import TicketModel from '../model/User/Ticket';
 
 async function create(
-  user: IUser,
+  user: string | Types.ObjectId | IUser,
   notificationType: NotificationType,
   notification: INotification,
 ) {
@@ -26,9 +28,27 @@ async function create(
         notifications: notification,
       },
     });
+    return true;
   }
+  return false;
+}
+
+async function sendToTourCustomer(
+  tourId: string | Types.ObjectId,
+  type: NotificationType,
+  notification: INotification,
+) {
+  const tickets = await TicketModel.find({ tourId });
+  const customers = tickets.map((ticket) => ticket.userId) as string[];
+
+  const notificationStates = await Promise.all(
+    customers.map((userId) => create(userId, type, notification)),
+  );
+
+  return customers.filter((_, i) => notificationStates[i] == true);
 }
 
 export default {
   create,
+  sendToTourCustomer,
 };

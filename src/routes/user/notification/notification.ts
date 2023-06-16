@@ -15,12 +15,7 @@ import UserModel from '../../../database/model/User/User';
 import WatchTable from '../../../helpers/realtime/WatchTable';
 import { Types } from 'mongoose';
 
-export default function handleNotification(socket: Socket) {
-  handleViewNewNotification(socket);
-  handleReadNotification(socket);
-}
-
-function handleViewNewNotification(socket: Socket) {
+export function handleViewNewNotification(socket: Socket) {
   socket.on(
     SocketClientMessage.notification.VIEW_NEW_NOTIFICATION,
     socketAsyncHandler(
@@ -63,7 +58,7 @@ function handleViewNewNotification(socket: Socket) {
   );
 }
 
-function handleReadNotification(socket: Socket) {
+export function handleReadNotification(socket: Socket) {
   socket.on(
     SocketClientMessage.notification.READ_NOTIFICATION,
     socketAsyncHandler(

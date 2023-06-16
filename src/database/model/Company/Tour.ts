@@ -13,7 +13,7 @@ export interface ITour {
   from: Date;
   to: Date;
   type: TourType;
-  image: string;
+  image?: string | null;
   touristRoute: Types.ObjectId;
   price: number;
 }

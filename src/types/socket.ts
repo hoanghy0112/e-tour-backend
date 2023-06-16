@@ -63,6 +63,7 @@ export const SocketServerMessage = {
   notification: {
     NEW_NOTIFICATION_LIST: 'new-notification-list',
     READ_NOTIFICATION_RESULT: 'read-notification-result',
+    PUSH_TO_TOUR_CUSTOMER_RESULT: 'push-to-tour-customer-result',
   },
   chat: {
     NEW_CHAT_MESSAGE: 'new-chat-message',
@@ -134,6 +135,7 @@ export const SocketClientMessage = {
   notification: {
     VIEW_NEW_NOTIFICATION: 'view-new-notification',
     READ_NOTIFICATION: 'read-notification',
+    PUSH_TO_TOUR_CUSTOMER: 'push-to-tour-customer',
   },
   chat: {
     VIEW_CHAT_ROOM_LIST: 'view-chat-room-list',

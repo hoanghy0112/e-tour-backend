@@ -8,7 +8,7 @@ export interface INotification {
   title: string;
   content: string;
   link: string;
-  image: string;
+  image: string | null;
   isRead: boolean;
   createdAt: Date;
 }
