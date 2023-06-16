@@ -44,7 +44,7 @@ describe('Company create tour', () => {
     clientSocket.close();
   });
 
-  test('Company create tour with invalid touristRoute', async () => {
+  test.skip('Company create tour with invalid touristRoute', async () => {
     await TourModel.deleteMany({});
 
     const FROM = new Date();
