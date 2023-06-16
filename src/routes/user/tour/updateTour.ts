@@ -16,7 +16,7 @@ export async function handleUpdateTour(socket: Socket) {
     SocketClientMessage.TOUR.UPDATE_TOUR,
     socketAsyncHandler(
       socket,
-      socketValidator(schema.deleteTour),
+      socketValidator(schema.updateTour),
       async (newTour: ITour) => {
         const { _id: id, ...newTourData } = newTour;
 
