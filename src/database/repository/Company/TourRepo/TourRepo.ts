@@ -98,8 +98,13 @@ async function filter({
   return tour || [];
 }
 
+async function remove(id: string | Types.ObjectId) {
+  return TourModel.findByIdAndDelete(id);
+}
+
 export default {
   create,
   findById,
   filter,
+  remove,
 };

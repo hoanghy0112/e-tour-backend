@@ -1,4 +1,4 @@
-import { SuccessMsgResponse, SuccessResponse } from '../../core/ApiResponse';
+import { SuccessResponse } from '../../core/ApiResponse';
 import TourRouteRepo from '../../database/repository/Company/TourRoute/TourRouteRepo';
 import asyncHandler from '../../helpers/asyncHandler';
 import { ProtectedStaffRequest } from '../../types/app-request';

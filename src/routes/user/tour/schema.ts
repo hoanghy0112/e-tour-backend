@@ -11,4 +11,7 @@ export default {
       id: Joi.string(),
     }),
   },
+  deleteTour: Joi.object().keys({
+    id: Joi.string().required(),
+  }),
 };

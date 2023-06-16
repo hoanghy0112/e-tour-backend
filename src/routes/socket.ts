@@ -24,10 +24,10 @@ import { handleViewRate } from './user/rating/viewRate';
 import handleTicket from './user/ticket';
 import { handleViewTour } from './user/tour/viewTour';
 import { handleVoucher } from './voucher';
+import handleTour from './user/tour';
 
 export default function socketRouter(socket: Socket) {
   handleTourSocket(socket);
-  handleViewTour(socket);
   handleViewStaffInformation(socket);
   handleViewCompanyInformation(socket);
   handleViewUserProfile(socket);
@@ -39,6 +39,7 @@ export default function socketRouter(socket: Socket) {
   handleContactCompany(socket);
   handleNotification(socket);
 
+  handleTour(socket)
   handleTouristRoute(socket);
   handleVoucher(socket);
   handleTicket(socket);
