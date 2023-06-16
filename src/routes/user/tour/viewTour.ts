@@ -71,12 +71,14 @@ async function handleViewTourByFilter(socket: Socket) {
       }) => {
         let tours = await TourRepo.filter({ touristRoute, from, to });
         const listener = WatchTable.register(TourModel, socket)
-          .filter((data: ITour, id) =>
-            tours.some((tour) => tour._id?.toString() == id.toString()) ||
-            touristRoute
-              ? data.touristRoute.toString() == touristRoute
-              : true,
-          )
+          .filter((data: ITour, id) => {
+            return (
+              tours.some((tour) => tour._id?.toString() == id.toString()) ||
+              (touristRoute
+                ? data.touristRoute.toString() == touristRoute
+                : true)
+            );
+          })
           .do(async (data, listenerId) => {
             tours = await TourRepo.filter({ touristRoute, from, to });
 
