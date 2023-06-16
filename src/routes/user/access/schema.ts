@@ -48,7 +48,7 @@ export default {
     identity: Joi.string(),
     isForeigner: Joi.boolean(),
     email: Joi.string().email(),
-    image: Joi.string().optional().uri(),
+    image: Joi.string().optional(),
     address: Joi.string().optional(),
     phoneNumber: Joi.string().optional(),
     identityExpiredAt: Joi.string().optional(),
