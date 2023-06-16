@@ -72,11 +72,11 @@ imageRouter.post(
       const blob = await response.blob();
       // const file = new File([blob], uuidv4(), { type: 'image/png' });
       // const buffer = await file.arrayBuffer();
-      const buffer = await blob.arrayBuffer();
+      // const buffer = await blob.arrayBuffer();
       const image = {
         // originalname: file.name,
         originalname: `${uuidv4()}.${ext}`,
-        buffer,
+        buffer: blob,
       };
       const imageId = image ? await uploadImageToS3(image) : '';
       return new SuccessResponse('Upload image successfully', { imageId }).send(
