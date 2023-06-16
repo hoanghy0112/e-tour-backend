@@ -61,7 +61,7 @@ export async function uploadImageToS3FromURL(
 }
 
 export async function uploadImageToS3(
-  image: { originalname: string; buffer: Buffer | Blob },
+  image: { originalname: string; buffer: Buffer | ArrayBuffer },
   Key = '',
 ): Promise<string | null> {
   const uid = uuidv4();
@@ -72,9 +72,11 @@ export async function uploadImageToS3(
   const ext = image.originalname.split('.').at(-1);
   const imageFileName = `${uid}.${ext}`;
 
+  // @ts-ignore
   const command = new PutObjectCommand({
     Bucket: Bucket,
     Key: Key || imageFileName,
+  // @ts-ignore
     Body: image.buffer,
   });
 
