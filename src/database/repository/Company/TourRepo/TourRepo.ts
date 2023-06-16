@@ -8,6 +8,7 @@ import TouristsRouteModel, {
 } from '../../../model/Company/TouristsRoute';
 import { INotification } from '../../../model/User/User';
 import NotificationRepo from '../../NotificationRepo';
+import TicketModel from '../../../model/User/Ticket';
 
 async function create(tour: ITour): Promise<ITour | null> {
   try {
@@ -42,12 +43,16 @@ async function create(tour: ITour): Promise<ITour | null> {
   }
 }
 
-async function findById(id: Types.ObjectId | string): Promise<ITour> {
+async function findById(id: Types.ObjectId | string): Promise<any> {
   const createdTour = await TourModel.findById(id);
+  const tickets = await TicketModel.find({ tourId: id });
 
   if (!createdTour) throw new TourError(TourErrorType.TOUR_NOT_FOUND);
 
-  return createdTour;
+  return {
+    ...createdTour.toObject(),
+    customer: tickets.length,
+  };
 }
 
 async function filter({
