@@ -12,7 +12,7 @@ import handleManageSavedTouristRoute from './touristRoute/saveTouristRoute';
 import { handleViewUserProfile } from './user/access/profile';
 import handleChat from './user/chat';
 import handleContactCompany from './user/contactCompany/contactCompany';
-import handleNotification from './user/notification/notification';
+import handleNotification from './user/notification';
 import { handleCreateRate } from './user/rating/createRate';
 import { handleViewRate } from './user/rating/viewRate';
 import handleTicket from './user/ticket';
