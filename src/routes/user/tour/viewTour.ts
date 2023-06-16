@@ -69,12 +69,16 @@ async function handleViewTourByFilter(socket: Socket) {
         from: Date;
         to: Date;
       }) => {
+        let tours = await TourRepo.filter({ touristRoute, from, to });
         const listener = WatchTable.register(TourModel, socket)
-          .filter((data: ITour) =>
-            touristRoute ? data.touristRoute.toString() == touristRoute : true,
+          .filter((data: ITour, id) =>
+            tours.some((tour) => tour._id?.toString() == id.toString()) ||
+            touristRoute
+              ? data.touristRoute.toString() == touristRoute
+              : true,
           )
           .do(async (data, listenerId) => {
-            const tours = await TourRepo.filter({ touristRoute, from, to });
+            tours = await TourRepo.filter({ touristRoute, from, to });
 
             return new SuccessResponse(
               'successfully retrieve tour',
@@ -82,20 +86,12 @@ async function handleViewTourByFilter(socket: Socket) {
               listener.getId(),
             ).sendSocket(socket, SocketServerMessage.LIST_TOUR);
           });
-        try {
-          const tour = await TourRepo.filter({ touristRoute, from, to });
 
-          return new SuccessResponse(
-            'successfully retrieve tour',
-            tour,
-            listener.getId(),
-          ).sendSocket(socket, SocketServerMessage.LIST_TOUR);
-        } catch (e) {
-          return new BadRequestResponse('Invalid tourist route').sendSocket(
-            socket,
-            SocketServerMessage.ERROR,
-          );
-        }
+        return new SuccessResponse(
+          'successfully retrieve tour',
+          tours,
+          listener.getId(),
+        ).sendSocket(socket, SocketServerMessage.LIST_TOUR);
       },
     ),
   );
