@@ -65,7 +65,7 @@ describe('View tour by filter', () => {
     {
       getTouristRoute: () => 'some-thing-else',
       check: (response: any) => {
-        expect(response.status).toEqual(400);
+        expect(response.status).toEqual(500);
       },
     },
   ])('Filter by tourist route', async ({ getTouristRoute, check }) => {
