@@ -102,9 +102,17 @@ async function remove(id: string | Types.ObjectId) {
   return TourModel.findByIdAndDelete(id);
 }
 
+async function update(
+  id: string | Types.ObjectId | undefined,
+  tourData: ITour,
+) {
+  return TourModel.findByIdAndUpdate(id, tourData, { new: true });
+}
+
 export default {
   create,
   findById,
   filter,
   remove,
+  update,
 };
