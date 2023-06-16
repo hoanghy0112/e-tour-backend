@@ -5,12 +5,16 @@ import { handleViewTicketList } from './viewTicketList';
 import { handleViewDetailTicket } from './viewDetailTicket';
 import { handleUpdateTicket } from './updateTicket';
 import { discardTicket } from './discardTicket';
-import validator from '../../../helpers/validator';
+import validator, { ValidationSource } from '../../../helpers/validator';
 import schema from './schema';
 
 export const ticketRouter = express.Router();
 
-ticketRouter.delete('/', validator(schema.discardTicket), discardTicket);
+ticketRouter.delete(
+  '/:ticketId',
+  validator(schema.discardTicket, ValidationSource.PARAM),
+  discardTicket,
+);
 
 export default function handleTicket(socket: Socket) {
   handleBookTicket(socket);

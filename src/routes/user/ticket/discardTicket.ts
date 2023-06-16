@@ -9,7 +9,7 @@ import { ProtectedUserRequest } from '../../../types/app-request';
 export const discardTicket = asyncHandler(
   async (req: ProtectedUserRequest, res) => {
     const userId = req.user?._id;
-    const { ticketId } = req.body;
+    const { ticketId } = req.params;
 
     if (!userId) throw new BadRequestError('userId not found');
 

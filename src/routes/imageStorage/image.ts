@@ -3,6 +3,8 @@ import validator, { ValidationSource } from '../../helpers/validator';
 import schema from './schema';
 import asyncHandler from '../../helpers/asyncHandler';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { Bucket } from '../../config';
 import {
@@ -56,6 +58,33 @@ imageRouter.post(
       );
     } catch (e) {
       return new BadRequestResponse(JSON.stringify(e)).send(res);
+    }
+  }),
+);
+
+imageRouter.post(
+  '/base64',
+  asyncHandler(async (req: PublicRequest, res) => {
+    try {
+      const { url } = req.body;
+      const ext = url.split(';')[0].split('/')[1];
+      const response = await fetch(url);
+      const blob = await response.blob();
+      // const file = new File([blob], uuidv4(), { type: 'image/png' });
+      // const buffer = await file.arrayBuffer();
+      const buffer = await blob.arrayBuffer();
+      const image = {
+        // originalname: file.name,
+        originalname: `${uuidv4()}.${ext}`,
+        buffer,
+      };
+      const imageId = image ? await uploadImageToS3(image) : '';
+      return new SuccessResponse('Upload image successfully', { imageId }).send(
+        res,
+      );
+    } catch (e: any) {
+      throw new BadRequestError(e?.message);
+      // return new BadRequestResponse(JSON.stringify(e)).send(res);
     }
   }),
 );

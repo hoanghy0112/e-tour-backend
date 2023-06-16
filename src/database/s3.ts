@@ -61,7 +61,7 @@ export async function uploadImageToS3FromURL(
 }
 
 export async function uploadImageToS3(
-  image: { originalname: string; buffer: Buffer },
+  image: { originalname: string; buffer: Buffer | ArrayBuffer },
   Key = '',
 ): Promise<string | null> {
   const uid = uuidv4();
