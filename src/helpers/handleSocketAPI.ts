@@ -1,5 +1,6 @@
 import { Socket } from 'socket.io';
 import socketAsyncHandler from './socketAsyncHandler';
+import socketValidator from './socketValidator';
 
 export default function handleSocketAPI({
   clientEvent,
@@ -12,5 +13,8 @@ export default function handleSocketAPI({
   schema: any;
   handler: any;
 }) {
-  socket.on(clientEvent, socketAsyncHandler(socket, schema, handler));
+  socket.on(
+    clientEvent,
+    socketAsyncHandler(socket, socketValidator(schema), handler),
+  );
 }
