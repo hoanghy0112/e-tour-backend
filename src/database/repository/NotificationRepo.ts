@@ -3,6 +3,9 @@ import { NotificationType } from '../model/Company/Company';
 import UserModel, { INotification, IUser } from '../model/User/User';
 import { Types } from 'mongoose';
 import TicketModel from '../model/User/Ticket';
+import TourRouteRepo from './Company/TourRoute/TourRouteRepo';
+import TouristsRouteModel from '../model/Company/TouristsRoute';
+import TourModel from '../model/Company/Tour';
 
 async function create(
   user: string | Types.ObjectId | IUser,
@@ -38,11 +41,17 @@ async function sendToTourCustomer(
   type: NotificationType,
   notification: INotification,
 ) {
+  const tour = await TourModel.findById(tourId);
   const tickets = await TicketModel.find({ tourId });
   const customers = tickets.map((ticket) => ticket.userId) as string[];
 
   const notificationStates = await Promise.all(
-    customers.map((userId) => create(userId, type, notification)),
+    customers.map((userId) =>
+      create(userId, type, {
+        ...notification,
+        link: `route-${tour?.touristRoute.toString()}/new`,
+      }),
+    ),
   );
 
   return customers.filter((_, i) => notificationStates[i] == true);
