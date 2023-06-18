@@ -14,7 +14,9 @@ import schema from './schema';
 import handleSocketAPI from '../../../helpers/handleSocketAPI';
 import authorization from '../../../auth/authorization';
 import { StaffPermission } from '../../../database/model/Company/Staff';
-import TouristsRouteModel from '../../../database/model/Company/TouristsRoute';
+import TouristsRouteModel, {
+  ITouristsRoute,
+} from '../../../database/model/Company/TouristsRoute';
 
 export async function handleViewTour(socket: Socket) {
   handleViewRecommendTour(socket);
@@ -108,40 +110,21 @@ async function handleViewTourByFilter(socket: Socket) {
 }
 
 export async function handleViewTourOfCompany(socket: Socket) {
-  socket.on(
-    SocketClientMessage.touristRoute.VIEW_COMPANY_ROUTE,
-    socketAsyncHandler(
-      socket,
-      socketValidator(schema.viewTour.ofCompany),
-      async ({ companyId }: { companyId: string }) => {
-        let touristRoutes = await TouristsRouteModel.find({ companyId });
+  handleSocketAPI({
+    socket,
+    clientEvent: SocketClientMessage.TOUR.VIEW_COMPANY_TOUR,
+    serverEvent: SocketServerMessage.TOUR_EVENTS.COMPANY_TOUR,
+    schema: schema.viewTour.ofCompany,
+    handler: async ({ companyId }: { companyId: string }) => {
+      const touristRoutes = await TouristsRouteModel.find({ companyId });
+      const tours = await TourModel.find({
+        touristRoute: { $in: touristRoutes.map((d) => d._id) },
+      });
 
-        const listener = WatchTable.register(TouristsRouteModel, socket)
-          .filter((data: ITouristsRoute, documentId) => {
-            return (
-              touristRoutes.some(
-                (route) => route._id.toString() == documentId.toString(),
-              ) || data.companyId.toString() == companyId
-            );
-          })
-          .do(async (data, listenerId) => {
-            touristRoutes = await TouristsRouteModel.find({ companyId });
-            new SuccessResponse(
-              'new route',
-              touristRoutes,
-              listenerId,
-            ).sendSocket(
-              socket,
-              SocketServerMessage.touristRoute.COMPANY_ROUTE,
-            );
-          });
-
-        return new SuccessResponse(
-          'successfully retrieve tourist route',
-          touristRoutes,
-          listener.getId(),
-        ).sendSocket(socket, SocketServerMessage.touristRoute.COMPANY_ROUTE);
-      },
-    ),
-  );
+      return new SuccessResponse(
+        'successfully retrieve tourist route',
+        tours,
+      ).sendSocket(socket, SocketServerMessage.TOUR_EVENTS.COMPANY_TOUR);
+    },
+  });
 }

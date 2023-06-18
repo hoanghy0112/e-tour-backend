@@ -30,6 +30,7 @@ export const SocketServerMessage = {
   TOUR_EVENTS: {
     DELETE_TOUR_RESULT: 'delete-tour-result',
     UPDATE_TOUR_RESULT: 'update-tour-result',
+    COMPANY_TOUR: 'company-tour'
   },
 
   touristRoute: {
@@ -103,6 +104,7 @@ export const SocketClientMessage = {
   TOUR: {
     DELETE_TOUR: 'delete-tour',
     UPDATE_TOUR: 'update-tour',
+    VIEW_COMPANY_TOUR: 'view-company-tour'
   },
 
   touristRoute: {
