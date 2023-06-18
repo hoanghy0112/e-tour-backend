@@ -10,35 +10,38 @@ import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
+import handleSocketAPI from '../../helpers/handleSocketAPI';
 
 export async function handleCreateTourRoute(socket: Socket) {
-  socket.on(
-    SocketClientMessage.CREATE_ROUTE,
-    socketAsyncHandler(
-      socket,
-      socketValidator(schema.createTourRoute),
-      socketAuthorization([StaffPermission.EDIT_ROUTE]),
-      async (tourRoute: ITouristsRoute) => {
-        tourRoute.images =
-          (await Promise.all(
-            (tourRoute.images || []).map(
-              async (image) => (await uploadImageToS3(image as any)) || '',
-            ),
-          )) || [];
+  handleSocketAPI({
+    socket,
+    clientEvent: SocketClientMessage.touristRoute.CREATE_ROUTE,
+    serverEvent: SocketServerMessage.touristRoute.CREATE_ROUTE_RESULT,
+    schema: schema.createTourRoute,
+    permissions: [StaffPermission.EDIT_ROUTE],
+    handler: async (tourRoute: ITouristsRoute) => {
+      tourRoute.images =
+        (await Promise.all(
+          (tourRoute.images || []).map(
+            async (image) => (await uploadImageToS3(image as any)) || '',
+          ),
+        )) || [];
 
-        const companyId = socket.data.staff.companyId;
-        const data = { ...tourRoute, companyId };
-        const listRoute = await TourRouteRepo.list(companyId);
-        if (listRoute?.find((v) => v.name === tourRoute.name))
-          throw new BadRequestError('Route name exists');
+      const companyId = socket.data.staff.companyId;
+      const data = { ...tourRoute, companyId };
+      const listRoute = await TourRouteRepo.list(companyId);
+      if (listRoute?.find((v) => v.name === tourRoute.name))
+        throw new BadRequestError('Route name exists');
 
-        TourRouteRepo.create(data);
+      TourRouteRepo.create(data);
 
-        return new SuccessResponse(
-          'Create tourist route successfully',
-          data,
-        ).sendSocket(socket, SocketServerMessage.CREATE_ROUTE_RESULT);
-      },
-    ),
-  );
+      return new SuccessResponse(
+        'Create tourist route successfully',
+        data,
+      ).sendSocket(
+        socket,
+        SocketServerMessage.touristRoute.CREATE_ROUTE_RESULT,
+      );
+    },
+  });
 }

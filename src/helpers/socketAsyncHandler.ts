@@ -44,7 +44,7 @@ const socketAsyncHandler =
   (
     socket: Socket,
     serverEvent: string | MiddlewareFunction | HandlerFunction,
-    ...func: (MiddlewareFunction | HandlerFunction)[]
+    ...func: (MiddlewareFunction | HandlerFunction | null)[]
   ) =>
   async (data: any) => {
     if (typeof serverEvent != 'string') func = [serverEvent, ...func];

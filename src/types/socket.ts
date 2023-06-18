@@ -5,9 +5,8 @@ export interface AuthenticationData {
 export const SocketServerMessage = {
   RESPONSE: 'response',
   ERROR: 'error',
-  CREATE_TOUR_RESULT: 'create-tour-result',
-  CREATE_ROUTE_RESULT: 'create-route-result',
   EDIT_ROUTE_RESULT: 'edit-route-result',
+  CREATE_TOUR_RESULT: 'create-tour-result',
   RETRIEVE_TOURIST_ROUTES: 'retrieve-tourist-route',
   LIST_TOUR: 'list-tour',
   LIST_ROUTE: 'list-route',
@@ -35,6 +34,7 @@ export const SocketServerMessage = {
   touristRoute: {
     VIEW_POPULAR_ROUTE_RESULT: 'view-popular-route-result',
     FOLLOW_TOURIST_ROUTE_RESULT: 'follow-tourist-route-result',
+    CREATE_ROUTE_RESULT: 'create-route-result',
     UNFOLLOW_TOURIST_ROUTE_RESULT: 'unfollow-tourist-route-result',
   },
 
@@ -80,7 +80,6 @@ export const SocketClientMessage = {
   REMOVE_LISTENER: 'remove-listener',
   TEST_WATCHTABLE: 'test-watchtable',
 
-  CREATE_ROUTE: 'create-route',
   CREATE_TOUR: 'create-tour',
   EDIT_ROUTE: 'edit-route',
   FILTER_ROUTE: 'filter-route',
@@ -104,6 +103,7 @@ export const SocketClientMessage = {
   },
 
   touristRoute: {
+    CREATE_ROUTE: 'create-route',
     INCREASE_POINT: 'increase-point',
     VIEW_POPULAR_ROUTE: 'view-popular-route',
     FOLLOW_TOURIST_ROUTE: 'follow-tourist-route',
