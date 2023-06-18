@@ -39,3 +39,4 @@ companyRouter.get(
   authorization([StaffPermission.SUPER_ADMIN]),
   viewCompanyRegistration,
 );
+

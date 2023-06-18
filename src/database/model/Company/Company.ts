@@ -12,9 +12,16 @@ export interface IFollower {
   notificationType: NotificationType;
 }
 
+export enum ProfileState {
+  REVIEWING = 'reviewing',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+}
+
 export interface ICompany {
   _id?: Types.ObjectId;
   isApproveToActive: boolean;
+  profileState?: ProfileState;
   name: string;
   email: string;
   description: string;
@@ -52,6 +59,7 @@ const schema = new Schema<ICompany>(
     email: {
       type: String,
     },
+    profileState: { type: String, default: ProfileState.REVIEWING },
     followers: [
       {
         user: { type: Schema.Types.ObjectId, ref: 'User' },
