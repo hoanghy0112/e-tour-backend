@@ -20,7 +20,8 @@ async function createChat(routeId: string, userId: string) {
   const staffList = (await StaffModel.find({
     companyId: route.companyId,
   })) as Staff[];
-  const staffId = staffList[Math.floor(Math.random() * staffList.length)]._id;
+  // const staffId = staffList[Math.floor(Math.random() * staffList.length)]._id;
+  const staffId = staffList[0]._id;
   chatRoom = await ChatModel.create({ staffId, userId, routeId });
   return chatRoom;
 }
