@@ -10,6 +10,8 @@ import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
+import { ForbiddenError } from '../../core/ApiError';
+import handleSocketAPI from '../../helpers/handleSocketAPI';
 
 export async function handleViewTouristRoute(socket: Socket) {
   handleViewRecommendTouristRoute(socket);
@@ -35,39 +37,39 @@ async function handleViewRecommendTouristRoute(socket: Socket) {
 }
 
 async function handleViewTouristRouteById(socket: Socket) {
-  socket.on(
-    SocketClientMessage.VIEW_ROUTE,
-    socketAsyncHandler(
-      socket,
-      socketValidator(schema.viewTouristRoute.byId),
-      async ({ id }: { id: string }) => {
-        const listener = WatchTable.register(TouristsRouteModel, socket)
-          .filter((data: ITouristsRoute) => data._id.toString() === id)
-          .do(async (data, listenerId) => {
-            const touristRoute = await TourRouteRepo.findById(id);
-            new SuccessResponse(
-              'update route',
-              touristRoute,
-              listenerId,
-            ).sendSocket(socket, SocketServerMessage.ROUTE);
-          });
-        try {
-          const touristRoute = await TourRouteRepo.findById(id);
+  handleSocketAPI({
+    socket,
+    clientEvent: SocketClientMessage.VIEW_ROUTE,
+    serverEvent: SocketServerMessage.ROUTE,
+    schema: schema.viewTouristRoute.byId,
+    handler: async ({ id }: { id: string }) => {
+      if (socket.data.staff) {
+        const companyId = socket.data.staff.companyId;
+        const route = await TouristsRouteModel.findById(id);
+        //@ts-ignore
+        if (route?.companyId.toString() != companyId.toString())
+          throw new ForbiddenError('This route is belong to another company');
+      }
 
-          return new SuccessResponse(
-            'successfully retrieve tourist route',
+      const listener = WatchTable.register(TouristsRouteModel, socket)
+        .filter((data: ITouristsRoute) => data._id.toString() === id)
+        .do(async (data, listenerId) => {
+          const touristRoute = await TourRouteRepo.findById(id);
+          new SuccessResponse(
+            'update route',
             touristRoute,
-            listener.getId(),
+            listenerId,
           ).sendSocket(socket, SocketServerMessage.ROUTE);
-        } catch (e) {
-          return new BadRequestResponse('Tourist route not found').sendSocket(
-            socket,
-            SocketServerMessage.ERROR,
-          );
-        }
-      },
-    ),
-  );
+        });
+      const touristRoute = await TourRouteRepo.findById(id);
+
+      return new SuccessResponse(
+        'successfully retrieve tourist route',
+        touristRoute,
+        listener.getId(),
+      ).sendSocket(socket, SocketServerMessage.ROUTE);
+    },
+  });
 }
 
 async function handleViewTouristRouteByFilter(socket: Socket) {
