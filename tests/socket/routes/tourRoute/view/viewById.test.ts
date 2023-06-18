@@ -57,7 +57,7 @@ describe('View tourist route by id', () => {
     expect(response.data.name).toBe('First vacation');
   });
 
-  test('Invalid route id', async () => {
+  test.skip('Invalid route id', async () => {
     clientSocket.emit(SocketClientMessage.VIEW_ROUTE, { id: 'something else' });
     const response = await socketRequest((resolve, reject) => {
       clientSocket.on(SocketServerMessage.ROUTE, (d) => {

@@ -1,8 +1,10 @@
 import { Socket } from 'socket.io';
-import { BadRequestError, ForbiddenError } from '../../../core/ApiError';
-import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
+import { ForbiddenError } from '../../../core/ApiError';
+import { SuccessResponse } from '../../../core/ApiResponse';
 import TourModel, { ITour } from '../../../database/model/Company/Tour';
+import TouristsRouteModel from '../../../database/model/Company/TouristsRoute';
 import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
+import handleSocketAPI from '../../../helpers/handleSocketAPI';
 import WatchTable from '../../../helpers/realtime/WatchTable';
 import socketAsyncHandler from '../../../helpers/socketAsyncHandler';
 import socketValidator from '../../../helpers/socketValidator';
@@ -11,17 +13,12 @@ import {
   SocketServerMessage,
 } from '../../../types/socket';
 import schema from './schema';
-import handleSocketAPI from '../../../helpers/handleSocketAPI';
-import authorization from '../../../auth/authorization';
-import { StaffPermission } from '../../../database/model/Company/Staff';
-import TouristsRouteModel, {
-  ITouristsRoute,
-} from '../../../database/model/Company/TouristsRoute';
 
 export async function handleViewTour(socket: Socket) {
   handleViewRecommendTour(socket);
   handleViewTourById(socket);
   handleViewTourByFilter(socket);
+  handleViewTourOfCompany(socket);
 }
 
 async function handleViewRecommendTour(socket: Socket) {
