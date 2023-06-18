@@ -22,6 +22,13 @@ export default {
     address: Joi.string().optional(),
     phone: Joi.string().optional(),
   }),
+  addStaff: Joi.object().keys({
+    fullName: Joi.string().required().min(1),
+    role: Joi.string().required(),
+    permissions: Joi.array().items(Joi.string()),
+    username: Joi.string().required().min(1),
+    password: Joi.string().required().min(6),
+  }),
   voucher: {
     createVoucher: Joi.object().keys({
       companyId: Joi.string().required(),

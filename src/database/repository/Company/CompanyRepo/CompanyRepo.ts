@@ -1,18 +1,8 @@
 import CompanyModel, { ICompany } from '@model/Company/Company';
-import {
-  Staff,
-  AdminPermission,
-  StaffRole,
-  StaffModel,
-} from '@model/Company/Staff';
-import StaffRepo from '../StaffRepo/StaffRepo';
-import {
-  createParameter,
-  createReturn,
-  findByIdParameter,
-} from './CompanyRepoSchema';
-import Logger from '../../../../core/Logger';
+import { AdminPermission, Staff, StaffRole } from '@model/Company/Staff';
 import { Types } from 'mongoose';
+import StaffRepo from '../StaffRepo/StaffRepo';
+import { createParameter, createReturn } from './CompanyRepoSchema';
 
 export async function create({
   company,

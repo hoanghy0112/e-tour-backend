@@ -9,6 +9,7 @@ import schema from './schema';
 import companySignup from './signup';
 import { viewCompanyInformation } from './viewCompanyInformation';
 import { editCompanyInformation } from './editCompanyInformation';
+import { addStaff } from './addStaff';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -23,4 +24,11 @@ companyRouter.put(
   validator(schema.updateCompanyInfo),
   upload.fields([{ name: 'image', maxCount: 1 }, { name: 'previewImages' }]),
   editCompanyInformation,
+);
+
+companyRouter.post(
+  '/staff',
+  authorization([StaffPermission.ADD_STAFF]),
+  validator(schema.addStaff),
+  addStaff,
 );

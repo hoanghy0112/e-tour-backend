@@ -8,25 +8,28 @@ export enum StaffRole {
 
 export enum StaffPermission {
   EDIT_ROUTE = 'edit-route',
+  VIEW_ROUTE = 'view-route',
+  DELETE_ROUTE = 'delete-route',
   EDIT_TOUR = 'edit-tour',
+  VIEW_TOUR = 'view-tour',
+  DELETE_TOUR = 'delete-tour',
+  VIEW_VOUCHER = 'view-voucher',
   EDIT_VOUCHER = 'edit-voucher',
+  DELETE_VOUCHER = 'delete-voucher',
   EDIT_COMPANY = 'edit-company',
   VIEW_TICKETS = 'view-tickets',
+  ADD_STAFF = 'add-staff',
+  VIEW_STAFF = 'view-staff',
+  REMOVE_STAFF = 'remove-staff',
 }
 
-export const AdminPermission = [
-  StaffPermission.EDIT_COMPANY,
-  StaffPermission.EDIT_ROUTE,
-  StaffPermission.EDIT_TOUR,
-  StaffPermission.EDIT_VOUCHER,
-  StaffPermission.VIEW_TICKETS,
-];
+export const AdminPermission = Object.values(StaffPermission);
 
 export interface Staff {
   _id: string;
   fullName: string;
   image?: string;
-  role: StaffRole;
+  role: string;
   permissions: StaffPermission[];
   companyId: Types.ObjectId;
   credential: Credential;
@@ -42,7 +45,6 @@ const schema = new Schema<Staff>(
     },
     role: {
       type: String,
-      enum: Object.values(StaffRole),
     },
     permissions: [
       {
