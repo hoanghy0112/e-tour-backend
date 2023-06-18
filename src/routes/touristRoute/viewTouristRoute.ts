@@ -178,7 +178,7 @@ async function handleViewPopularTouristRoute(socket: Socket) {
   );
 }
 
-async function handleViewTouristRouteOfCompany(socket: Socket) {
+export async function handleViewTouristRouteOfCompany(socket: Socket) {
   socket.on(
     SocketClientMessage.touristRoute.VIEW_COMPANY_ROUTE,
     socketAsyncHandler(

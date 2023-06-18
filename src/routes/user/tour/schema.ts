@@ -11,6 +11,9 @@ export default {
     byId: Joi.object().keys({
       id: Joi.string(),
     }),
+    ofCompany: Joi.object().keys({
+      companyId: Joi.string().required(),
+    }),
   },
   createTour: Joi.object().keys({
     name: Joi.string().optional().default(''),

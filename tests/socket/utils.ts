@@ -9,11 +9,11 @@ import { v4 } from 'uuid';
 import UserModel from '../../src/database/model/User/User';
 import { StaffModel } from '../../src/database/model/Company/Staff';
 
-let clientSocket;
-let clientId;
+let clientSocket: any;
+let clientId: any;
 
-let staffSocket;
-let staffId;
+let staffSocket: any;
+let staffId: any;
 
 export async function setupTestedSocketServer() {
   await connectMongo();
@@ -26,8 +26,8 @@ export async function setupTestedSocketServer() {
   const username = 'username';
   const password = 'password';
 
-  let token = '';
-  let id = '';
+  // let token = '';
+  // let id = '';
   let response;
 
   response = await request
@@ -55,7 +55,7 @@ export async function setupTestedSocketServer() {
     path: '/socket',
     query: {
       type: 'client',
-      token,
+      token: clientToken,
     },
   });
 
@@ -63,7 +63,7 @@ export async function setupTestedSocketServer() {
     path: '/socket',
     query: {
       type: 'staff',
-      token,
+      token: staffToken,
     },
   });
 

@@ -7,7 +7,10 @@ import handleManageSavedTouristRoute, {
   removeTouristRouteFromSaved,
   viewSavedTouristRoute,
 } from './saveTouristRoute';
-import { handleViewTouristRoute } from './viewTouristRoute';
+import {
+  handleViewTouristRoute,
+  handleViewTouristRouteOfCompany,
+} from './viewTouristRoute';
 import {
   handleFollowTouristRoute,
   handleUnFollowTouristRoute,
@@ -57,5 +60,5 @@ export function handleTouristRoute(socket: Socket) {
   handleViewTouristRoute(socket);
   handleFollowTouristRoute(socket);
   handleUnFollowTouristRoute(socket);
-  handleViewNotificationOfTour(socket);
+  handleViewTouristRouteOfCompany(socket);
 }
