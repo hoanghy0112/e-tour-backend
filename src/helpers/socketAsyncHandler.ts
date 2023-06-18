@@ -13,34 +13,41 @@ import { SocketServerMessage } from '../types/socket';
 type MiddlewareFunction = (socket: Socket, data: any) => any;
 type HandlerFunction = (data: any) => Promise<any>;
 
-export const socketErrorHandler = (socket: Socket) => (err: any) => {
-  if (err instanceof BadRequestError) {
-    return new BadRequestResponse(err.message).sendSocket(
-      socket,
-      SocketServerMessage.ERROR,
-    );
-  }
-  if (err instanceof ApiError) {
-    ApiError.handleSocket(err, socket);
-    if (err.type === ErrorType.INTERNAL)
+export const socketErrorHandler =
+  (socket: Socket, eventName = SocketServerMessage.ERROR) =>
+  (err: any) => {
+    if (err instanceof BadRequestError) {
+      return new BadRequestResponse(err.message).sendSocket(
+        socket,
+        eventName || SocketServerMessage.ERROR,
+      );
+    }
+    if (err instanceof ApiError) {
+      ApiError.handleSocket(err, socket);
+      if (err.type === ErrorType.INTERNAL)
+        Logger.error(
+          `500 - ${err.name} - ${err.type} - ${err.message} - ${err.stack}`,
+        );
+    } else {
       Logger.error(
         `500 - ${err.name} - ${err.type} - ${err.message} - ${err.stack}`,
       );
-  } else {
-    Logger.error(
-      `500 - ${err.name} - ${err.type} - ${err.message} - ${err.stack}`,
-    );
-    Logger.error(err);
-    if (environment === 'development') {
-      socket.emit('error', err);
+      Logger.error(err);
+      if (environment === 'development') {
+        socket.emit('error', err);
+      }
+      ApiError.handleSocket(new InternalError(), socket);
     }
-    ApiError.handleSocket(new InternalError(), socket);
-  }
-};
+  };
 
 const socketAsyncHandler =
-  (socket: Socket, ...func: (MiddlewareFunction | HandlerFunction)[]) =>
+  (
+    socket: Socket,
+    serverEvent: string | MiddlewareFunction | HandlerFunction,
+    ...func: (MiddlewareFunction | HandlerFunction)[]
+  ) =>
   async (data: any) => {
+    if (typeof serverEvent != 'string') func = [serverEvent, ...func];
     const middlewares = func.slice(0, func.length - 1);
     const execution = func.at(-1) as HandlerFunction;
 
@@ -50,7 +57,10 @@ const socketAsyncHandler =
       );
       await execution?.(data);
     } catch (error) {
-      socketErrorHandler(socket)(error);
+      socketErrorHandler(
+        socket,
+        typeof serverEvent == 'string' ? serverEvent : "",
+      )(error);
     }
   };
 
