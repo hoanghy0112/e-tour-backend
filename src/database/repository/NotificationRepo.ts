@@ -48,6 +48,7 @@ async function sendToTourCustomer(
   const notificationData = {
     ...notification,
     link: `route-${tour?.touristRoute.toString()}/new`,
+    createdAt: new Date(),
   };
 
   const notificationStates = await Promise.all(
