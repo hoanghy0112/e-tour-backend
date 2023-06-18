@@ -1,16 +1,14 @@
-import { RoleRequest } from '@/types/app-request';
 import express, { Request } from 'express';
+import multer from 'multer';
 import { BadRequestError } from '../../core/ApiError';
 import { SuccessResponse } from '../../core/ApiResponse';
 import CompanyRepo from '../../database/repository/Company/CompanyRepo/CompanyRepo';
 import StaffRepo from '../../database/repository/Company/StaffRepo/StaffRepo';
 import KeystoreRepo from '../../database/repository/KeystoreRepo';
+import { uploadImageToS3 } from '../../database/s3';
 import asyncHandler from '../../helpers/asyncHandler';
 import validator from '../../helpers/validator';
 import schema from './schema';
-import multer from 'multer';
-import { uploadImageToS3 } from '../../database/s3';
-import Logger from '../../core/Logger';
 
 const router = express.Router();
 

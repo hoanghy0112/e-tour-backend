@@ -15,6 +15,13 @@ export default {
     username: Joi.string().required().min(1),
     password: Joi.string().required().min(6),
   }),
+  updateCompanyInfo: Joi.object().keys({
+    name: Joi.string().min(1),
+    email: Joi.string().email(),
+    description: Joi.string().optional().min(1),
+    address: Joi.string().optional(),
+    phone: Joi.string().optional(),
+  }),
   voucher: {
     createVoucher: Joi.object().keys({
       companyId: Joi.string().required(),
