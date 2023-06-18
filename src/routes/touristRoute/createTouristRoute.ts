@@ -33,11 +33,11 @@ export async function handleCreateTourRoute(socket: Socket) {
       if (listRoute?.find((v) => v.name === tourRoute.name))
         throw new BadRequestError('Route name exists');
 
-      TourRouteRepo.create(data);
+      const touristRoute = await TourRouteRepo.create(data);
 
       return new SuccessResponse(
         'Create tourist route successfully',
-        data,
+        touristRoute,
       ).sendSocket(
         socket,
         SocketServerMessage.touristRoute.CREATE_ROUTE_RESULT,

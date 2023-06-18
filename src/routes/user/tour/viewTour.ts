@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { BadRequestError } from '../../../core/ApiError';
+import { BadRequestError, ForbiddenError } from '../../../core/ApiError';
 import { BadRequestResponse, SuccessResponse } from '../../../core/ApiResponse';
 import TourModel, { ITour } from '../../../database/model/Company/Tour';
 import TourRepo from '../../../database/repository/Company/TourRepo/TourRepo';
@@ -11,6 +11,10 @@ import {
   SocketServerMessage,
 } from '../../../types/socket';
 import schema from './schema';
+import handleSocketAPI from '../../../helpers/handleSocketAPI';
+import authorization from '../../../auth/authorization';
+import { StaffPermission } from '../../../database/model/Company/Staff';
+import TouristsRouteModel from '../../../database/model/Company/TouristsRoute';
 
 export async function handleViewTour(socket: Socket) {
   handleViewRecommendTour(socket);
@@ -23,35 +27,39 @@ async function handleViewRecommendTour(socket: Socket) {
 }
 
 async function handleViewTourById(socket: Socket) {
-  socket.on(
-    SocketClientMessage.VIEW_TOUR,
-    socketAsyncHandler(
-      socket,
-      socketValidator(schema.viewTour.byId),
-      async ({ id }: { id: string }) => {
-        try {
-          const tour = await TourRepo.findById(id);
+  handleSocketAPI({
+    socket,
+    clientEvent: SocketClientMessage.VIEW_TOUR,
+    serverEvent: SocketServerMessage.TOUR,
+    schema: schema.viewTour.byId,
+    handler: async ({ id }: { id: string }) => {
+      if (socket.data.staff) {
+        // authorization([StaffPermission.VIEW_TOUR]);
+        const companyId = socket.data.staff.companyId;
+        const tour = await TourModel.findById(id).populate('touristRoute');
+        //@ts-ignore
+        if (tour?.touristRoute?.companyId.toString() != companyId.toString())
+          throw new ForbiddenError('This tour is belong to another company');
+      }
 
-          const listener = WatchTable.register(TourModel, socket)
-            .filter((data: ITour) => data?._id?.toString() === id)
-            .do((data, listenerId) => {
-              new SuccessResponse('update tour', data, listenerId).sendSocket(
-                socket,
-                SocketServerMessage.TOUR,
-              );
-            });
+      const tour = await TourRepo.findById(id);
 
-          return new SuccessResponse(
-            'successfully retrieve tour',
-            tour,
-            listener.getId(),
-          ).sendSocket(socket, SocketServerMessage.TOUR);
-        } catch (e) {
-          throw new BadRequestError('Tour not found');
-        }
-      },
-    ),
-  );
+      const listener = WatchTable.register(TourModel, socket)
+        .filter((data: ITour) => data?._id?.toString() === id)
+        .do((data, listenerId) => {
+          new SuccessResponse('update tour', data, listenerId).sendSocket(
+            socket,
+            SocketServerMessage.TOUR,
+          );
+        });
+
+      return new SuccessResponse(
+        'successfully retrieve tour',
+        tour,
+        listener.getId(),
+      ).sendSocket(socket, SocketServerMessage.TOUR);
+    },
+  });
 }
 
 async function handleViewTourByFilter(socket: Socket) {

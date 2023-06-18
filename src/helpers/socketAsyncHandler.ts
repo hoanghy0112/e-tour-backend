@@ -16,7 +16,6 @@ type HandlerFunction = (data: any) => Promise<any>;
 export const socketErrorHandler =
   (socket: Socket, eventName = SocketServerMessage.ERROR) =>
   (err: any) => {
-    console.log({ eventName });
     if (err instanceof BadRequestError) {
       return new BadRequestResponse(err.message).sendSocket(
         socket,
