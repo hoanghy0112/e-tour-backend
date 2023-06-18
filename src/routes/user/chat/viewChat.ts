@@ -50,10 +50,10 @@ export async function handleViewChatMessage(socket: Socket) {
         const chatMessages = await ChatRepo.viewChatMessageList(chatRoomId);
         socket.join(`chat:${chatRoomId}`);
 
-        return new SuccessResponse('success', chatMessages).sendSocket(
-          socket,
-          SocketServerMessage.chat.CHAT_MESSAGE_LIST,
-        );
+        return new SuccessResponse('success', {
+          chatRoomId,
+          messages: chatMessages,
+        }).sendSocket(socket, SocketServerMessage.chat.CHAT_MESSAGE_LIST);
       },
     ),
   );

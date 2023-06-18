@@ -41,6 +41,7 @@ export async function handleCreateChatMessage(socket: Socket) {
             uid,
             content,
             createdAt: now,
+            chatRoomId,
           });
 
         return new SuccessResponse('success', chatRoom).sendSocket(
