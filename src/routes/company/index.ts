@@ -10,6 +10,7 @@ import companySignup from './signup';
 import { viewCompanyInformation } from './viewCompanyInformation';
 import { editCompanyInformation } from './editCompanyInformation';
 import { addStaff } from './addStaff';
+import { viewCompanyRegistration } from './viewRegistration';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -31,4 +32,10 @@ companyRouter.post(
   authorization([StaffPermission.ADD_STAFF]),
   validator(schema.addStaff),
   addStaff,
+);
+
+companyRouter.get(
+  '/registration',
+  authorization([StaffPermission.SUPER_ADMIN]),
+  viewCompanyRegistration,
 );

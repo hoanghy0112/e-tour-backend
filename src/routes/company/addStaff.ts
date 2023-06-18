@@ -5,11 +5,11 @@ import { ProtectedStaffRequest } from '../../types/app-request';
 
 export const addStaff = asyncHandler(
   async (req: ProtectedStaffRequest, res) => {
-    const companyId = req.staff.companyId;
+    const companyId = req.staff.companyId
     const data = req.body;
 
     const staff = await StaffRepo.create({
-      staff: { ...data, companyId },
+      staff: {...data, companyId},
       username: data.username,
       password: data.password,
     });
