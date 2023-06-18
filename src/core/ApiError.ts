@@ -56,31 +56,53 @@ export abstract class ApiError extends Error {
     }
   }
 
-  public static handleSocket(err: ApiError, socket: Socket): void {
+  public static handleSocket(
+    err: ApiError,
+    socket: Socket,
+    eventName = SocketServerMessage.ERROR,
+  ): void {
     switch (err.type) {
       case ErrorType.BAD_TOKEN:
       case ErrorType.TOKEN_EXPIRED:
       case ErrorType.UNAUTHORIZED:
-        return new AuthFailureResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
+        return new AuthFailureResponse(err.message).sendSocket(
+          socket,
+          eventName || SocketServerMessage.ERROR,
+        );
       case ErrorType.ACCESS_TOKEN:
-        return new AccessTokenErrorResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
+        return new AccessTokenErrorResponse(err.message).sendSocket(
+          socket,
+          eventName || SocketServerMessage.ERROR,
+        );
       case ErrorType.INTERNAL:
-        return new InternalErrorResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
+        return new InternalErrorResponse(err.message).sendSocket(
+          socket,
+          eventName || SocketServerMessage.ERROR,
+        );
       case ErrorType.NOT_FOUND:
       case ErrorType.NO_ENTRY:
       case ErrorType.NO_DATA:
-        return new NotFoundResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
+        return new NotFoundResponse(err.message).sendSocket(
+          socket,
+          eventName || SocketServerMessage.ERROR,
+        );
       case ErrorType.BAD_REQUEST:
-        return new BadRequestResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
+        return new BadRequestResponse(err.message).sendSocket(
+          socket,
+          eventName || SocketServerMessage.ERROR,
+        );
       case ErrorType.FORBIDDEN:
-        return new ForbiddenResponse(err.message).sendSocket(socket, SocketServerMessage.ERROR);
+        return new ForbiddenResponse(err.message).sendSocket(
+          socket,
+          eventName || SocketServerMessage.ERROR,
+        );
       default: {
         let message = err.message;
         // Do not send failure message in production as it may send sensitive data
         if (environment === 'production') message = 'Something wrong happened.';
         return new InternalErrorResponse(message).sendSocket(
           socket,
-          SocketServerMessage.ERROR,
+          eventName || SocketServerMessage.ERROR,
         );
       }
     }

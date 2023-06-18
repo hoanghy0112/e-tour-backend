@@ -31,7 +31,10 @@ const schema = new Schema<Credential>({
     type: String,
     enum: Object.values(UserType),
   },
-  username: String,
+  username: {
+    type: String,
+    unique: true,
+  },
   password: String,
   accessToken: String,
   refreshToken: String,

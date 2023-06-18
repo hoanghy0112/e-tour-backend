@@ -16,6 +16,7 @@ type HandlerFunction = (data: any) => Promise<any>;
 export const socketErrorHandler =
   (socket: Socket, eventName = SocketServerMessage.ERROR) =>
   (err: any) => {
+    console.log({ eventName });
     if (err instanceof BadRequestError) {
       return new BadRequestResponse(err.message).sendSocket(
         socket,
@@ -23,7 +24,7 @@ export const socketErrorHandler =
       );
     }
     if (err instanceof ApiError) {
-      ApiError.handleSocket(err, socket);
+      ApiError.handleSocket(err, socket, eventName);
       if (err.type === ErrorType.INTERNAL)
         Logger.error(
           `500 - ${err.name} - ${err.type} - ${err.message} - ${err.stack}`,
@@ -59,7 +60,7 @@ const socketAsyncHandler =
     } catch (error) {
       socketErrorHandler(
         socket,
-        typeof serverEvent == 'string' ? serverEvent : "",
+        typeof serverEvent == 'string' ? serverEvent : '',
       )(error);
     }
   };
