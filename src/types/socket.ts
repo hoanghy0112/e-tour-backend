@@ -16,6 +16,7 @@ export const SocketServerMessage = {
   STAFF_INFO: 'staff-info',
   COMPANY_INFO: 'company-info',
   USER_PROFILE: 'user-profile',
+  CREATE_ROUTE_RESULT: 'create-route-result',
 
   BOOKED_TICKET: 'booked-ticket',
   UPDATED_TICKET: 'updated-ticket',
@@ -90,6 +91,7 @@ export const SocketClientMessage = {
   VIEW_COMPANY_INFO: 'view-company-info',
   VIEW_USER_PROFILE: 'view-user-profile',
   VIEW_RECOMMEND_ROUTE: 'view-recommend-route',
+  CREATE_ROUTE: 'create-route',
 
   BOOK_TICKET: 'book-ticket',
 
