@@ -177,3 +177,42 @@ async function handleViewPopularTouristRoute(socket: Socket) {
     ),
   );
 }
+
+async function handleViewTouristRouteOfCompany(socket: Socket) {
+  socket.on(
+    SocketClientMessage.touristRoute.VIEW_COMPANY_ROUTE,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.viewTouristRoute.ofCompany),
+      async ({ companyId }: { companyId: string }) => {
+        let touristRoutes = await TouristsRouteModel.find({ companyId });
+
+        const listener = WatchTable.register(TouristsRouteModel, socket)
+          .filter((data: ITouristsRoute, documentId) => {
+            return (
+              touristRoutes.some(
+                (route) => route._id.toString() == documentId.toString(),
+              ) || data.companyId.toString() == companyId
+            );
+          })
+          .do(async (data, listenerId) => {
+            touristRoutes = await TouristsRouteModel.find({ companyId });
+            new SuccessResponse(
+              'new route',
+              touristRoutes,
+              listenerId,
+            ).sendSocket(
+              socket,
+              SocketServerMessage.touristRoute.COMPANY_ROUTE,
+            );
+          });
+
+        return new SuccessResponse(
+          'successfully retrieve tourist route',
+          touristRoutes,
+          listener.getId(),
+        ).sendSocket(socket, SocketServerMessage.touristRoute.COMPANY_ROUTE);
+      },
+    ),
+  );
+}

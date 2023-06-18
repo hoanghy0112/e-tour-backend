@@ -15,6 +15,9 @@ export default {
       num: Joi.number().optional().default(5),
       skip: Joi.number().optional().default(0),
     }),
+    ofCompany: Joi.object().keys({
+      companyId: Joi.string().required(),
+    }),
   },
   increasePoint: Joi.object().keys({
     routeId: Joi.string().required(),

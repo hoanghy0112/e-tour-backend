@@ -17,6 +17,7 @@ import validator, { ValidationSource } from '../../helpers/validator';
 import schema from './schema';
 import authentication from '../../auth/authentication';
 import { deleteTouristRoute } from './deleteTouristRoute';
+import { handleViewNotificationOfTour } from '../user/notification/notification';
 
 export const touristRouteRouter = express.Router();
 
@@ -56,4 +57,5 @@ export function handleTouristRoute(socket: Socket) {
   handleViewTouristRoute(socket);
   handleFollowTouristRoute(socket);
   handleUnFollowTouristRoute(socket);
+  handleViewNotificationOfTour(socket);
 }

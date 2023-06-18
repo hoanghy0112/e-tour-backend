@@ -1,16 +1,13 @@
 import { Socket } from 'socket.io';
-import socketAuthorization from '../../auth/socketAuthorization';
 import { BadRequestError } from '../../core/ApiError';
 import { SuccessResponse } from '../../core/ApiResponse';
 import { StaffPermission } from '../../database/model/Company/Staff';
 import { ITouristsRoute } from '../../database/model/Company/TouristsRoute';
 import TourRouteRepo from '../../database/repository/Company/TourRoute/TourRouteRepo';
 import { uploadImageToS3 } from '../../database/s3';
-import socketAsyncHandler from '../../helpers/socketAsyncHandler';
-import socketValidator from '../../helpers/socketValidator';
+import handleSocketAPI from '../../helpers/handleSocketAPI';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
-import handleSocketAPI from '../../helpers/handleSocketAPI';
 
 export async function handleCreateTourRoute(socket: Socket) {
   handleSocketAPI({
