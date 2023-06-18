@@ -1,4 +1,5 @@
 import mongoose, { Schema, model, Types } from 'mongoose';
+import watch from '../../helpers/realtime/watch';
 
 export const CHAT_DOCUMENT_NAME = 'Chat';
 export const CHAT_COLLECTION_NAME = 'chats';
@@ -53,3 +54,5 @@ export const ChatModel = model<IChat>(
   schema,
   CHAT_COLLECTION_NAME,
 );
+
+ChatModel.watch().on('change', watch<IChat>(ChatModel));

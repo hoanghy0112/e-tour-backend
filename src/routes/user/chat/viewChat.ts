@@ -9,6 +9,8 @@ import {
 } from '../../../types/socket';
 import schema from './schema';
 import { BadRequestError } from '../../../core/ApiError';
+import WatchTable from '../../../helpers/realtime/WatchTable';
+import { ChatModel } from '../../../database/model/Chat';
 
 export async function handleViewChatRoomList(socket: Socket) {
   socket.on(
@@ -18,6 +20,17 @@ export async function handleViewChatRoomList(socket: Socket) {
       if (!uid) throw new BadRequestError('User not found');
 
       const chatRooms = await ChatRepo.viewChatRoomList(uid);
+
+      WatchTable.register(ChatModel, socket)
+        .filter(() => true)
+        .do(async () => {
+          const chatRooms = await ChatRepo.viewChatRoomList(uid);
+
+          return new SuccessResponse('success', chatRooms).sendSocket(
+            socket,
+            SocketServerMessage.chat.CHAT_ROOM_LIST,
+          );
+        });
 
       return new SuccessResponse('success', chatRooms).sendSocket(
         socket,
