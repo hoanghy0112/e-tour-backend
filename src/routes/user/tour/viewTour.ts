@@ -114,8 +114,9 @@ export async function handleViewTourOfCompany(socket: Socket) {
     socket,
     clientEvent: SocketClientMessage.TOUR.VIEW_COMPANY_TOUR,
     serverEvent: SocketServerMessage.TOUR_EVENTS.COMPANY_TOUR,
-    schema: schema.viewTour.ofCompany,
-    handler: async ({ companyId }: { companyId: string }) => {
+    handler: async () => {
+      const companyId = socket.data.staff.companyId;
+
       const touristRoutes = await TouristsRouteModel.find({ companyId });
       const tours = await TourModel.find({
         touristRoute: { $in: touristRoutes.map((d) => d._id) },
