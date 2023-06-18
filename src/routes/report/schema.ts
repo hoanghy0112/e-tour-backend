@@ -3,7 +3,7 @@ import { ReportType } from '../../database/model/Report';
 
 export default {
   createReport: Joi.object().keys({
-    objectId: Joi.string().required(),
+    objectId: Joi.string().optional(),
     reportType: Joi.string()
       .allow(...Object.values(ReportType))
       .required(),
