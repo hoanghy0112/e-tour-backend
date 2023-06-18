@@ -1,11 +1,8 @@
-import authorization from '../../auth/authorization';
 import { SuccessResponse } from '../../core/ApiResponse';
 import CompanyModel from '../../database/model/Company/Company';
-import { StaffPermission } from '../../database/model/Company/Staff';
-import CompanyRepo from '../../database/repository/Company/CompanyRepo/CompanyRepo';
 import { uploadImageToS3 } from '../../database/s3';
 import asyncHandler from '../../helpers/asyncHandler';
-import { ProtectedStaffRequest, PublicRequest } from '../../types/app-request';
+import { ProtectedStaffRequest } from '../../types/app-request';
 
 export const editCompanyInformation = asyncHandler(
   async (req: ProtectedStaffRequest, res) => {
