@@ -45,19 +45,31 @@ async function sendToTourCustomer(
   const tickets = await TicketModel.find({ tourId });
   const customers = tickets.map((ticket) => ticket.userId) as string[];
 
+  const notificationData = {
+    ...notification,
+    link: `route-${tour?.touristRoute.toString()}/new`,
+  };
+
   const notificationStates = await Promise.all(
-    customers.map((userId) =>
-      create(userId, type, {
-        ...notification,
-        link: `route-${tour?.touristRoute.toString()}/new`,
-      }),
-    ),
+    customers.map((userId) => create(userId, type, notificationData)),
   );
 
+  await TourModel.findByIdAndUpdate(tourId, {
+    $push: {
+      notifications: notificationData,
+    },
+  });
+
   return customers.filter((_, i) => notificationStates[i] == true);
+}
+
+async function getTourNotification(tourId: string) {
+  const tour = await TourModel.findById(tourId).populate('notifications');
+  return (tour?.notifications || []).reverse();
 }
 
 export default {
   create,
   sendToTourCustomer,
+  getTourNotification,
 };

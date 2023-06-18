@@ -1,5 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 import watch from '../../../helpers/realtime/watch';
+import { INotification } from '../User/User';
 
 export enum TourType {
   NORMAL = 'normal',
@@ -16,6 +17,7 @@ export interface ITour {
   image?: string | null;
   touristRoute: Types.ObjectId;
   price: number;
+  notifications?: INotification[];
 }
 
 const tourSchema = new Schema<ITour>(
@@ -51,6 +53,19 @@ const tourSchema = new Schema<ITour>(
       type: Number,
       default: 0,
     },
+    notifications: [
+      {
+        title: String,
+        content: String,
+        link: String,
+        image: String,
+        isRead: {
+          type: Boolean,
+          default: false,
+        },
+        createdAt: Date,
+      },
+    ],
   },
   {
     timestamps: true,

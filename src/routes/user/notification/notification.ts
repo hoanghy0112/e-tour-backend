@@ -14,6 +14,8 @@ import schema from './schema';
 import UserModel from '../../../database/model/User/User';
 import WatchTable from '../../../helpers/realtime/WatchTable';
 import { Types } from 'mongoose';
+import NotificationRepo from '../../../database/repository/NotificationRepo';
+import TourModel from '../../../database/model/Company/Tour';
 
 export function handleViewNewNotification(socket: Socket) {
   socket.on(
@@ -25,15 +27,17 @@ export function handleViewNewNotification(socket: Socket) {
         const userId = socket.data.user._id;
 
         const notifications =
-          (await UserModel.findById(userId).populate('notifications'))
-            ?.notifications?.reverse() || [];
+          (
+            await UserModel.findById(userId).populate('notifications')
+          )?.notifications?.reverse() || [];
 
         const listener = WatchTable.register(UserModel, socket)
           .filter((data, id) => id.toString() === userId.toString())
           .do(async (data, listenerId) => {
             const notifications =
-              (await UserModel.findById(userId).populate('notifications'))
-                ?.notifications?.reverse() || [];
+              (
+                await UserModel.findById(userId).populate('notifications')
+              )?.notifications?.reverse() || [];
 
             return new SuccessResponse(
               'Successfully retrieve notifications',
@@ -91,6 +95,47 @@ export function handleReadNotification(socket: Socket) {
         ).sendSocket(
           socket,
           SocketServerMessage.notification.READ_NOTIFICATION_RESULT,
+        );
+      },
+    ),
+  );
+}
+
+export function handleViewNotificationOfTour(socket: Socket) {
+  socket.on(
+    SocketClientMessage.notification.VIEW_TOUR_NOTIFICATION,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.viewTourNotification),
+      async ({ tourId }: { tourId: string }) => {
+        const notifications = await NotificationRepo.getTourNotification(
+          tourId,
+        );
+
+        const listener = WatchTable.register(TourModel, socket)
+          .filter((data, id) => id.toString() === tourId.toString())
+          .do(async (data, listenerId) => {
+            const notifications = await NotificationRepo.getTourNotification(
+              tourId,
+            );
+
+            return new SuccessResponse(
+              'Successfully retrieve notifications',
+              notifications,
+              listenerId,
+            ).sendSocket(
+              socket,
+              SocketServerMessage.notification.TOUR_NOTIFICATION,
+            );
+          });
+
+        return new SuccessResponse(
+          'Successfully retrieve notifications',
+          notifications,
+          listener.getId(),
+        ).sendSocket(
+          socket,
+          SocketServerMessage.notification.TOUR_NOTIFICATION,
         );
       },
     ),
