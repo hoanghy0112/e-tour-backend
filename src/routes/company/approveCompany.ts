@@ -7,7 +7,8 @@ import { PublicRequest } from '../../types/app-request';
 
 export const approveCompanyRegistration = asyncHandler(
   async (req: PublicRequest, res) => {
-    const { companyId, isApproveToActive } = req.body;
+    const { companyId } = req.params;
+    const { isApproveToActive } = req.body;
     const data = await CompanyModel.findByIdAndUpdate(
       { companyId },
       {
