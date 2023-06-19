@@ -20,7 +20,7 @@ reportRouter.get(
   getCompanyReport,
 );
 reportRouter.get(
-  '/route/:routeId',
+  '/route',
   authorization([StaffPermission.VIEW_REPORT]),
   getRouteReport,
 );

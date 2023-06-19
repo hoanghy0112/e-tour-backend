@@ -63,7 +63,7 @@ async function create(voucher: IVoucher): Promise<IVoucher> {
       const notification = {
         title: `New voucher from ${company.name}`,
         content: `Voucher ${voucher.name} has been created, click to view detail`,
-        link: `tour-${voucherDoc._id.toString()}/new`,
+        link: `voucher-${voucherDoc._id.toString()}/new`,
         image: voucherDoc.image,
       };
 

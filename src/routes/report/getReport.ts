@@ -18,15 +18,13 @@ export const getApplicationReport = asyncHandler(
 
 export const getCompanyReport = asyncHandler(
   async (req: ProtectedStaffRequest, res) => {
-    // const { companyId } = req.params;
-    // const staff = req.staff;
-    // if (staff?.companyId.toString() != companyId.toString())
-    //   throw new ForbiddenError('Different company');
-    const companyId = req.staff.companyId;
-    const report = await ReportModel.find({
-      reportType: ReportType.COMPANY,
-      objectId: companyId,
-    });
+    const report = await ReportModel.find(
+      {
+        reportType: ReportType.COMPANY,
+      },
+      null,
+      { sort: { createdAt: -1 } },
+    );
 
     return new SuccessResponse('success', report).send(res);
   },
@@ -34,15 +32,13 @@ export const getCompanyReport = asyncHandler(
 
 export const getRouteReport = asyncHandler(
   async (req: ProtectedStaffRequest, res) => {
-    const { routeId } = req.params;
-    const staff = req.staff;
-    const route = await TouristsRouteModel.findById(routeId);
-    if (staff?.companyId.toString() != route?.companyId.toString())
-      throw new ForbiddenError('Different company');
-    const report = await ReportModel.find({
-      reportType: ReportType.ROUTE,
-      objectId: routeId,
-    });
+    const report = await ReportModel.find(
+      {
+        reportType: ReportType.ROUTE,
+      },
+      null,
+      { sort: { createdAt: -1 } },
+    );
 
     return new SuccessResponse('success', report).send(res);
   },
