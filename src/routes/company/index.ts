@@ -15,6 +15,7 @@ import { approveCompanyRegistration } from './approveCompany';
 import { getAllCompany } from './getAllCompany';
 import { deleteCompany } from './deleteCompany';
 import { viewStaffList } from './viewStaffList';
+import { removeStaff } from './removeStaff';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -39,6 +40,12 @@ companyRouter.get(
   '/staff',
   authorization([StaffPermission.VIEW_STAFF]),
   viewStaffList,
+);
+
+companyRouter.delete(
+  '/staff/:id',
+  authorization([StaffPermission.DELETE_STAFF]),
+  removeStaff,
 );
 
 companyRouter.get('/:companyId', viewCompanyInformation);

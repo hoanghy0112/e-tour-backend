@@ -23,6 +23,7 @@ export enum StaffPermission {
   DELETE_COMPANY = 'delete-company',
   VIEW_TICKETS = 'view-tickets',
   ADD_STAFF = 'add-staff',
+  DELETE_STAFF = 'delete-staff',
   VIEW_STAFF = 'view-staff',
   REMOVE_STAFF = 'remove-staff',
 }
