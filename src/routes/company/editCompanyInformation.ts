@@ -54,23 +54,6 @@ export const editCompanyInformation = asyncHandler(
       } else {
       }
     } else if (company.profileState == ProfileState.REJECTED) {
-      // if (company.isApproveToActive) {
-      //   sendEmail({
-      //     to: company.email,
-      //     subject: 'E-Tour company registration result',
-      //     subTitle: '',
-      //     header: 'Your company profile has been accepted',
-      //     content: 'Now you can run your own travel business with E-Tour',
-      //   });
-      // } else {
-      //   sendEmail({
-      //     to: company.email,
-      //     subject: 'E-Tour company registration result',
-      //     subTitle: '',
-      //     header: 'Your company profile has been accepted',
-      //     content: 'Now you can run your own travel business with E-Tour',
-      //   });
-      // }
     }
 
     return new SuccessResponse('Success', company).send(res);
