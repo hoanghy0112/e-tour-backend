@@ -14,6 +14,7 @@ import { viewCompanyRegistration } from './viewRegistration';
 import { approveCompanyRegistration } from './approveCompany';
 import { getAllCompany } from './getAllCompany';
 import { deleteCompany } from './deleteCompany';
+import { viewStaffList } from './viewStaffList';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -32,6 +33,12 @@ companyRouter.get(
   '/registration',
   authorization([StaffPermission.SUPER_ADMIN]),
   viewCompanyRegistration,
+);
+
+companyRouter.get(
+  '/staff',
+  authorization([StaffPermission.VIEW_STAFF]),
+  viewStaffList,
 );
 
 companyRouter.get('/:companyId', viewCompanyInformation);
