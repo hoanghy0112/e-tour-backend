@@ -27,8 +27,6 @@ export default function sendEmail({
       .replace('{{content}}', content),
   };
 
-  console.log({ msg, header, content });
-
   sgMail
     .send(msg)
     .then(() => {

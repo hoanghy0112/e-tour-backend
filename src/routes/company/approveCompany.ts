@@ -40,7 +40,14 @@ export const approveCompanyRegistration = asyncHandler(
           header: 'Your company has been banned by E-Tour admin',
           content: 'Your can send email to us in 24h to remove ban',
         });
-      } else {
+      } else if (oldData.profileState == ProfileState.PENDING) {
+        sendEmail({
+          to: data.email,
+          subject: 'E-Tour company registration result',
+          subTitle: '',
+          header: 'Your company profile has been rejected',
+          content: 'You can reupload your company profile',
+        });
       }
     }
 
