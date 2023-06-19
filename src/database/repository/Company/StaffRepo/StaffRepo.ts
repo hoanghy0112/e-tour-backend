@@ -39,15 +39,16 @@ async function create({
 
 async function findByUsername({
   username,
-}: findByUsernameParameter): Promise<Staff | null> {
+}: findByUsernameParameter): Promise<any> {
   const credential = await CredentialModel.findOne({ username });
 
-  if (!credential) return null;
+  return credential;
+  // if (!credential) return null;
 
-  return await StaffModel.findOne({ credential: credential?._id.toString() })
-    .populate('credential')
-    .lean()
-    .exec();
+  // return await StaffModel.findOne({ credential: credential?._id.toString() })
+  //   .populate('credential')
+  //   .lean()
+  //   .exec();
 }
 
 async function findById(id: Types.ObjectId | string): Promise<Staff | null> {
@@ -68,5 +69,5 @@ export default {
   create,
   findByUsername,
   findByCredentialId,
-  findById
+  findById,
 };
