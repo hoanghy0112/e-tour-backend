@@ -16,15 +16,19 @@ export default function sendEmail({
   to: string;
 }) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
+
   const msg = {
     to,
     from: '21520946@gm.uit.edu.vn',
     subject,
-    text: subTitle,
+    text: subTitle || 'E-Tour Business',
     html: htmlTemplate
       .replace('{{title}}', header)
       .replace('{{content}}', content),
   };
+
+  console.log({ msg, header, content });
+
   sgMail
     .send(msg)
     .then(() => {
