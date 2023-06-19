@@ -26,13 +26,13 @@ export async function handleViewCompanyInformation(socket: Socket) {
           throw new InternalError('Staff does not belong to any company');
 
         const listener = WatchTable.register(CompanyModel, socket)
-          .filter(
-            (data: Staff) => data._id.toString() == company._id?.toString(),
-          )
-          .do((data, listenerId) => {
+          .filter((data: Staff, id) => id == staff?.companyId.toString())
+          .do(async (data, listenerId) => {
+            const company = await CompanyModel.findById(staff?.companyId);
+
             new SuccessResponse(
               'update staff information',
-              data,
+              company,
               listenerId,
             ).sendSocket(socket, SocketServerMessage.COMPANY_INFO);
           });
