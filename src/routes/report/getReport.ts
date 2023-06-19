@@ -8,9 +8,13 @@ import { ProtectedStaffRequest, PublicRequest } from '../../types/app-request';
 
 export const getApplicationReport = asyncHandler(
   async (req: PublicRequest, res) => {
-    const report = await ReportModel.find({
-      reportType: ReportType.APPLICATION,
-    });
+    const report = await ReportModel.find(
+      {
+        reportType: ReportType.APPLICATION,
+      },
+      null,
+      { sort: { createdAt: -1 } },
+    );
 
     return new SuccessResponse('success', report).send(res);
   },
