@@ -21,6 +21,8 @@ export default {
     description: Joi.string().optional().min(1),
     address: Joi.string().optional(),
     phone: Joi.string().optional(),
+    image: Joi.any(),
+    previewImages: Joi.any(),
   }),
   addStaff: Joi.object().keys({
     fullName: Joi.string().required().min(1),
