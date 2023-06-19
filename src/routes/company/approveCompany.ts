@@ -10,7 +10,7 @@ export const approveCompanyRegistration = asyncHandler(
     const { companyId } = req.params;
     const { isApproveToActive } = req.body;
     const data = await CompanyModel.findByIdAndUpdate(
-      { companyId },
+      companyId,
       {
         profileState: isApproveToActive
           ? ProfileState.APPROVED

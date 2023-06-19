@@ -19,7 +19,15 @@ export const companyRouter = express.Router();
 
 companyRouter.use('/signup', companySignup);
 companyRouter.use('/login', companyLogin);
+
+companyRouter.get(
+  '/registration',
+  authorization([StaffPermission.SUPER_ADMIN]),
+  viewCompanyRegistration,
+);
+
 companyRouter.get('/:companyId', viewCompanyInformation);
+
 companyRouter.put(
   '/:companyId',
   authorization([StaffPermission.EDIT_COMPANY]),
@@ -33,12 +41,6 @@ companyRouter.post(
   authorization([StaffPermission.ADD_STAFF]),
   validator(schema.addStaff),
   addStaff,
-);
-
-companyRouter.get(
-  '/registration',
-  authorization([StaffPermission.SUPER_ADMIN]),
-  viewCompanyRegistration,
 );
 
 companyRouter.put(

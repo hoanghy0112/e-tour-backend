@@ -5,7 +5,7 @@ import { PublicRequest } from '../../types/app-request';
 
 export const viewCompanyRegistration = asyncHandler(
   async (req: PublicRequest, res) => {
-    const data = await CompanyModel.find({ isApproveToActive: false }, null, {
+    const data = await CompanyModel.find({ isApproveToActive: false }, '', {
       sort: { updatedAt: -1 },
     });
 
