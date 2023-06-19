@@ -76,7 +76,6 @@ companyRouter.post(
   '/staff',
   authorization([StaffPermission.ADD_STAFF]),
   upload.fields([{ name: 'image', maxCount: 1 }]),
-  validator(schema.addStaff),
   addStaff,
 );
 
