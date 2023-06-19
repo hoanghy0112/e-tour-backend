@@ -1,7 +1,9 @@
 import { SuccessResponse } from '../../core/ApiResponse';
 import CompanyModel, {
+  ICompany,
   ProfileState,
 } from '../../database/model/Company/Company';
+import sendEmail from '../../database/repository/Mail/MailRepo';
 import { uploadImageToS3 } from '../../database/s3';
 import asyncHandler from '../../helpers/asyncHandler';
 import { ProtectedStaffRequest } from '../../types/app-request';
@@ -35,7 +37,41 @@ export const editCompanyInformation = asyncHandler(
     data.previewImages = previewImages || undefined;
     const c = await CompanyModel.findById(companyId);
     if (!c?.isApproveToActive) data.profileState = ProfileState.PENDING;
-    const company = await CompanyModel.findByIdAndUpdate(companyId, data);
+    const company = (await CompanyModel.findByIdAndUpdate(
+      companyId,
+      data,
+    )) as ICompany;
+
+    if (company.profileState == ProfileState.APPROVED) {
+      if (data?.isApproveToActive === false) {
+        sendEmail({
+          to: company.email,
+          subject: 'E-Tour Business ban',
+          subTitle: '',
+          header: 'Your company has been banned by E-Tour admin',
+          content: 'Your can send email to us in 24h to remove ban',
+        });
+      } else {
+      }
+    } else if (company.profileState == ProfileState.REJECTED) {
+      // if (company.isApproveToActive) {
+      //   sendEmail({
+      //     to: company.email,
+      //     subject: 'E-Tour company registration result',
+      //     subTitle: '',
+      //     header: 'Your company profile has been accepted',
+      //     content: 'Now you can run your own travel business with E-Tour',
+      //   });
+      // } else {
+      //   sendEmail({
+      //     to: company.email,
+      //     subject: 'E-Tour company registration result',
+      //     subTitle: '',
+      //     header: 'Your company profile has been accepted',
+      //     content: 'Now you can run your own travel business with E-Tour',
+      //   });
+      // }
+    }
 
     return new SuccessResponse('Success', company).send(res);
   },

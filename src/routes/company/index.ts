@@ -1,22 +1,23 @@
 import express from 'express';
+// import nodemailer from 'nodemailer';
 
 import multer from 'multer';
 import authorization from '../../auth/authorization';
 import { StaffPermission } from '../../database/model/Company/Staff';
 import validator from '../../helpers/validator';
+import { addStaff } from './addStaff';
+import { approveCompanyRegistration } from './approveCompany';
+import { deleteCompany } from './deleteCompany';
+import { editCompanyInformation } from './editCompanyInformation';
+import { editStaff } from './editStaff';
+import { getAllCompany } from './getAllCompany';
 import companyLogin from './login';
+import { removeStaff } from './removeStaff';
 import schema from './schema';
 import companySignup from './signup';
 import { viewCompanyInformation } from './viewCompanyInformation';
-import { editCompanyInformation } from './editCompanyInformation';
-import { addStaff } from './addStaff';
 import { viewCompanyRegistration } from './viewRegistration';
-import { approveCompanyRegistration } from './approveCompany';
-import { getAllCompany } from './getAllCompany';
-import { deleteCompany } from './deleteCompany';
 import { viewStaffList } from './viewStaffList';
-import { removeStaff } from './removeStaff';
-import { editStaff } from './editStaff';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -24,6 +25,8 @@ export const companyRouter = express.Router();
 
 companyRouter.use('/signup', companySignup);
 companyRouter.use('/login', companyLogin);
+
+
 
 companyRouter.get(
   '/',
