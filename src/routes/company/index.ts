@@ -46,6 +46,7 @@ companyRouter.get(
 companyRouter.put(
   '/staff/:id',
   authorization([StaffPermission.EDIT_STAFF]),
+  upload.fields([{ name: 'image', maxCount: 1 }]),
   editStaff,
 );
 
