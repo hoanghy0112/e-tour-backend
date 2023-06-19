@@ -1,5 +1,6 @@
 import { Schema, Types, model } from 'mongoose';
 import { IUser } from '../User/User';
+import watch from '../../../helpers/realtime/watch';
 
 export enum NotificationType {
   ALL = 'all',
@@ -79,4 +80,6 @@ const schema = new Schema<ICompany>(
 schema.index({ name: 1 });
 
 const CompanyModel = model('Company', schema);
+CompanyModel.watch().on('change', watch<ICompany>(CompanyModel));
+
 export default CompanyModel;

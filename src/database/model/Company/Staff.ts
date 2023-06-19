@@ -1,5 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 import { Credential } from '../Credential';
+import watch from '../../../helpers/realtime/watch';
 
 export enum StaffRole {
   ADMIN = 'admin',
@@ -66,3 +67,4 @@ const schema = new Schema<Staff>(
 );
 
 export const StaffModel = model('Staff', schema);
+StaffModel.watch().on('change', watch<Staff>(StaffModel));

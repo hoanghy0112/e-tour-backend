@@ -26,7 +26,10 @@ export async function handleViewCompanyInformation(socket: Socket) {
           throw new InternalError('Staff does not belong to any company');
 
         const listener = WatchTable.register(CompanyModel, socket)
-          .filter((data: Staff, id) => id == staff?.companyId.toString())
+          .filter((data: Staff, id) => {
+            console.log({ data, id, iid: staff?.companyId.toString() });
+            return id == staff?.companyId.toString();
+          })
           .do(async (data, listenerId) => {
             const company = await CompanyModel.findById(staff?.companyId);
 
