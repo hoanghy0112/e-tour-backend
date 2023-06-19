@@ -12,6 +12,7 @@ import { editCompanyInformation } from './editCompanyInformation';
 import { addStaff } from './addStaff';
 import { viewCompanyRegistration } from './viewRegistration';
 import { approveCompanyRegistration } from './approveCompany';
+import { getAllCompany } from './getAllCompany';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -19,6 +20,12 @@ export const companyRouter = express.Router();
 
 companyRouter.use('/signup', companySignup);
 companyRouter.use('/login', companyLogin);
+
+companyRouter.get(
+  '/',
+  authorization([StaffPermission.SUPER_ADMIN]),
+  getAllCompany,
+);
 
 companyRouter.get(
   '/registration',
