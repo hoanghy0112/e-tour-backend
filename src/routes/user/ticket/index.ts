@@ -7,6 +7,7 @@ import { handleUpdateTicket } from './updateTicket';
 import { discardTicket } from './discardTicket';
 import validator, { ValidationSource } from '../../../helpers/validator';
 import schema from './schema';
+import { handleViewTicketByFilter } from './viewTicketByFilter';
 
 export const ticketRouter = express.Router();
 
@@ -21,4 +22,5 @@ export default function handleTicket(socket: Socket) {
   handleUpdateTicket(socket);
   handleViewTicketList(socket);
   handleViewDetailTicket(socket);
+  handleViewTicketByFilter(socket);
 }

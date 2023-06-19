@@ -30,7 +30,7 @@ export const SocketServerMessage = {
   TOUR_EVENTS: {
     DELETE_TOUR_RESULT: 'delete-tour-result',
     UPDATE_TOUR_RESULT: 'update-tour-result',
-    COMPANY_TOUR: 'company-tour'
+    COMPANY_TOUR: 'company-tour',
   },
 
   touristRoute: {
@@ -50,6 +50,7 @@ export const SocketServerMessage = {
   ticket: {
     BOOKED_TICKET_LIST: 'booked-ticket-list',
     UPDATE_TICKET_RESULT: 'update-ticket-result',
+    FILTER_TICKET_RESULT: 'filter-ticket-result',
   },
 
   voucher: {
@@ -104,7 +105,7 @@ export const SocketClientMessage = {
   TOUR: {
     DELETE_TOUR: 'delete-tour',
     UPDATE_TOUR: 'update-tour',
-    VIEW_COMPANY_TOUR: 'view-company-tour'
+    VIEW_COMPANY_TOUR: 'view-company-tour',
   },
 
   touristRoute: {
@@ -126,6 +127,7 @@ export const SocketClientMessage = {
     VIEW_BOOKED_TICKET: 'view-booked-ticket',
     UPDATE_TICKET: 'update-ticket',
     VIEW_DETAIL_TICKET: 'view-detail-ticket',
+    FILTER_TICKET: 'filter-ticket',
   },
 
   voucher: {
