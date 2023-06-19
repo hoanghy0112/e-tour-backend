@@ -42,13 +42,13 @@ async function findByUsername({
 }: findByUsernameParameter): Promise<any> {
   const credential = await CredentialModel.findOne({ username });
 
-  return credential;
-  // if (!credential) return null;
+  // return credential;
+  if (!credential) return null;
 
-  // return await StaffModel.findOne({ credential: credential?._id.toString() })
-  //   .populate('credential')
-  //   .lean()
-  //   .exec();
+  return await StaffModel.findOne({ credential: credential?._id.toString() })
+    .populate('credential')
+    .lean()
+    .exec();
 }
 
 async function findById(id: Types.ObjectId | string): Promise<Staff | null> {
