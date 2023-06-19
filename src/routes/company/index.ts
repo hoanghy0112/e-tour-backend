@@ -13,6 +13,7 @@ import { addStaff } from './addStaff';
 import { viewCompanyRegistration } from './viewRegistration';
 import { approveCompanyRegistration } from './approveCompany';
 import { getAllCompany } from './getAllCompany';
+import { deleteCompany } from './deleteCompany';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -41,6 +42,12 @@ companyRouter.put(
   validator(schema.updateCompanyInfo),
   upload.fields([{ name: 'image', maxCount: 1 }, { name: 'previewImages' }]),
   editCompanyInformation,
+);
+
+companyRouter.delete(
+  '/:companyId',
+  authorization([StaffPermission.DELETE_COMPANY]),
+  deleteCompany,
 );
 
 companyRouter.post(
