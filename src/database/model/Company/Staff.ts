@@ -25,6 +25,7 @@ export enum StaffPermission {
   ADD_STAFF = 'add-staff',
   DELETE_STAFF = 'delete-staff',
   VIEW_STAFF = 'view-staff',
+  EDIT_STAFF = 'edit-staff',
 }
 
 export const AdminPermission = Object.values(StaffPermission);

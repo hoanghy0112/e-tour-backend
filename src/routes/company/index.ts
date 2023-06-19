@@ -16,6 +16,7 @@ import { getAllCompany } from './getAllCompany';
 import { deleteCompany } from './deleteCompany';
 import { viewStaffList } from './viewStaffList';
 import { removeStaff } from './removeStaff';
+import { editStaff } from './editStaff';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -40,6 +41,12 @@ companyRouter.get(
   '/staff',
   authorization([StaffPermission.VIEW_STAFF]),
   viewStaffList,
+);
+
+companyRouter.put(
+  '/staff/:id',
+  authorization([StaffPermission.EDIT_STAFF]),
+  editStaff,
 );
 
 companyRouter.delete(
