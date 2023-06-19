@@ -6,6 +6,12 @@ import ReportRepo from '../../database/repository/ReportRepo';
 import asyncHandler from '../../helpers/asyncHandler';
 import { ProtectedStaffRequest, PublicRequest } from '../../types/app-request';
 
+export const getAllReport = asyncHandler(async (req: PublicRequest, res) => {
+  const report = await ReportModel.find({}, null, { sort: { createdAt: -1 } });
+
+  return new SuccessResponse('success', report).send(res);
+});
+
 export const getApplicationReport = asyncHandler(
   async (req: PublicRequest, res) => {
     const report = await ReportModel.find(

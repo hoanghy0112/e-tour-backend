@@ -3,6 +3,7 @@ import validator from '../../helpers/validator';
 import schema from './schema';
 import { createReport } from './reportTour';
 import {
+  getAllReport,
   getApplicationReport,
   getCompanyReport,
   getRouteReport,
@@ -19,6 +20,11 @@ reportRouter.delete(
   '/:id',
   authorization([StaffPermission.SUPER_ADMIN]),
   deleteReport,
+);
+reportRouter.get(
+  '/',
+  authorization([StaffPermission.SUPER_ADMIN]),
+  getAllReport,
 );
 reportRouter.get(
   '/application',
