@@ -1,5 +1,7 @@
 import { SuccessResponse } from '../../core/ApiResponse';
-import CompanyModel from '../../database/model/Company/Company';
+import CompanyModel, {
+  ProfileState,
+} from '../../database/model/Company/Company';
 import { uploadImageToS3 } from '../../database/s3';
 import asyncHandler from '../../helpers/asyncHandler';
 import { ProtectedStaffRequest } from '../../types/app-request';
@@ -31,6 +33,8 @@ export const editCompanyInformation = asyncHandler(
 
     data.image = image || undefined;
     data.previewImages = previewImages || undefined;
+    const c = await CompanyModel.findById(companyId);
+    if (!c?.isApproveToActive) data.profileState = ProfileState.PENDING;
     const company = await CompanyModel.findByIdAndUpdate(companyId, data);
 
     return new SuccessResponse('Success', company).send(res);

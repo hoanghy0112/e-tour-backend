@@ -8,6 +8,7 @@ export enum StaffRole {
 
 export enum StaffPermission {
   SUPER_ADMIN = 'super-admin',
+  VIEW_REPORT = 'view-report',
   EDIT_ROUTE = 'edit-route',
   VIEW_ROUTE = 'view-route',
   DELETE_ROUTE = 'delete-route',

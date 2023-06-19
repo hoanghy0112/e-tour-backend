@@ -13,7 +13,7 @@ export interface IFollower {
 }
 
 export enum ProfileState {
-  REVIEWING = 'reviewing',
+  PENDING = 'pending',
   APPROVED = 'approved',
   REJECTED = 'rejected',
 }
@@ -59,7 +59,7 @@ const schema = new Schema<ICompany>(
     email: {
       type: String,
     },
-    profileState: { type: String, default: ProfileState.REVIEWING },
+    profileState: { type: String, default: ProfileState.PENDING },
     followers: [
       {
         user: { type: Schema.Types.ObjectId, ref: 'User' },
