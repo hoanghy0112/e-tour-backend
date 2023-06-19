@@ -21,8 +21,17 @@ import schema from './schema';
 import authentication from '../../auth/authentication';
 import { deleteTouristRoute } from './deleteTouristRoute';
 import { handleViewNotificationOfTour } from '../user/notification/notification';
+import authorization from '../../auth/authorization';
+import { StaffPermission } from '../../database/model/Company/Staff';
+import { getAllRoutes } from './getAllRoutes';
 
 export const touristRouteRouter = express.Router();
+
+touristRouteRouter.get(
+  '/',
+  authorization([StaffPermission.SUPER_ADMIN]),
+  getAllRoutes,
+);
 
 touristRouteRouter.get(
   '/find',
