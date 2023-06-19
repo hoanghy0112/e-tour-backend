@@ -26,6 +26,7 @@ reportRouter.get(
   authorization([StaffPermission.SUPER_ADMIN]),
   getAllReport,
 );
+
 reportRouter.get(
   '/application',
   authorization([StaffPermission.SUPER_ADMIN]),
