@@ -35,6 +35,7 @@ export const editCompanyInformation = asyncHandler(
 
     data.image = image || undefined;
     data.previewImages = previewImages || undefined;
+
     const c = await CompanyModel.findById(companyId);
     if (!c?.isApproveToActive) data.profileState = ProfileState.PENDING;
     const company = (await CompanyModel.findByIdAndUpdate(
