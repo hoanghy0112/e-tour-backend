@@ -4,7 +4,7 @@ import { NotificationType } from '../../../database/model/Company/Company';
 export default {
   viewNewNotification: Joi.object().keys({}),
   viewTourNotification: Joi.object().keys({
-    tourId: Joi.string().required()
+    tourId: Joi.string().required(),
   }),
   readNotification: Joi.object().keys({
     notificationIDs: Joi.array().items(Joi.string()),
@@ -16,7 +16,7 @@ export default {
       title: Joi.string().required(),
       content: Joi.string(),
       link: Joi.string(),
-      image: Joi.string(),
+      image: Joi.any(),
     }),
   }),
 };

@@ -113,10 +113,7 @@ const schema = new Schema<IUser>(
     cards: {
       type: [
         {
-          cardNumber: {
-            type: String,
-            unique: true,
-          },
+          cardNumber: String,
           name: String,
           expiredDate: Date,
           cvv: String,
