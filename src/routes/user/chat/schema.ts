@@ -12,4 +12,7 @@ export default {
   viewChatMessage: Joi.object().keys({
     chatRoomId: Joi.string().required(),
   }),
+  getChatRoomOfRoute: Joi.object().keys({
+    routeId: Joi.string().required(),
+  }),
 };

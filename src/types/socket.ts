@@ -76,6 +76,7 @@ export const SocketServerMessage = {
     CHAT_ROOM_LIST: 'chat-room-list',
     CREATE_CHAT_RESULT: 'create-chat-result',
     CREATE_CHAT_MESSAGE_RESULT: 'create-chat-message-result',
+    GET_CHAT_ROOM_OF_ROUTE_RESULT: 'get-chat-room-of-route-result',
   },
 };
 
@@ -152,5 +153,6 @@ export const SocketClientMessage = {
     VIEW_CHAT_MESSAGE: 'view-chat-message',
     CREATE_CHAT: 'create-chat',
     CREATE_CHAT_MESSAGE: 'create-chat-message',
+    GET_CHAT_ROOM_OF_ROUTE: 'get-chat-room-of-route',
   },
 };
