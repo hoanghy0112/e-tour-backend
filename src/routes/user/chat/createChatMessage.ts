@@ -10,6 +10,7 @@ import {
 import schema from './schema';
 import { BadRequestError } from '../../../core/ApiError';
 import handleSocketAPI from '../../../helpers/handleSocketAPI';
+import io from '../../../socketServer';
 
 export async function handleCreateChatMessage(socket: Socket) {
   handleSocketAPI({
@@ -36,14 +37,15 @@ export async function handleCreateChatMessage(socket: Socket) {
       if (!chatRoom)
         throw new BadRequestError('user is not a member of chat room');
 
-      socket
-        .to(`chat:${chatRoomId}`)
-        .emit(SocketServerMessage.chat.NEW_CHAT_MESSAGE, {
+      io.in(`chat:${chatRoomId}`).emit(
+        SocketServerMessage.chat.NEW_CHAT_MESSAGE,
+        {
           uid,
           content,
           createdAt: now,
           chatRoomId,
-        });
+        },
+      );
 
       return new SuccessResponse('success', chatRoom).sendSocket(
         socket,
