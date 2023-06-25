@@ -9,46 +9,46 @@ import {
 } from '../../../types/socket';
 import schema from './schema';
 import { BadRequestError } from '../../../core/ApiError';
+import handleSocketAPI from '../../../helpers/handleSocketAPI';
 
 export async function handleCreateChatMessage(socket: Socket) {
-  socket.on(
-    SocketClientMessage.chat.CREATE_CHAT_MESSAGE,
-    socketAsyncHandler(
-      socket,
-      socketValidator(schema.createChatMessage),
-      async ({
-        chatRoomId,
-        content,
-      }: {
-        chatRoomId: string;
-        content: string;
-      }) => {
-        const uid = (socket.data.user || socket.data.staff)._id.toString();
+  handleSocketAPI({
+    socket,
+    clientEvent: SocketClientMessage.chat.CREATE_CHAT_MESSAGE,
+    serverEvent: SocketServerMessage.chat.CREATE_CHAT_MESSAGE_RESULT,
+    schema: schema.createChatMessage,
+    handler: async ({
+      chatRoomId,
+      content,
+    }: {
+      chatRoomId: string;
+      content: string;
+    }) => {
+      const uid = (socket.data.user || socket.data.staff)._id.toString();
 
-        const now = new Date();
-        const chatRoom = await ChatRepo.createChatMessage(
-          chatRoomId,
+      const now = new Date();
+      const chatRoom = await ChatRepo.createChatMessage(
+        chatRoomId,
+        uid,
+        content,
+        now,
+      );
+      if (!chatRoom)
+        throw new BadRequestError('user is not a member of chat room');
+
+      socket
+        .to(`chat:${chatRoomId}`)
+        .emit(SocketServerMessage.chat.NEW_CHAT_MESSAGE, {
           uid,
           content,
-          now,
-        );
-        if (!chatRoom)
-          throw new BadRequestError('user is not a member of chat room');
+          createdAt: now,
+          chatRoomId,
+        });
 
-        socket
-          .to(`chat:${chatRoomId}`)
-          .emit(SocketServerMessage.chat.NEW_CHAT_MESSAGE, {
-            uid,
-            content,
-            createdAt: now,
-            chatRoomId,
-          });
-
-        return new SuccessResponse('success', chatRoom).sendSocket(
-          socket,
-          SocketServerMessage.chat.CREATE_CHAT_MESSAGE_RESULT,
-        );
-      },
-    ),
-  );
+      return new SuccessResponse('success', chatRoom).sendSocket(
+        socket,
+        SocketServerMessage.chat.CREATE_CHAT_MESSAGE_RESULT,
+      );
+    },
+  });
 }
