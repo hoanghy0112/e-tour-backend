@@ -23,8 +23,9 @@ export function handleGetChatRoomOfRoute(socket: Socket) {
       if (!userId) throw new BadRequestError('User not found');
 
       const chatRoom =
-        (await ChatModel.findOne({ routeId, userId })) ||
-        (await ChatRepo.createChat(routeId, userId));
+        (await ChatModel.findOne({ routeId, userId }, null, {
+          populate: 'staffId',
+        })) || (await ChatRepo.createChat(routeId, userId));
 
       return new SuccessResponse('Success', chatRoom).sendSocket(
         socket,
