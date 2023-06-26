@@ -47,12 +47,19 @@ async function sendToTourCustomer(
 
   const notificationData = {
     ...notification,
-    link: `route-${tour?.touristRoute.toString()}/new`,
+    link: `tour-${tour?.touristRoute.toString()}/new`,
     createdAt: new Date(),
   };
 
   const notificationStates = await Promise.all(
-    customers.map((userId) => create(userId, type, notificationData)),
+    // customers.map((userId) => create(userId, type, notificationData)),
+    tickets.map((ticket) =>
+      create(ticket.userId, type, {
+        ...notification,
+        link: `ticket-${ticket._id.toString()}/notification`,
+        createdAt: new Date(),
+      }),
+    ),
   );
 
   await TourModel.findByIdAndUpdate(tourId, {
