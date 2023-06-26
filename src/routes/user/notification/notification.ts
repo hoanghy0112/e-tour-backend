@@ -26,18 +26,20 @@ export function handleViewNewNotification(socket: Socket) {
       async ({}) => {
         const userId = socket.data.user._id;
 
-        const notifications =
+        const notifications = (
           (
             await UserModel.findById(userId).populate('notifications')
-          )?.notifications?.reverse() || [];
+          )?.notifications?.reverse() || []
+        ).filter((d) => !d.isRead);
 
         const listener = WatchTable.register(UserModel, socket)
           .filter((data, id) => id.toString() === userId.toString())
           .do(async (data, listenerId) => {
-            const notifications =
+            const notifications = (
               (
                 await UserModel.findById(userId).populate('notifications')
-              )?.notifications?.reverse() || [];
+              )?.notifications?.reverse() || []
+            ).filter((d) => !d.isRead);
 
             return new SuccessResponse(
               'Successfully retrieve notifications',
