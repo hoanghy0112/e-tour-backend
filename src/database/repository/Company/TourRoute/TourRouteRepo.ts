@@ -65,7 +65,7 @@ async function findById(
   const rate = await RateRepo.getOverallRatingOfRoute(id);
 
   const isFollowing = userId
-    ? (tourRoute.followers.map((v) => v._id.toString()) || []).includes(
+    ? (tourRoute.followers.map((v) => v.user.toString()) || []).includes(
         userId.toString(),
       )
     : false;

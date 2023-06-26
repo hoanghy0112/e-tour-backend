@@ -19,7 +19,7 @@ export interface ITouristsRoute {
   companyId: mongoose.Types.ObjectId;
   createdAt: Date;
   point?: number;
-  followers: (IFollower | string)[];
+  followers: IFollower[];
 }
 
 const touristsRouteSchema = new mongoose.Schema<ITouristsRoute>(
