@@ -56,6 +56,7 @@ async function list(
 
 async function findById(
   id: string | Types.ObjectId,
+  userId: string | Types.ObjectId,
 ): Promise<ITouristsRoute & { rate: number }> {
   const tourRoute = await TouristsRouteModel.findById(id);
 
@@ -63,9 +64,14 @@ async function findById(
 
   const rate = await RateRepo.getOverallRatingOfRoute(id);
 
+  const isFollowing = userId
+    ? (tourRoute.followers || []).includes(userId.toString())
+    : false;
+
   return {
     ...JSON.parse(JSON.stringify(tourRoute)),
     ...rate,
+    isFollowing,
   };
 }
 

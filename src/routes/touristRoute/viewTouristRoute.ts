@@ -54,14 +54,21 @@ async function handleViewTouristRouteById(socket: Socket) {
       const listener = WatchTable.register(TouristsRouteModel, socket)
         .filter((data: ITouristsRoute) => data._id.toString() === id)
         .do(async (data, listenerId) => {
-          const touristRoute = await TourRouteRepo.findById(id);
+          const touristRoute = await TourRouteRepo.findById(
+            id,
+            socket.data?.user?._id.toString(),
+          );
           new SuccessResponse(
             'update route',
             touristRoute,
             listenerId,
           ).sendSocket(socket, SocketServerMessage.ROUTE);
         });
-      const touristRoute = await TourRouteRepo.findById(id);
+
+      const touristRoute = await TourRouteRepo.findById(
+        id,
+        socket.data?.user?._id.toString(),
+      );
 
       return new SuccessResponse(
         'successfully retrieve tourist route',
