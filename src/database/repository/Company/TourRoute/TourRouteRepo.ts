@@ -59,6 +59,7 @@ async function findById(
   user: IUser | undefined,
 ): Promise<ITouristsRoute & { rate: number }> {
   const tourRoute = await TouristsRouteModel.findById(id);
+  const company = await CompanyModel.findById(tourRoute?.companyId);
 
   if (!tourRoute) throw new RouteError(RouteErrorType.ROUTE_NOT_FOUND);
 
@@ -79,6 +80,7 @@ async function findById(
     ...rate,
     isFollowing,
     isSaved,
+    company,
   };
 }
 
