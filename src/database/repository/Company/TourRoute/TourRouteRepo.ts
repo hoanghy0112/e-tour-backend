@@ -6,7 +6,7 @@ import { RouteError, RouteErrorType } from '../../../error/TouristRoute';
 import RateRepo from '../../User/RateRepo';
 import TourModel, { ITour } from '../../../model/Company/Tour';
 import TourRepo from '../TourRepo/TourRepo';
-import UserModel, { INotification } from '../../../model/User/User';
+import UserModel, { INotification, IUser } from '../../../model/User/User';
 import { BadRequestError } from '../../../../core/ApiError';
 import CompanyModel, {
   ICompany,
@@ -56,7 +56,7 @@ async function list(
 
 async function findById(
   id: string | Types.ObjectId,
-  userId: string | Types.ObjectId,
+  user: IUser | undefined,
 ): Promise<ITouristsRoute & { rate: number }> {
   const tourRoute = await TouristsRouteModel.findById(id);
 
@@ -64,16 +64,21 @@ async function findById(
 
   const rate = await RateRepo.getOverallRatingOfRoute(id);
 
-  const isFollowing = userId
+  const isFollowing = user
     ? (tourRoute.followers.map((v) => v.user.toString()) || []).includes(
-        userId.toString(),
+        user?._id?.toString() || '',
       )
     : false;
+
+  const isSaved = (user?.savedRoutes?.map((v) => v.toString()) || []).includes(
+    tourRoute._id.toString(),
+  );
 
   return {
     ...JSON.parse(JSON.stringify(tourRoute)),
     ...rate,
     isFollowing,
+    isSaved,
   };
 }
 

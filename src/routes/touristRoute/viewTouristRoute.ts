@@ -56,7 +56,7 @@ async function handleViewTouristRouteById(socket: Socket) {
         .do(async (data, listenerId) => {
           const touristRoute = await TourRouteRepo.findById(
             id,
-            socket.data?.user?._id.toString(),
+            socket.data?.user,
           );
           new SuccessResponse(
             'update route',
@@ -65,10 +65,7 @@ async function handleViewTouristRouteById(socket: Socket) {
           ).sendSocket(socket, SocketServerMessage.ROUTE);
         });
 
-      const touristRoute = await TourRouteRepo.findById(
-        id,
-        socket.data?.user?._id.toString(),
-      );
+      const touristRoute = await TourRouteRepo.findById(id, socket.data?.user);
 
       return new SuccessResponse(
         'successfully retrieve tourist route',
