@@ -65,6 +65,19 @@ async function handleViewTouristRouteById(socket: Socket) {
           ).sendSocket(socket, SocketServerMessage.ROUTE);
         });
 
+      WatchTable.register(UserModel, socket)
+        .filter((data, id) => socket.data?.user?._id.toString() == id)
+        .do(async () => {
+          const touristRoute = await TourRouteRepo.findById(
+            id,
+            socket.data?.user,
+          );
+          new SuccessResponse('update route', touristRoute).sendSocket(
+            socket,
+            SocketServerMessage.ROUTE,
+          );
+        });
+
       const touristRoute = await TourRouteRepo.findById(id, socket.data?.user);
 
       return new SuccessResponse(
