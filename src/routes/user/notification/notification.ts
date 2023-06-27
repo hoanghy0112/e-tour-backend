@@ -64,6 +64,47 @@ export function handleViewNewNotification(socket: Socket) {
   );
 }
 
+export function handleViewAllNotification(socket: Socket) {
+  socket.on(
+    SocketClientMessage.notification.VIEW_ALL_NOTIFICATION,
+    socketAsyncHandler(socket, async ({}) => {
+      const userId = socket.data.user._id;
+
+      const notifications =
+        (
+          await UserModel.findById(userId).populate('notifications')
+        )?.notifications?.reverse() || [];
+
+      const listener = WatchTable.register(UserModel, socket)
+        .filter((data, id) => id.toString() === userId.toString())
+        .do(async (data, listenerId) => {
+          const notifications =
+            (
+              await UserModel.findById(userId).populate('notifications')
+            )?.notifications?.reverse() || [];
+
+          return new SuccessResponse(
+            'Successfully',
+            notifications,
+            listenerId,
+          ).sendSocket(
+            socket,
+            SocketServerMessage.notification.ALL_NOTIFICATION_LIST,
+          );
+        });
+
+      return new SuccessResponse(
+        'Successfully',
+        notifications,
+        listener.getId(),
+      ).sendSocket(
+        socket,
+        SocketServerMessage.notification.ALL_NOTIFICATION_LIST,
+      );
+    }),
+  );
+}
+
 export function handleReadNotification(socket: Socket) {
   socket.on(
     SocketClientMessage.notification.READ_NOTIFICATION,
