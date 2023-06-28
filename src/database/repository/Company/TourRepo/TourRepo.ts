@@ -25,7 +25,7 @@ async function create(tour: ITour): Promise<ITour | null> {
         const user = follower.user;
 
         const notification = {
-          title: `E-Tour notification`,
+          title: `New tour for you`,
           content: `${route.name} has created a new tour for you.`,
           link: `route-${createdTour.touristRoute.toString()}/${
             createdTour._id

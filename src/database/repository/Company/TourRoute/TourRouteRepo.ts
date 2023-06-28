@@ -33,7 +33,7 @@ async function create(
       const user = follower.user;
 
       const notification = {
-        title: `E-Tour notification`,
+        title: `New tourist route for you`,
         content: `${company.name} has created a new tourist route for you.`,
         link: `route-${createdTourRoute._id.toString()}/new`,
         image: createdTourRoute.images?.[0],
