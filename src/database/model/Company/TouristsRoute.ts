@@ -83,6 +83,16 @@ const touristsRouteSchema = new mongoose.Schema<ITouristsRoute>(
 );
 
 touristsRouteSchema.index({ point: 1 });
+touristsRouteSchema.index(
+  { name: 'text', description: 'text' },
+  {
+    weights: {
+      name: 10,
+      description: 1,
+    },
+  },
+);
+touristsRouteSchema.index({ createdAt: 1 });
 
 const TouristsRouteModel = mongoose.model('TouristsRoute', touristsRouteSchema);
 

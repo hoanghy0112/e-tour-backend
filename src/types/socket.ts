@@ -39,6 +39,7 @@ export const SocketServerMessage = {
     CREATE_ROUTE_RESULT: 'create-route-result',
     UNFOLLOW_TOURIST_ROUTE_RESULT: 'unfollow-tourist-route-result',
     COMPANY_ROUTE: 'company-route',
+    SEARCH_ROUTE_RESULT: 'search-route-result',
   },
 
   savedTouristRoute: {
@@ -117,6 +118,7 @@ export const SocketClientMessage = {
     FOLLOW_TOURIST_ROUTE: 'follow-tourist-route',
     UNFOLLOW_TOURIST_ROUTE: 'unfollow-tourist-route',
     VIEW_COMPANY_ROUTE: 'view-company-route',
+    SEARCH_ROUTE: 'search-route',
   },
 
   savedTouristRoute: {

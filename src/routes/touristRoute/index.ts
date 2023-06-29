@@ -8,6 +8,7 @@ import handleManageSavedTouristRoute, {
   viewSavedTouristRoute,
 } from './saveTouristRoute';
 import {
+  handleSearchTouristRoute,
   handleViewTouristRoute,
   handleViewTouristRouteOfCompany,
 } from './viewTouristRoute';
@@ -70,4 +71,5 @@ export function handleTouristRoute(socket: Socket) {
   handleFollowTouristRoute(socket);
   handleUnFollowTouristRoute(socket);
   handleViewTouristRouteOfCompany(socket);
+  handleSearchTouristRoute(socket);
 }

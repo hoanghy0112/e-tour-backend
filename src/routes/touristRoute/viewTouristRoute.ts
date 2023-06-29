@@ -229,3 +229,38 @@ export async function handleViewTouristRouteOfCompany(socket: Socket) {
     },
   });
 }
+
+export async function handleSearchTouristRoute(socket: Socket) {
+  socket.on(
+    SocketClientMessage.touristRoute.SEARCH_ROUTE,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.viewTouristRoute.byFilter),
+      async ({ keyword }: { keyword: string }) => {
+        // console.time('time');
+        const touristRoutes = await TouristsRouteModel.find(
+          {
+            $text: {
+              $search: keyword,
+            },
+          },
+          { score: { $meta: 'textScore' } },
+        ).sort({ createdAt: -1 });
+
+        //@ts-ignore
+        touristRoutes.sort((a, b) => b.toObject().score - a.toObject().score);
+
+        // console.log(touristRoutes);
+        // console.timeEnd('time');
+
+        return new SuccessResponse(
+          'successfully retrieve tourist route',
+          touristRoutes,
+        ).sendSocket(
+          socket,
+          SocketServerMessage.touristRoute.SEARCH_ROUTE_RESULT,
+        );
+      },
+    ),
+  );
+}
