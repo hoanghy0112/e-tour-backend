@@ -35,7 +35,7 @@ touristRouteRouter.get(
 
 touristRouteRouter.get(
   '/find',
-  validator(schema.filter, ValidationSource.QUERY),
+  // validator(schema.filter, ValidationSource.QUERY),
   viewTouristRouteByFilter,
 );
 
