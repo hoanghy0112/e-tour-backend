@@ -22,6 +22,11 @@ export interface ICard {
   type: string;
 }
 
+export interface IHistorySearch {
+  text: string;
+  createdAt: Date;
+}
+
 export interface IUser {
   _id?: Types.ObjectId;
   fullName: string;
@@ -40,6 +45,7 @@ export interface IUser {
   notifications?: INotification[];
   cards: ICard[];
   defaultCard: string;
+  searchHistory: IHistorySearch[];
 }
 
 const schema = new Schema<IUser>(
@@ -125,6 +131,12 @@ const schema = new Schema<IUser>(
       default: [],
     },
     defaultCard: Types.ObjectId,
+    searchHistory: [
+      {
+        text: String,
+        createdAt: Date,
+      },
+    ],
   },
   {
     timestamps: true,

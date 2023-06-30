@@ -10,7 +10,7 @@ import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import socketValidator from '../../helpers/socketValidator';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
-import { ForbiddenError } from '../../core/ApiError';
+import { ForbiddenError, InternalError } from '../../core/ApiError';
 import handleSocketAPI from '../../helpers/handleSocketAPI';
 
 export async function handleViewTouristRoute(socket: Socket) {
@@ -237,7 +237,10 @@ export async function handleSearchTouristRoute(socket: Socket) {
       socket,
       socketValidator(schema.viewTouristRoute.byFilter),
       async ({ keyword }: { keyword: string }) => {
-        // console.time('time');
+        const userId = socket.data?.user?._id;
+
+        if (!userId) throw new InternalError('userId not found');
+
         const touristRoutes = await TouristsRouteModel.find(
           {
             $text: {
@@ -250,8 +253,20 @@ export async function handleSearchTouristRoute(socket: Socket) {
         //@ts-ignore
         touristRoutes.sort((a, b) => b.toObject().score - a.toObject().score);
 
-        // console.log(touristRoutes);
-        // console.timeEnd('time');
+
+        await UserModel.findByIdAndUpdate(userId, {
+          $push: {
+            searchHistory: {
+              $each: [
+                {
+                  text: keyword,
+                  createdAt: new Date(),
+                },
+              ],
+              $position: 0,
+            },
+          },
+        });
 
         return new SuccessResponse(
           'successfully retrieve tourist route',
