@@ -58,6 +58,7 @@ export const SocketServerMessage = {
     VOUCHER: 'voucher',
     NEW_VOUCHER_LIST: 'new-voucher-list',
     CREATE_VOUCHER_RESULT: 'create-voucher-result',
+    VIEW_COMPANY_VOUCHER_RESULT: 'view-company-voucher-result',
   },
 
   contactCompany: {
@@ -137,6 +138,7 @@ export const SocketClientMessage = {
   voucher: {
     VIEW_BY_VOUCHER_ID: 'view-voucher-by-id',
     VIEW_NEW_VOUCHER: 'view-new-voucher',
+    VIEW_COMPANY_VOUCHER: 'view-company-voucher',
     CREATE_VOUCHER: 'create-voucher',
   },
 

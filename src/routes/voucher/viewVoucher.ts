@@ -9,11 +9,12 @@ import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import schema from './schema';
 import asyncHandler from '../../helpers/asyncHandler';
 import { ProtectedUserRequest } from '../../types/app-request';
-import { BadRequestError } from '../../core/ApiError';
+import { BadRequestError, InternalError } from '../../core/ApiError';
 
 export async function handleViewVoucher(socket: Socket) {
   handleViewVoucherById(socket);
   handleViewNewVoucher(socket);
+  handleViewCompanyVoucher(socket);
 }
 
 async function handleViewVoucherById(socket: Socket) {
@@ -86,3 +87,45 @@ export const viewSavedVoucher = asyncHandler(
     return new SuccessResponse('Success', savedVouchers).send(res);
   },
 );
+
+async function handleViewCompanyVoucher(socket: Socket) {
+  socket.on(
+    SocketClientMessage.voucher.VIEW_COMPANY_VOUCHER,
+    socketAsyncHandler(
+      socket,
+      socketValidator(schema.viewVoucher.newVoucher),
+      async ({ num }: { num: number }) => {
+        const staff = socket.data?.staff;
+        const companyId = staff?.companyId;
+
+        if (!companyId) throw new InternalError('companyId not found');
+
+        const vouchers = await VoucherModel.find({ companyId });
+
+        const listener = WatchTable.register(VoucherModel, socket).do(
+          async (data, listenerId) => {
+            const vouchers = await VoucherModel.find({ companyId });
+
+            return new SuccessResponse(
+              'successfully retrieve vouchers',
+              vouchers,
+              listenerId,
+            ).sendSocket(
+              socket,
+              SocketServerMessage.voucher.VIEW_COMPANY_VOUCHER_RESULT,
+            );
+          },
+        );
+
+        return new SuccessResponse(
+          'successfully retrieve vouchers',
+          vouchers,
+          listener.getId(),
+        ).sendSocket(
+          socket,
+          SocketServerMessage.voucher.VIEW_COMPANY_VOUCHER_RESULT,
+        );
+      },
+    ),
+  );
+}
