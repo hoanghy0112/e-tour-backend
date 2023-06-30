@@ -20,6 +20,7 @@ export async function handleViewTouristRoute(socket: Socket) {
   handleViewSavedTouristRoute(socket);
   handleIncreaseRoutePoint(socket);
   handleViewPopularTouristRoute(socket);
+  handleViewSearchHistory(socket);
 }
 
 async function handleViewRecommendTouristRoute(socket: Socket) {
@@ -253,7 +254,6 @@ export async function handleSearchTouristRoute(socket: Socket) {
         //@ts-ignore
         touristRoutes.sort((a, b) => b.toObject().score - a.toObject().score);
 
-
         await UserModel.findByIdAndUpdate(userId, {
           $push: {
             searchHistory: {
@@ -278,4 +278,8 @@ export async function handleSearchTouristRoute(socket: Socket) {
       },
     ),
   );
+}
+
+export async function handleViewSearchHistory(socket: Socket) {
+  // view search
 }
