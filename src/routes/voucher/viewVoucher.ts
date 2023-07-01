@@ -78,11 +78,13 @@ async function handleViewNewVoucher(socket: Socket) {
 
 export const viewSavedVoucher = asyncHandler(
   async (req: ProtectedUserRequest, res) => {
+    const isPopulate = req.params?.populate == 'true';
+
     const userId = req.user._id;
 
     if (!userId) throw new BadRequestError('userId not found');
 
-    const savedVouchers = await VoucherRepo.viewSaved(userId);
+    const savedVouchers = await VoucherRepo.viewSaved(userId, isPopulate);
 
     return new SuccessResponse('Success', savedVouchers).send(res);
   },

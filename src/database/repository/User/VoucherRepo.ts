@@ -119,9 +119,18 @@ async function removeFromSaved(
   return updatedUser.savedVouchers || [];
 }
 
-async function viewSaved(userId: string | Types.ObjectId | undefined) {
-  const updatedUser = (await UserModel.findById(userId)) as IUser;
-  return updatedUser.savedVouchers || [];
+async function viewSaved(
+  userId: string | Types.ObjectId | undefined,
+  isPopulate: boolean,
+) {
+  const updatedUser = (await UserModel.findById(userId))?.toObject() as IUser;
+  if (!isPopulate) return updatedUser.savedVouchers || [];
+  else if (updatedUser.savedVouchers?.length != 0) {
+    return await VoucherModel.find({
+      _id: { $in: updatedUser.savedVouchers },
+    });
+  }
+  return [];
 }
 
 export default {
