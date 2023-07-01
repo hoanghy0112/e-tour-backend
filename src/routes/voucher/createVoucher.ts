@@ -24,6 +24,12 @@ export function handleCreateVoucher(socket: Socket) {
           );
           voucherInfo.image = voucherImageName || '';
         }
+        if (voucherInfo.backgroundImage) {
+          const voucherImageName = await uploadImageToS3(
+            voucherInfo.backgroundImage as any,
+          );
+          voucherInfo.backgroundImage = voucherImageName || '';
+        }
         const voucher = await VoucherRepo.create(voucherInfo);
 
         return new SuccessResponse(

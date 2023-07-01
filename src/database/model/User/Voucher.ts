@@ -15,8 +15,11 @@ export interface IVoucher {
   type: VoucherType;
   description: string;
   image?: string | Buffer;
+  backgroundImage?: string | Buffer;
   usingCondition: string;
   value: number;
+  min: number;
+  max: number;
   num: number;
 }
 
@@ -43,7 +46,18 @@ const voucherSchema = new Schema<IVoucher>(
     image: {
       type: String,
     },
+    backgroundImage: {
+      type: String,
+    },
     value: {
+      type: Number,
+      default: 0,
+    },
+    min: {
+      type: Number,
+      default: 0,
+    },
+    max: {
       type: Number,
       default: 0,
     },
