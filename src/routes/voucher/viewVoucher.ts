@@ -86,7 +86,7 @@ export const viewSavedVoucher = asyncHandler(
 
     const savedVouchers = await VoucherRepo.viewSaved(userId, isPopulate);
 
-    return new SuccessResponse('Success', savedVouchers).send(res);
+    return new SuccessResponse('Success', savedVouchers.reverse()).send(res);
   },
 );
 
