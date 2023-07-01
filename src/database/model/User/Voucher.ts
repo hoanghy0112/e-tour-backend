@@ -5,6 +5,8 @@ export enum VoucherType {
   DISCOUNT = 'discount',
   FREE = 'free',
   NORMAL = 'normal',
+  PERCENT = 'percent',
+  MONEY = 'money',
 }
 
 export interface IVoucher {
@@ -35,7 +37,7 @@ const voucherSchema = new Schema<IVoucher>(
     },
     type: {
       type: String,
-      enum: Object.values(VoucherType),
+      // enum: Object.values(VoucherType),
     },
     description: {
       type: String,

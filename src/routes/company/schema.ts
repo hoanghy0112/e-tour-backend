@@ -37,9 +37,9 @@ export default {
       name: Joi.string().required(),
       expiredAt: Joi.date().required(),
       type: Joi.string()
-        .allow(...Object.values(VoucherType))
+        // .allow(...Object.values(VoucherType))
         .optional()
-        .default(VoucherType.NORMAL),
+        .default(VoucherType.MONEY),
       description: Joi.string().optional().allow(''),
       image: Joi.any().optional(),
       backgroundImage: Joi.any().optional(),
