@@ -78,7 +78,7 @@ async function handleViewNewVoucher(socket: Socket) {
 
 export const viewSavedVoucher = asyncHandler(
   async (req: ProtectedUserRequest, res) => {
-    const isPopulate = req.params?.populate == 'true';
+    const isPopulate = req.query?.populate == 'true';
 
     const userId = req.user._id;
 
