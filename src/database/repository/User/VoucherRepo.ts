@@ -128,7 +128,7 @@ async function viewSaved(
   else if (updatedUser.savedVouchers?.length != 0) {
     return await VoucherModel.find({
       _id: { $in: updatedUser.savedVouchers },
-    });
+    }).populate('companyId');
   }
   return [];
 }
