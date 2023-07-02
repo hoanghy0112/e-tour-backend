@@ -42,12 +42,12 @@ export const viewTouristRouteByFilter = asyncHandler(
           from: 'companies',
           localField: 'companyId',
           foreignField: '_id',
-          as: 'companyId',
+          as: 'company',
         },
       },
       {
         $unwind: {
-          path: '$companyId',
+          path: '$company',
           includeArrayIndex: '__companyIndex',
           preserveNullAndEmptyArrays: true,
         },
