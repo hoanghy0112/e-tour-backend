@@ -53,7 +53,7 @@ export const viewTouristRouteByFilter = asyncHandler(
         },
       },
       {
-        $unset: ['followers', 'rates', 'companyId.followers'],
+        $unset: ['followers', 'rates', 'company.followers'],
       },
     ]).exec();
 
