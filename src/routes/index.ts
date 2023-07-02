@@ -11,6 +11,7 @@ import { ticketRouter } from './user/ticket';
 import { voucherRouter } from './voucher';
 import { touristRouteRouter } from './touristRoute';
 import { companyRouter } from './company';
+import { chatRouter } from './user/chat';
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.use('/ticket', authentication.userAuthentication, ticketRouter);
 router.use('/voucher', voucherRouter);
 router.use('/touristRoute', touristRouteRouter);
 router.use('/company', companyRouter);
+router.use('/chat', chatRouter);
 
 router.use('/demo', demoRouter);
 
