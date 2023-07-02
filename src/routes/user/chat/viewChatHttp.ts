@@ -49,7 +49,7 @@ export const httpViewChatRoomList = asyncHandler(
           staff: 1,
           route: 1,
           lastChat: {
-            $arrayElemAt: ['$chats', 0],
+            $arrayElemAt: ['$chats', -1],
           },
         },
       },
