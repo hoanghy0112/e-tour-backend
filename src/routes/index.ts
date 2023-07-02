@@ -11,7 +11,7 @@ import { ticketRouter } from './user/ticket';
 import { voucherRouter } from './voucher';
 import { touristRouteRouter } from './touristRoute';
 import { companyRouter } from './company';
-import { chatRouter } from './user/chat';
+import { chatRouter } from './user/chat/httpRouter';
 
 const router = express.Router();
 
