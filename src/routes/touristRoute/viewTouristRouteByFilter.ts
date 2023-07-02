@@ -8,9 +8,11 @@ export const viewTouristRouteByFilter = asyncHandler(
   async (req: PublicRequest, res) => {
     const query = req.query;
 
-    const data = TouristsRouteModel.aggregate([
+    const data = await TouristsRouteModel.aggregate([
       {
-        $match: query,
+        $match: {
+          route: 'TP Hồ Chí Minh',
+        },
       },
       {
         $lookup: {
@@ -23,14 +25,37 @@ export const viewTouristRouteByFilter = asyncHandler(
       {
         $addFields: {
           rate: {
-            $avg: '$rates.star',
+            $ifNull: [
+              {
+                $avg: '$rates.star',
+              },
+              0,
+            ],
           },
           num: {
             $size: '$rates',
           },
         },
       },
-    ]);
+      {
+        $unset: ['followers', 'rates', 'companyId.followers'],
+      },
+      {
+        $lookup: {
+          from: 'companies',
+          localField: 'companyId',
+          foreignField: '_id',
+          as: 'companyId',
+        },
+      },
+      {
+        $unwind: {
+          path: '$companyId',
+          includeArrayIndex: '__companyIndex',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+    ]).exec();
 
     // const data = await TouristsRouteModel.find(query);
 
