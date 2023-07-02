@@ -38,9 +38,6 @@ export const viewTouristRouteByFilter = asyncHandler(
         },
       },
       {
-        $unset: ['followers', 'rates', 'companyId.followers'],
-      },
-      {
         $lookup: {
           from: 'companies',
           localField: 'companyId',
@@ -54,6 +51,9 @@ export const viewTouristRouteByFilter = asyncHandler(
           includeArrayIndex: '__companyIndex',
           preserveNullAndEmptyArrays: true,
         },
+      },
+      {
+        $unset: ['followers', 'rates', 'companyId.followers'],
       },
     ]).exec();
 
