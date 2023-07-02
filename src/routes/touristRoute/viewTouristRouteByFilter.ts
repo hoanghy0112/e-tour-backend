@@ -8,16 +8,40 @@ export const viewTouristRouteByFilter = asyncHandler(
   async (req: PublicRequest, res) => {
     const query = req.query;
 
-    const data = await TouristsRouteModel.find(query);
+    const data = TouristsRouteModel.aggregate([
+      {
+        $match: query,
+      },
+      {
+        $lookup: {
+          from: 'rates',
+          localField: '_id',
+          foreignField: 'touristsRouteId',
+          as: 'rates',
+        },
+      },
+      {
+        $addFields: {
+          rate: {
+            $avg: '$rates.star',
+          },
+          num: {
+            $size: '$rates',
+          },
+        },
+      },
+    ]);
 
-    const dataWithRating = await Promise.all(
-      data.map(async (route) => ({
-        ...route.toObject(),
-        ...(await RateRepo.getOverallRatingOfRoute(route._id)),
-      })),
-    );
+    // const data = await TouristsRouteModel.find(query);
 
-    return new SuccessResponse('success', dataWithRating).send(res);
+    // const dataWithRating = await Promise.all(
+    //   data.map(async (route) => ({
+    //     ...route.toObject(),
+    //     ...(await RateRepo.getOverallRatingOfRoute(route._id)),
+    //   })),
+    // );
+
+    return new SuccessResponse('success', data).send(res);
   },
 );
 
@@ -26,9 +50,35 @@ export const viewTouristRouteByDestination = asyncHandler(
     const destination = req.query?.destination;
 
     // const data = await TouristsRouteModel.find(query);
-    const data = TouristsRouteModel.find({
-      route: destination,
-    });
+    // const data = TouristsRouteModel.find({
+    //   route: destination,
+    // });
+
+    const data = TouristsRouteModel.aggregate([
+      {
+        $match: {
+          route: destination,
+        },
+      },
+      {
+        $lookup: {
+          from: 'rates',
+          localField: '_id',
+          foreignField: 'touristsRouteId',
+          as: 'rates',
+        },
+      },
+      {
+        $addFields: {
+          rate: {
+            $avg: '$rates.star',
+          },
+          num: {
+            $size: '$rates',
+          },
+        },
+      },
+    ]);
 
     return new SuccessResponse('success', data).send(res);
   },
