@@ -1,10 +1,10 @@
 import { SuccessResponse } from '../../core/ApiResponse';
 import TouristsRouteModel from '../../database/model/Company/TouristsRoute';
 import asyncHandler from '../../helpers/asyncHandler';
-import { PublicRequest } from '../../types/app-request';
+import { ProtectedUserRequest } from '../../types/app-request';
 
-export const viewTouristRouteByFilter = asyncHandler(
-  async (req: PublicRequest, res) => {
+export const getRecommendRouteOfCompany = asyncHandler(
+  async (req: ProtectedUserRequest, res) => {
     const query = req.query;
 
     const data = await TouristsRouteModel.aggregate([
@@ -52,7 +52,7 @@ export const viewTouristRouteByFilter = asyncHandler(
       {
         $unset: ['followers', 'rates', 'company.followers'],
       },
-    ]).exec();
+    ]);
 
     return new SuccessResponse('success', data).send(res);
   },
