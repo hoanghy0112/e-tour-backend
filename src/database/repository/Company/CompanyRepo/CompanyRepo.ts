@@ -38,7 +38,7 @@ export async function findById({
   userId: Types.ObjectId | string;
 }): Promise<ICompany | null> {
   // const company = await CompanyModel.findById(id);
-  const company = await CompanyModel.aggregate([
+  const company = (await CompanyModel.aggregate([
     {
       $match: {
         _id: new Types.ObjectId(id),
@@ -72,9 +72,9 @@ export async function findById({
         },
       },
     },
-  ]) as unknown as ICompany;
+  ])) as unknown as ICompany[];
 
-  return company;
+  return company.at(0) || null;
 }
 
 const CompanyRepo = {

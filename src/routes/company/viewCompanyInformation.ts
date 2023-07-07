@@ -54,6 +54,7 @@ export const viewCompanyInformation = asyncHandler(
   async (req: ProtectedUserRequest, res) => {
     const { companyId } = req.params;
     const userId = req?.user?._id;
+    console.log({ user: req.user });
 
     if (userId) {
       const company = await CompanyRepo.findById({ id: companyId, userId });

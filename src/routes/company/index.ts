@@ -18,6 +18,7 @@ import companySignup from './signup';
 import { viewCompanyInformation } from './viewCompanyInformation';
 import { viewCompanyRegistration } from './viewRegistration';
 import { viewStaffList } from './viewStaffList';
+import authentication from '../../auth/authentication';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -25,8 +26,6 @@ export const companyRouter = express.Router();
 
 companyRouter.use('/signup', companySignup);
 companyRouter.use('/login', companyLogin);
-
-
 
 companyRouter.get(
   '/',
@@ -59,7 +58,11 @@ companyRouter.delete(
   removeStaff,
 );
 
-companyRouter.get('/:companyId', viewCompanyInformation);
+companyRouter.get(
+  '/:companyId',
+  authentication.userAuthentication,
+  viewCompanyInformation,
+);
 
 companyRouter.put(
   '/:companyId',
