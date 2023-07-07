@@ -11,9 +11,9 @@ export const viewTouristRouteByFilter = asyncHandler(
     const data = await TouristsRouteModel.aggregate([
       {
         $match: {
-          companyId: companyId
-            ? new Types.ObjectId(companyId?.toString())
-            : null,
+          ...(companyId
+            ? { companyId: new Types.ObjectId(companyId?.toString()) }
+            : {}),
           ...query,
         },
       },
