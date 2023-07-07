@@ -32,10 +32,47 @@ export async function create({
 
 export async function findById({
   id,
+  userId,
 }: {
   id: Types.ObjectId | string;
+  userId: Types.ObjectId | string;
 }): Promise<ICompany | null> {
-  const company = await CompanyModel.findById(id);
+  // const company = await CompanyModel.findById(id);
+  const company = await CompanyModel.aggregate([
+    {
+      $match: {
+        _id: new Types.ObjectId(id),
+      },
+    },
+    {
+      $addFields: {
+        followers: {
+          $filter: {
+            input: '$followers',
+            as: 'item',
+            cond: {
+              $eq: ['$$item.user', new Types.ObjectId(userId)],
+            },
+          },
+        },
+      },
+    },
+    {
+      $unwind: {
+        path: '$followers',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        isFollowing: {
+          $toBool: {
+            $ifNull: ['$followers', 0],
+          },
+        },
+      },
+    },
+  ]) as unknown as ICompany;
 
   return company;
 }

@@ -9,7 +9,7 @@ import WatchTable from '../../helpers/realtime/WatchTable';
 import socketAsyncHandler from '../../helpers/socketAsyncHandler';
 import { SocketClientMessage, SocketServerMessage } from '../../types/socket';
 import asyncHandler from '../../helpers/asyncHandler';
-import { PublicRequest } from '../../types/app-request';
+import { ProtectedUserRequest, PublicRequest } from '../../types/app-request';
 
 export async function handleViewCompanyInformation(socket: Socket) {
   socket.on(
@@ -18,9 +18,7 @@ export async function handleViewCompanyInformation(socket: Socket) {
       try {
         const staffId = socket.data.staff._id;
         const staff = await StaffRepo.findById(staffId);
-        const company = await CompanyRepo.findById({
-          id: staff?.companyId || '',
-        });
+        const company = await CompanyModel.findById(staff?.companyId || '');
 
         if (!company)
           throw new InternalError('Staff does not belong to any company');
@@ -53,11 +51,17 @@ export async function handleViewCompanyInformation(socket: Socket) {
 }
 
 export const viewCompanyInformation = asyncHandler(
-  async (req: PublicRequest, res) => {
+  async (req: ProtectedUserRequest, res) => {
     const { companyId } = req.params;
+    const userId = req?.user?._id;
 
-    const company = await CompanyRepo.findById({ id: companyId });
-
-    return new SuccessResponse('Success', company).send(res);
+    if (userId) {
+      const company = await CompanyRepo.findById({ id: companyId, userId });
+      return new SuccessResponse('Success', company).send(res);
+    } else {
+      const company = await CompanyModel.findById(companyId);
+      return new SuccessResponse('Success', company).send(res);
+    }
+    // const company  = await Comp
   },
 );
