@@ -38,23 +38,23 @@ export async function handleBookTicket(socket: Socket) {
             voucherIds,
           });
 
-          const listener = WatchTable.register(TicketModel, socket)
-            .filter(
-              (ticket: ITicket) =>
-                ticket._id?.toString() === createdTicket?._id,
-            )
-            .do((data, listenerId) => {
-              new SuccessResponse(
-                'Updated ticket',
-                data,
-                listenerId,
-              ).sendSocket(socket, SocketServerMessage.UPDATED_RATE);
-            });
+          // const listener = WatchTable.register(TicketModel, socket)
+          //   .filter(
+          //     (ticket: ITicket) =>
+          //       ticket._id?.toString() === createdTicket?._id,
+          //   )
+          //   .do((data, listenerId) => {
+          //     new SuccessResponse(
+          //       'Updated ticket',
+          //       data,
+          //       listenerId,
+          //     ).sendSocket(socket, SocketServerMessage.UPDATED_RATE);
+          //   });
 
           return new SuccessResponse(
             'Successfully book ticket',
             createdTicket,
-            listener.getId(),
+            // listener.getId(),
           ).sendSocket(socket, SocketServerMessage.BOOKED_TICKET);
         } catch (e: any) {
           if (e instanceof VoucherError) {

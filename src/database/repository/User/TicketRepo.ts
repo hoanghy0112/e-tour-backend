@@ -40,8 +40,13 @@ export async function create({
   );
 
   let voucherValue = 0;
-  voucherValues.forEach((voucher) => (voucherValue += voucher.value));
+  voucherValues.forEach(
+    (voucher) => voucher.type === 'percent' && (voucherValue += voucher.value),
+  );
   finalPrice = finalPrice * Math.max(1 - voucherValue, 0);
+  voucherValues.forEach(
+    (voucher) => voucher.type === 'money' && (finalPrice -= voucher.value),
+  );
 
   ticketInfo.price = finalPrice;
 
