@@ -41,7 +41,14 @@ export async function findById({
   const company = (await CompanyModel.aggregate([
     {
       $match: {
-        _id: new Types.ObjectId(id),
+        _id: new Types.ObjectId(id.toString()),
+      },
+    },
+    {
+      $addFields: {
+        followerNum: {
+          $size: '$followers',
+        },
       },
     },
     {
@@ -51,7 +58,7 @@ export async function findById({
             input: '$followers',
             as: 'item',
             cond: {
-              $eq: ['$$item.user', new Types.ObjectId(userId)],
+              $eq: ['$$item.user', new Types.ObjectId(userId.toString())],
             },
           },
         },
@@ -71,6 +78,9 @@ export async function findById({
           },
         },
       },
+    },
+    {
+      $unset: ['followers'],
     },
   ])) as unknown as ICompany[];
 
